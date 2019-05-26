@@ -2953,7 +2953,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location line="+79"/>
-        <source>Open the Vulcoin debug log file from the current data directory. This can take a few vlconds for large log files.</source>
+        <source>Open the Vulcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4465,8 +4465,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location line="+6"/>
-        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few vlconds of yours.</source>
-        <translation>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few vlconds of yours.</translation>
+        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -5093,8 +5093,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location line="+3"/>
-        <source>Number of vlconds to keep misbehaving peers from reconnecting (default: %u)</source>
-        <translation type="unfinished">Number of vlconds to keep misbehaving peers from reconnecting (default: %u)</translation>
+        <source>Number of seconds to keep misbehaving peers from reconnecting (default: %u)</source>
+        <translation type="unfinished">Number of seconds to keep misbehaving peers from reconnecting (default: %u)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -6175,8 +6175,8 @@ for example: alertnotify=echo %%s | mail -s &quot;Vulcoin Alert&quot; admin@foo.
     </message>
     <message>
         <location line="+1"/>
-        <source>Specify connection timeout in millivlconds (minimum: 1, default: %d)</source>
-        <translation type="unfinished">Specify connection timeout in millivlconds (minimum: 1, default: %d)</translation>
+        <source>Specify connection timeout in milliseconds (minimum: 1, default: %d)</source>
+        <translation type="unfinished">Specify connection timeout in milliseconds (minimum: 1, default: %d)</translation>
     </message>
     <message>
         <location line="+1"/>

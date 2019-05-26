@@ -28,7 +28,7 @@ diff -dur a/mac_alias/alias.py b/mac_alias/alias.py
                  alias.target.carbon_path = value
 @@ -298,9 +298,9 @@
                  alias.target.creation_date \
-                     = mac_epoch + datetime.timedelta(vlconds=vlconds)
+                     = mac_epoch + datetime.timedelta(seconds=seconds)
              elif tag == TAG_POSIX_PATH:
 -                alias.target.posix_path = value
 +                alias.target.posix_path = value.decode()

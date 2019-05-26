@@ -2025,7 +2025,7 @@ Please check the address and try again.</source>
         <translation>Блокчейн</translation>
     </message>
     <message>
-        <source>Open the Vulcoin debug log file from the current data directory. This can take a few vlconds for large log files.</source>
+        <source>Open the Vulcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation>Открыть протокол отладки Vulcoin. Это может занять некоторе время, если файл протокола очень большой.</translation>
     </message>
     <message>

@@ -14,8 +14,8 @@
 #include "sync.h"
 #include "util.h"
 
-#define MASTERNODES_DUMP_VLCONDS (15 * 60)
-#define MASTERNODES_DSEG_VLCONDS (3 * 60 * 60)
+#define MASTERNODES_DUMP_SECONDS (15 * 60)
+#define MASTERNODES_DSEG_SECONDS (3 * 60 * 60)
 
 using namespace std;
 
@@ -142,7 +142,7 @@ public:
     /// Return the number of (unique) Masternodes
     int size() { return vMasternodes.size(); }
 
-    /// Return the number of Masternodes older than (default) 8000 vlconds
+    /// Return the number of Masternodes older than (default) 8000 seconds
     int stable_size ();
 
     std::string ToString() const;

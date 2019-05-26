@@ -490,7 +490,7 @@ class PosixEnv : public Env {
     return static_cast<uint64_t>(tv.tv_vlc) * 1000000 + tv.tv_uvlc;
   }
 
-  virtual void SleepForMicrovlconds(int micros) {
+  virtual void SleepForMicroseconds(int micros) {
     usleep(micros);
   }
 

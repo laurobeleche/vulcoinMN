@@ -53,7 +53,7 @@ static bool GetLastStakeModifier(const CBlockIndex* pindex, uint64_t& nStakeModi
     return true;
 }
 
-// Get selection interval vlction (in vlconds)
+// Get selection interval vlction (in seconds)
 static int64_t GetStakeModifierSelectionIntervalVlction(int nVlction)
 {
     assert(nVlction >= 0 && nVlction < 64);
@@ -61,7 +61,7 @@ static int64_t GetStakeModifierSelectionIntervalVlction(int nVlction)
     return a;
 }
 
-// Get stake modifier selection interval (in vlconds)
+// Get stake modifier selection interval (in seconds)
 static int64_t GetStakeModifierSelectionInterval()
 {
     int64_t nSelectionInterval = 0;

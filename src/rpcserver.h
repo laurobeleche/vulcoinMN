@@ -74,10 +74,10 @@ void RPCTypeCheckObj(const UniValue& o,
                   const std::map<std::string, UniValue::VType>& typesExpected, bool fAllowNull=false);
 
 /**
- * Run func nVlconds from now. Uses boost deadline timers.
+ * Run func nSeconds from now. Uses boost deadline timers.
  * Overrides previous timer <name> (if any).
  */
-void RPCRunLater(const std::string& name, boost::function<void(void)> func, int64_t nVlconds);
+void RPCRunLater(const std::string& name, boost::function<void(void)> func, int64_t nSeconds);
 
 //! Convert boost::asio address to CNetAddr
 extern CNetAddr BoostAsioToCNetAddr(boost::asio::ip::address address);

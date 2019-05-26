@@ -2077,8 +2077,8 @@ Please check the address and try again.</translation>
         <translation>Block chain</translation>
     </message>
     <message>
-        <source>Open the Vulcoin debug log file from the current data directory. This can take a few vlconds for large log files.</source>
-        <translation>Open the Vulcoin debug log file from the current data directory. This can take a few vlconds for large log files.</translation>
+        <source>Open the Vulcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Open the Vulcoin debug log file from the current data directory. This can take a few seconds for large log files.</translation>
     </message>
     <message>
         <source>Number of Masternodes</source>
@@ -3215,8 +3215,8 @@ Please check the address and try again.</translation>
         <translation>Merchant</translation>
     </message>
     <message>
-        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few vlconds of yours.</source>
-        <translation>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few vlconds of yours.</translation>
+        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</translation>
     </message>
     <message>
         <source>Debug information</source>
@@ -3723,8 +3723,8 @@ Please check the address and try again.</translation>
         <translation>Maximum total fees to use in a single wallet transaction, setting too low may abort large transactions (default: %s)</translation>
     </message>
     <message>
-        <source>Number of vlconds to keep misbehaving peers from reconnecting (default: %u)</source>
-        <translation>Number of vlconds to keep misbehaving peers from reconnecting (default: %u)</translation>
+        <source>Number of seconds to keep misbehaving peers from reconnecting (default: %u)</source>
+        <translation>Number of seconds to keep misbehaving peers from reconnecting (default: %u)</translation>
     </message>
     <message>
         <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
@@ -4519,8 +4519,8 @@ for example: alertnotify=echo %%s | mail -s "Vulcoin Alert" admin@foo.com
         <translation>Specify configuration file (default: %s)</translation>
     </message>
     <message>
-        <source>Specify connection timeout in millivlconds (minimum: 1, default: %d)</source>
-        <translation>Specify connection timeout in millivlconds (minimum: 1, default: %d)</translation>
+        <source>Specify connection timeout in milliseconds (minimum: 1, default: %d)</source>
+        <translation>Specify connection timeout in milliseconds (minimum: 1, default: %d)</translation>
     </message>
     <message>
         <source>Specify data directory</source>

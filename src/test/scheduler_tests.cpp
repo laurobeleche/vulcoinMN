@@ -34,9 +34,9 @@ static void microTask(CScheduler& s, boost::mutex& mutex, int& counter, int delt
 static void MicroSleep(uint64_t n)
 {
 #if defined(HAVE_WORKING_BOOST_SLEEP_FOR)
-    boost::this_thread::sleep_for(boost::chrono::microvlconds(n));
+    boost::this_thread::sleep_for(boost::chrono::microseconds(n));
 #elif defined(HAVE_WORKING_BOOST_SLEEP)
-    boost::this_thread::sleep(boost::posix_time::microvlconds(n));
+    boost::this_thread::sleep(boost::posix_time::microseconds(n));
 #else
     //should never get here
     #error missing boost sleep implementation
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(manythreads)
     // properly will sum to the number of tasks done.
     // Each task adds or subtracts from one of the counters a
     // random amount, and then schedules another task 0-1000
-    // microvlconds in the future to subtract or add from
+    // microseconds in the future to subtract or add from
     // the counter -random_amount+1, so in the end the shared
     // counters should sum to the number of initial tasks performed.
     CScheduler microTasks;
@@ -73,8 +73,8 @@ BOOST_AUTO_TEST_CASE(manythreads)
     BOOST_CHECK(nTasks == 0);
 
     for (int i = 0; i < 100; i++) {
-        boost::chrono::system_clock::time_point t = now + boost::chrono::microvlconds(randomMvlc(rng));
-        boost::chrono::system_clock::time_point tReschedule = now + boost::chrono::microvlconds(500 + randomMvlc(rng));
+        boost::chrono::system_clock::time_point t = now + boost::chrono::microseconds(randomMvlc(rng));
+        boost::chrono::system_clock::time_point tReschedule = now + boost::chrono::microseconds(500 + randomMvlc(rng));
         int whichCounter = zeroToNine(rng);
         CScheduler::Function f = boost::bind(&microTask, boost::ref(microTasks),
                                              boost::ref(counterMutex[whichCounter]), boost::ref(counter[whichCounter]),
@@ -98,8 +98,8 @@ BOOST_AUTO_TEST_CASE(manythreads)
     for (int i = 0; i < 5; i++)
         microThreads.create_thread(boost::bind(&CScheduler::serviceQueue, &microTasks));
     for (int i = 0; i < 100; i++) {
-        boost::chrono::system_clock::time_point t = now + boost::chrono::microvlconds(randomMvlc(rng));
-        boost::chrono::system_clock::time_point tReschedule = now + boost::chrono::microvlconds(500 + randomMvlc(rng));
+        boost::chrono::system_clock::time_point t = now + boost::chrono::microseconds(randomMvlc(rng));
+        boost::chrono::system_clock::time_point tReschedule = now + boost::chrono::microseconds(500 + randomMvlc(rng));
         int whichCounter = zeroToNine(rng);
         CScheduler::Function f = boost::bind(&microTask, boost::ref(microTasks),
                                              boost::ref(counterMutex[whichCounter]), boost::ref(counter[whichCounter]),

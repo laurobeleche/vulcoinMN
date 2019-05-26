@@ -273,7 +273,7 @@ class Benchmark {
             (message_.empty() ? "" : " "),
             message_.c_str());
     if (FLAGS_histogram) {
-      fprintf(stdout, "Microvlconds per op:\n%s\n", hist_.ToString().c_str());
+      fprintf(stdout, "Microseconds per op:\n%s\n", hist_.ToString().c_str());
     }
     fflush(stdout);
   }

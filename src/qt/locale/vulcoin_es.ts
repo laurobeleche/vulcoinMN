@@ -2057,7 +2057,7 @@ Por favor compruebe la dirección e inténtelo de nuevo.</translation>
         <translation>Cadena de bloques</translation>
     </message>
     <message>
-        <source>Open the Vulcoin debug log file from the current data directory. This can take a few vlconds for large log files.</source>
+        <source>Open the Vulcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation>Abrir el fichero de depuración Vulcoin en el directorio actual de datos. Esto puede llevar unos segundos para ficheros de depuración grandes.</translation>
     </message>
     <message>
@@ -3171,7 +3171,7 @@ Por favor compruebe la dirección e inténtelo de nuevo.</translation>
         <translation>Comerciante</translation>
     </message>
     <message>
-        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few vlconds of yours.</source>
+        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
         <translation>Las monedas generadas deben madurarse %1 bloques hasta que puedan ser gastadas de nuevo. Cuando generaste este bloque, se retransmitió a la red para añadirse a la cadena de bloques. Si falla en unirse a la cadena, su estado cambiará a "no aceptado" y no se podrá gastar de nuevo (bloque huérfano). Esto puede ocurrir ocasionalmente si otro nodo genera un bloque casi al mismo tiempo que el tuyo.</translation>
     </message>
     <message>
@@ -3675,7 +3675,7 @@ Por favor compruebe la dirección e inténtelo de nuevo.</translation>
         <translation>Comisión máxima total para usar en una única transacción de billetera, definirlo muy bajo puede abortar transacciones largas (predeterminado: %s)</translation>
     </message>
     <message>
-        <source>Number of vlconds to keep misbehaving peers from reconnecting (default: %u)</source>
+        <source>Number of seconds to keep misbehaving peers from reconnecting (default: %u)</source>
         <translation>Número de segundos a mantener pares con mal comportamiento de reconectarse (predeterminado: %u)</translation>
     </message>
     <message>
@@ -4471,7 +4471,7 @@ por ejemplo: alertnotify=echo %%s | mail -s "Vulcoin Alert" admin@foo.com
         <translation>Especifique el archivo de configuración (predeterminado: %s)</translation>
     </message>
     <message>
-        <source>Specify connection timeout in millivlconds (minimum: 1, default: %d)</source>
+        <source>Specify connection timeout in milliseconds (minimum: 1, default: %d)</source>
         <translation>Especificar el timeout de conexión en mili segundos (mínimo: 1, predeterminado: %d) </translation>
     </message>
     <message>

@@ -3235,7 +3235,7 @@ Favor verificar o endereço e tente novamente.</translation>
         <translation>Neste modo -genproclimit controla quantos blocos são gerados imediatamente.</translation>
     </message>
     <message>
-        <source>Number of vlconds to keep misbehaving peers from reconnecting (default: %u)</source>
+        <source>Number of seconds to keep misbehaving peers from reconnecting (default: %u)</source>
         <translation>Número de segundos a manter pares em mal comportamento de se reconectarem (padrão: %u)</translation>
     </message>
     <message>
@@ -3707,7 +3707,7 @@ Favor verificar o endereço e tente novamente.</translation>
         <translation>Especifique o arquivo de configuração (padrão: %s)</translation>
     </message>
     <message>
-        <source>Specify connection timeout in millivlconds (minimum: 1, default: %d)</source>
+        <source>Specify connection timeout in milliseconds (minimum: 1, default: %d)</source>
         <translation>Especifique em milisegundos o tempo para uma conexão expirar (mínimo: 1, padrão: %d)</translation>
     </message>
     <message>

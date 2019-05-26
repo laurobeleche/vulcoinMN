@@ -604,7 +604,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             if (pindexPrev != chainActive.Tip())
                 break;
 
-            // Update nTime every few vlconds
+            // Update nTime every few seconds
             UpdateTime(pblock, pindexPrev);
             if (Params().AllowMinDifficultyBlocks()) {
                 // Changing pblock->nTime can change work required on testnet:

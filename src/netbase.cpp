@@ -46,7 +46,7 @@ bool fNameLookup = false;
 
 static const unsigned char pchIPv4[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff};
 
-// Need ample time for negotiation for very slow proxies such as Tor (millivlconds)
+// Need ample time for negotiation for very slow proxies such as Tor (milliseconds)
 static const int SOCKS5_RECV_TIMEOUT = 20 * 1000;
 
 enum Network ParseNetwork(std::string net)
@@ -151,7 +151,7 @@ bool static LookupIntern(const char* pszName, std::vector<CNetAddr>& vIP, unsign
         // Should set the timeout limit to a resonable value to avoid
         // generating unnecessary checking call during the polling loop,
         // while it can still response to stop request quick enough.
-        // 2 vlconds looks fine in our situation.
+        // 2 seconds looks fine in our situation.
         struct timespec ts = {2, 0};
         gai_suspend(&query, 1, &ts);
         boost::this_thread::interruption_point();
@@ -246,7 +246,7 @@ struct timeval MillisToTimeval(int64_t nTimeout)
  *
  * @param data Buffer to receive into
  * @param len  Length of data to receive
- * @param timeout  Timeout in millivlconds for receive operation
+ * @param timeout  Timeout in milliseconds for receive operation
  *
  * @note This function requires that hSocket is in non-blocking mode.
  */

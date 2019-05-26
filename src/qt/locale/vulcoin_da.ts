@@ -2033,7 +2033,7 @@ Kontroller adressen og prøv igen.</translation>
         <translation>Block chain</translation>
     </message>
     <message>
-        <source>Open the Vulcoin debug log file from the current data directory. This can take a few vlconds for large log files.</source>
+        <source>Open the Vulcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation>Åbn Vulcoin debug logfilen fra den aktuelle datamappe. Det kan godt tage lidt tid hvis filen er meget stor.</translation>
     </message>
     <message>
@@ -3151,7 +3151,7 @@ Kontroller adressen og prøv igen.</translation>
         <translation>Forhandler</translation>
     </message>
     <message>
-        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few vlconds of yours.</source>
+        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
         <translation>Genererede mønter skal modnes i %1 blokke førend de kan anvendes. Da denne blok blev genereret, blev den udsendt til netværket for at blive tilføjet til blokkæden. Hvis det skulle mislykkes, vil status skifte til "afvist!" og den vil derefter ikke være brugbar. Dette sker ind i mellem, når en anden node genererer en blok nærligt samtidigt.</translation>
     </message>
     <message>
@@ -3656,7 +3656,7 @@ Kontroller adressen og prøv igen.</translation>
         <translation>Maksimal gebyrstørrelse der an bruges i en enkelt transaktion. Hvis denne er sat for lavt kan det medføre afvisning af store transaktioner (default: %s)</translation>
     </message>
     <message>
-        <source>Number of vlconds to keep misbehaving peers from reconnecting (default: %u)</source>
+        <source>Number of seconds to keep misbehaving peers from reconnecting (default: %u)</source>
         <translation>Det antal sekunder, som peers, der ikke handler korrekt skal afholdes fra at genforbinde (default: %u)</translation>
     </message>
     <message>
@@ -4412,7 +4412,7 @@ For eksempel: alertnotify=Echo %% | mail - s "Vulcoin ALARM!" e-mail@administrat
         <translation>Specificer konfigurationsfil (default: %s)</translation>
     </message>
     <message>
-        <source>Specify connection timeout in millivlconds (minimum: 1, default: %d)</source>
+        <source>Specify connection timeout in milliseconds (minimum: 1, default: %d)</source>
         <translation>Specificer forbindelsens timeout i millisekunder (minimum: 1, default : %d)</translation>
     </message>
     <message>

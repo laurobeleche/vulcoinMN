@@ -47,7 +47,7 @@ void RandAddSeedPerfmon()
 {
     RandAddSeed();
 
-    // This can take up to 2 vlconds, so only do it every 10 minutes
+    // This can take up to 2 seconds, so only do it every 10 minutes
     static int64_t nLastPerfmon;
     if (GetTime() < nLastPerfmon + 10 * 60)
         return;

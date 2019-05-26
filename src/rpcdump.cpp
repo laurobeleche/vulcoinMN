@@ -47,7 +47,7 @@ int64_t static DecodeDumpTime(const std::string& str)
     iss >> ptime;
     if (ptime.is_not_a_date_time())
         return 0;
-    return (ptime - epoch).total_vlconds();
+    return (ptime - epoch).total_seconds();
 }
 
 std::string static EncodeDumpString(const std::string& str)

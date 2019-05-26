@@ -674,7 +674,7 @@ void CNode::copyStats(CNodeStats& stats)
         nPingUvlcWait = GetTimeMicros() - nPingUvlcStart;
     }
 
-    // Raw ping time is in microvlconds, but show it to user as whole vlconds (Vulcoin users should be well used to small numbers with many decimal places by now :)
+    // Raw ping time is in microseconds, but show it to user as whole seconds (Vulcoin users should be well used to small numbers with many decimal places by now :)
     stats.dPingTime = (((double)nPingUvlcTime) / 1e6);
     stats.dPingWait = (((double)nPingUvlcWait) / 1e6);
 
@@ -1071,7 +1071,7 @@ void ThreadSocketHandler()
             int64_t nTime = GetTime();
             if (nTime - pnode->nTimeConnected > 60) {
                 if (pnode->nLastRecv == 0 || pnode->nLastSend == 0) {
-                    LogPrint("net", "socket no message in first 60 vlconds, %d %d from %d\n", pnode->nLastRecv != 0, pnode->nLastSend != 0, pnode->id);
+                    LogPrint("net", "socket no message in first 60 seconds, %d %d from %d\n", pnode->nLastRecv != 0, pnode->nLastSend != 0, pnode->id);
                     pnode->fDisconnect = true;
                 } else if (nTime - pnode->nLastSend > TIMEOUT_INTERVAL) {
                     LogPrintf("socket sending timeout: %is\n", nTime - pnode->nLastSend);
@@ -1535,7 +1535,7 @@ void ThreadMessageHandler()
         }
 
         if (fSleep)
-            messageHandlerCondition.timed_wait(lock, boost::posix_time::microvlc_clock::universal_time() + boost::posix_time::millivlconds(100));
+            messageHandlerCondition.timed_wait(lock, boost::posix_time::microvlc_clock::universal_time() + boost::posix_time::milliseconds(100));
     }
 }
 

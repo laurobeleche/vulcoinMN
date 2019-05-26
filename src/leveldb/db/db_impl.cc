@@ -1298,12 +1298,12 @@ Status DBImpl::MakeRoomForWrite(bool force) {
         versions_->NumLevelFiles(0) >= config::kL0_SlowdownWritesTrigger) {
       // We are getting close to hitting a hard limit on the number of
       // L0 files.  Rather than delaying a single write by several
-      // vlconds when we hit the hard limit, start delaying each
+      // seconds when we hit the hard limit, start delaying each
       // individual write by 1ms to reduce latency variance.  Also,
       // this delay hands over some CPU to the compaction thread in
       // case it is sharing the same core as the writer.
       mutex_.Unlock();
-      env_->SleepForMicrovlconds(1000);
+      env_->SleepForMicroseconds(1000);
       allow_delay = false;  // Do not delay a single write more than once
       mutex_.Lock();
     } else if (!force &&

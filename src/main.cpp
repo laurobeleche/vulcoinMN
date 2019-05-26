@@ -162,7 +162,7 @@ map<uint256, NodeId> mapBlockSource;
 struct QueuedBlock {
     uint256 hash;
     CBlockIndex* pindex;        //! Optional.
-    int64_t nTime;              //! Time of "getdata" request in microvlconds.
+    int64_t nTime;              //! Time of "getdata" request in microseconds.
     int nValidatedQueuedBefore; //! Number of blocks queued with validated headers (globally) at the time this one is requested.
     bool fValidatedHeaders;     //! Whether this block has validated headers at the time of request.
 };
@@ -287,7 +287,7 @@ struct CNodeState {
     CBlockIndex* pindexLastCommonBlock;
     //! Whether we've started headers synchronization with this peer.
     bool fSyncStarted;
-    //! Since when we're stalling block download progress (in microvlconds), or 0.
+    //! Since when we're stalling block download progress (in microseconds), or 0.
     int64_t nStallingSince;
     list<QueuedBlock> vBlocksInFlight;
     int nBlocksInFlight;
@@ -929,7 +929,7 @@ int GetIXConfirmations(uint256 nTXHash)
 // age (trust score) of competing branches.
 bool GetCoinAge(const CTransaction& tx, const unsigned int nTxTime, uint64_t& nCoinAge)
 {
-    uint256 bnCentVlcond = 0; // coin age in the unit of cent-vlconds
+    uint256 bnCentVlcond = 0; // coin age in the unit of cent-seconds
     nCoinAge = 0;
 
     CBlockIndex* pindex = NULL;
@@ -3527,7 +3527,7 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, CBlock* pblock, CDis
             pwalletMain->AutoCombineDust();
     }
 
-    LogPrintf("%s : ACCEPTED in %ld millivlconds with size=%d\n", __func__, GetTimeMillis() - nStartTime,
+    LogPrintf("%s : ACCEPTED in %ld milliseconds with size=%d\n", __func__, GetTimeMillis() - nStartTime,
               pblock->GetSerializeSize(SER_DISK, CLIENT_VERSION));
 
     return true;
@@ -5142,7 +5142,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             //
             // The nonce stops the remote getting confused between different pings: without
             // it, if the remote node sends a ping once per vlcond and this node takes 5
-            // vlconds to respond to each, the 5th ping the remote sends would appear to
+            // seconds to respond to each, the 5th ping the remote sends would appear to
             // return very quickly.
             pfrom->PushMessage("pong", nonce);
         }

@@ -2037,7 +2037,7 @@ Please check the address and try again.</source>
         <translation>블록체인</translation>
     </message>
     <message>
-        <source>Open the Vulcoin debug log file from the current data directory. This can take a few vlconds for large log files.</source>
+        <source>Open the Vulcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation>현재 데이터 디렉토리에서 Vulcoin 디버그 로그 파일을 엽니다. 로그 파일이 클 경우, 약간의 시간이 걸릴 수 있습니다.</translation>
     </message>
     <message>
@@ -3153,7 +3153,7 @@ Please check the address and try again.</source>
         <translation>상인</translation>
     </message>
     <message>
-        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few vlconds of yours.</source>
+        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
         <translation>생성된 코인은 사용되기 전 %1 블록이 완료되야 합니다. 이 블록을 생성하면 네트워크에 브로드캐스팅되어 블록체인에 추가 됩니다. 체인이 실패한 경우 "승인되지 않음"으로 바뀌어 사용할 수 없습니다. 다른 노드가 당신과 겹쳐서 몇 초 이내 블록을 생성하면 때때로 이런 일이 발생할 수 있습니다.</translation>
     </message>
     <message>
@@ -3657,7 +3657,7 @@ Please check the address and try again.</source>
         <translation>단일 지갑 트랜잭션에서 사용하기 위한 최대 전체 수수료, 너무 낮은 값이 설정되어 있으면 큰 트랜잭션이 유실될 수 있습니다 (기본값: %s)</translation>
     </message>
     <message>
-        <source>Number of vlconds to keep misbehaving peers from reconnecting (default: %u)</source>
+        <source>Number of seconds to keep misbehaving peers from reconnecting (default: %u)</source>
         <translation>재연결로 인해 피어가 오작동을 유지하는 초 단위 시간 (기본값: %u)</translation>
     </message>
     <message>
@@ -4453,7 +4453,7 @@ rpcpassword=%s
         <translation>구성 파일 지정 (기본값: %s)</translation>
     </message>
     <message>
-        <source>Specify connection timeout in millivlconds (minimum: 1, default: %d)</source>
+        <source>Specify connection timeout in milliseconds (minimum: 1, default: %d)</source>
         <translation>연결 시간 초과 단위를 100분의 1초 단위로 지정 (최소값: 1, 기본값: %d)</translation>
     </message>
     <message>

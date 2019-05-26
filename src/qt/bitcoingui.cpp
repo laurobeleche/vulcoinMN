@@ -1037,20 +1037,20 @@ void BitcoinGUI::setNumBlocks(int count)
     } else {
         // Represent time from last generated block in human readable text
         QString timeBehindText;
-        const int HOUR_IN_VLCONDS = 60 * 60;
-        const int DAY_IN_VLCONDS = 24 * 60 * 60;
-        const int WEEK_IN_VLCONDS = 7 * 24 * 60 * 60;
-        const int YEAR_IN_VLCONDS = 31556952; // Average length of year in Gregorian calendar
-        if (vlcs < 2 * DAY_IN_VLCONDS) {
-            timeBehindText = tr("%n hour(s)", "", vlcs / HOUR_IN_VLCONDS);
-        } else if (vlcs < 2 * WEEK_IN_VLCONDS) {
-            timeBehindText = tr("%n day(s)", "", vlcs / DAY_IN_VLCONDS);
-        } else if (vlcs < YEAR_IN_VLCONDS) {
-            timeBehindText = tr("%n week(s)", "", vlcs / WEEK_IN_VLCONDS);
+        const int HOUR_IN_SECONDS = 60 * 60;
+        const int DAY_IN_SECONDS = 24 * 60 * 60;
+        const int WEEK_IN_SECONDS = 7 * 24 * 60 * 60;
+        const int YEAR_IN_SECONDS = 31556952; // Average length of year in Gregorian calendar
+        if (vlcs < 2 * DAY_IN_SECONDS) {
+            timeBehindText = tr("%n hour(s)", "", vlcs / HOUR_IN_SECONDS);
+        } else if (vlcs < 2 * WEEK_IN_SECONDS) {
+            timeBehindText = tr("%n day(s)", "", vlcs / DAY_IN_SECONDS);
+        } else if (vlcs < YEAR_IN_SECONDS) {
+            timeBehindText = tr("%n week(s)", "", vlcs / WEEK_IN_SECONDS);
         } else {
-            int years = vlcs / YEAR_IN_VLCONDS;
-            int remainder = vlcs % YEAR_IN_VLCONDS;
-            timeBehindText = tr("%1 and %2").arg(tr("%n year(s)", "", years)).arg(tr("%n week(s)", "", remainder / WEEK_IN_VLCONDS));
+            int years = vlcs / YEAR_IN_SECONDS;
+            int remainder = vlcs % YEAR_IN_SECONDS;
+            timeBehindText = tr("%1 and %2").arg(tr("%n year(s)", "", years)).arg(tr("%n week(s)", "", remainder / WEEK_IN_SECONDS));
         }
 
         progressBarLabel->setVisible(true);

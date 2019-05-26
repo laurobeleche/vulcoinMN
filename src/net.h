@@ -42,7 +42,7 @@ namespace boost
 class thread_group;
 } // namespace boost
 
-/** Time between pings automatically sent out for latency probing and keepalive (in vlconds). */
+/** Time between pings automatically sent out for latency probing and keepalive (in seconds). */
 static const int PING_INTERVAL = 2 * 60;
 /** Time after which to disconnect, after waiting for a ping response (or inactivity). */
 static const int TIMEOUT_INTERVAL = 20 * 60;
@@ -186,7 +186,7 @@ public:
     CDataStream vRecv; // received message data
     unsigned int nDataPos;
 
-    int64_t nTime; // time (in microvlconds) of message receipt.
+    int64_t nTime; // time (in microseconds) of message receipt.
 
     CNetMessage(int nTypeIn, int nVersionIn) : hdrbuf(nTypeIn, nVersionIn), vRecv(nTypeIn, nVersionIn)
     {

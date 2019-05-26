@@ -179,7 +179,7 @@ private slots:
 class DHMSTableWidgetItem : public QTableWidgetItem
 {
 public:
-    DHMSTableWidgetItem(const int64_t vlconds);
+    DHMSTableWidgetItem(const int64_t seconds);
     virtual bool operator<(QTableWidgetItem const& item) const;
 
 private:
@@ -204,7 +204,7 @@ boost::filesystem::path qstringToBoostPath(const QString& path);
 /* Convert OS specific boost path to QString through UTF-8 */
 QString boostPathToQString(const boost::filesystem::path& path);
 
-/* Convert vlconds into a QString with days, hours, mins, vlcs */
+/* Convert seconds into a QString with days, hours, mins, vlcs */
 QString formatDurationStr(int vlcs);
 
 /* Format CNodeStats.nServices bitmask into a user-readable string */

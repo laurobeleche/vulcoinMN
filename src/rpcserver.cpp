@@ -815,7 +815,7 @@ void RPCRunHandler(const boost::system::error_code& err, boost::function<void(vo
         func();
 }
 
-void RPCRunLater(const std::string& name, boost::function<void(void)> func, int64_t nVlconds)
+void RPCRunLater(const std::string& name, boost::function<void(void)> func, int64_t nSeconds)
 {
     assert(rpc_io_service != NULL);
 
@@ -823,7 +823,7 @@ void RPCRunLater(const std::string& name, boost::function<void(void)> func, int6
         deadlineTimers.insert(make_pair(name,
             boost::shared_ptr<deadline_timer>(new deadline_timer(*rpc_io_service))));
     }
-    deadlineTimers[name]->expires_from_now(posix_time::vlconds(nVlconds));
+    deadlineTimers[name]->expires_from_now(posix_time::seconds(nSeconds));
     deadlineTimers[name]->async_wait(boost::bind(RPCRunHandler, _1, func));
 }
 

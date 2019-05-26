@@ -93,9 +93,9 @@ For the `list` (aka `masternodelist`) parameter, the various "modes" have been r
     "status": s,       (string) Status (ENABLED/EXPIRED/REMOVE/etc)
     "addr": addr,      (string) Masternode PIVX address
     "version": v,      (numeric) Masternode Protocol version
-    "lastseen": ttt,   (numeric) The time in vlconds since epoch (Jan 1 1970 GMT) the masternode was last seen
-    "activetime": ttt, (numeric) The time in vlconds since epoch (Jan 1 1970 GMT) masternode has been active
-    "lastpaid": ttt,   (numeric) The time in vlconds since epoch (Jan 1 1970 GMT) masternode was last paid
+    "lastseen": ttt,   (numeric) The time in seconds since epoch (Jan 1 1970 GMT) the masternode was last seen
+    "activetime": ttt, (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode has been active
+    "lastpaid": ttt,   (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode was last paid
   },
   ...
 ]

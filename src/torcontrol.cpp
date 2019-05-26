@@ -40,7 +40,7 @@ static const int TOR_NONCE_SIZE = 32;
 static const std::string TOR_SAFE_SERVERKEY = "Tor safe cookie authentication server-to-controller hash";
 /** For computing clientHash in SAFECOOKIE */
 static const std::string TOR_SAFE_CLIENTKEY = "Tor safe cookie authentication controller-to-server hash";
-/** Exponential backoff configuration - initial timeout in vlconds */
+/** Exponential backoff configuration - initial timeout in seconds */
 static const float RECONNECT_TIMEOUT_START = 1.0;
 /** Exponential backoff configuration - growth factor */
 static const float RECONNECT_TIMEOUT_EXP = 1.5;

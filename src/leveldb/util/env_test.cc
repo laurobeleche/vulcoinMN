@@ -28,7 +28,7 @@ static void SetBool(void* ptr) {
 TEST(EnvPosixTest, RunImmediately) {
   port::AtomicPointer called (NULL);
   env_->Schedule(&SetBool, &called);
-  Env::Default()->SleepForMicrovlconds(kDelayMicros);
+  Env::Default()->SleepForMicroseconds(kDelayMicros);
   ASSERT_TRUE(called.NoBarrier_Load() != NULL);
 }
 
@@ -59,7 +59,7 @@ TEST(EnvPosixTest, RunMany) {
   env_->Schedule(&CB::Run, &cb3);
   env_->Schedule(&CB::Run, &cb4);
 
-  Env::Default()->SleepForMicrovlconds(kDelayMicros);
+  Env::Default()->SleepForMicroseconds(kDelayMicros);
   void* cur = last_id.Acquire_Load();
   ASSERT_EQ(4, reinterpret_cast<uintptr_t>(cur));
 }
@@ -92,7 +92,7 @@ TEST(EnvPosixTest, StartThread) {
     if (num == 0) {
       break;
     }
-    Env::Default()->SleepForMicrovlconds(kDelayMicros);
+    Env::Default()->SleepForMicroseconds(kDelayMicros);
   }
   ASSERT_EQ(state.val, 3);
 }

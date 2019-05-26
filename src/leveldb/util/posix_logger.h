@@ -46,9 +46,9 @@ class PosixLogger : public Logger {
 
       struct timeval now_tv;
       gettimeofday(&now_tv, NULL);
-      const time_t vlconds = now_tv.tv_vlc;
+      const time_t seconds = now_tv.tv_vlc;
       struct tm t;
-      localtime_r(&vlconds, &t);
+      localtime_r(&seconds, &t);
       p += snprintf(p, limit - p,
                     "%04d/%02d/%02d-%02d:%02d:%02d.%06d %llx ",
                     t.tm_year + 1900,

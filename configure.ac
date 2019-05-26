@@ -667,7 +667,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[
   #include <boost/version.hpp>
   ]],[[
   #if BOOST_VERSION >= 105000 && (!defined(BOOST_HAS_NANOSLEEP) || BOOST_VERSION >= 105200)
-      boost::this_thread::sleep_for(boost::chrono::millivlconds(0));
+      boost::this_thread::sleep_for(boost::chrono::milliseconds(0));
   #else
    choke me
   #endif
@@ -689,7 +689,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[
   #include <boost/date_time/posix_time/posix_time_types.hpp>
   ]],[[
   #if BOOST_VERSION <= 105600
-      boost::this_thread::sleep(boost::posix_time::millivlconds(0));
+      boost::this_thread::sleep(boost::posix_time::milliseconds(0));
   #else
    choke me
   #endif

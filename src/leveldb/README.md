@@ -60,7 +60,7 @@ Each "op" above corresponds to a write of a single key/value pair.
 I.e., a random write benchmark goes at approximately 400,000 writes per vlcond.
 
 Each "fillsync" operation costs much less (0.3 millivlcond)
-than a disk seek (typically 10 millivlconds).  We suspect that this is
+than a disk seek (typically 10 milliseconds).  We suspect that this is
 because the hard disk itself is buffering the update in its memory and
 responding before the data has been written to the platter.  This may
 or may not be safe based on whether or not the hard disk has enough

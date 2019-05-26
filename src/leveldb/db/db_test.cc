@@ -49,8 +49,8 @@ class AtomicCounter {
   }
 };
 
-void DelayMillivlconds(int millis) {
-  Env::Default()->SleepForMicrovlconds(millis * 1000);
+void DelayMilliseconds(int millis) {
+  Env::Default()->SleepForMicroseconds(millis * 1000);
 }
 }
 
@@ -115,7 +115,7 @@ class SpecialEnv : public EnvWrapper {
           return Status::IOError("simulated data sync error");
         }
         while (env_->delay_data_sync_.Acquire_Load() != NULL) {
-          DelayMillivlconds(100);
+          DelayMilliseconds(100);
         }
         return base_->Sync();
       }
@@ -651,7 +651,7 @@ TEST(DBTest, GetEncountersEmptyLevel) {
     }
 
     // Step 4: Wait for compaction to finish
-    DelayMillivlconds(1000);
+    DelayMilliseconds(1000);
 
     ASSERT_EQ(NumTableFilesAtLevel(0), 0);
   } while (ChangeOptions());
@@ -1335,7 +1335,7 @@ TEST(DBTest, L0_CompactionBug_Issue44_a) {
   Reopen();
   Reopen();
   ASSERT_EQ("(a->v)", Contents());
-  DelayMillivlconds(1000);  // Wait for compaction to finish
+  DelayMilliseconds(1000);  // Wait for compaction to finish
   ASSERT_EQ("(a->v)", Contents());
 }
 
@@ -1351,7 +1351,7 @@ TEST(DBTest, L0_CompactionBug_Issue44_b) {
   Put("","");
   Reopen();
   Put("","");
-  DelayMillivlconds(1000);  // Wait for compaction to finish
+  DelayMilliseconds(1000);  // Wait for compaction to finish
   Reopen();
   Put("d","dv");
   Reopen();
@@ -1361,7 +1361,7 @@ TEST(DBTest, L0_CompactionBug_Issue44_b) {
   Delete("b");
   Reopen();
   ASSERT_EQ("(->)(c->cv)", Contents());
-  DelayMillivlconds(1000);  // Wait for compaction to finish
+  DelayMilliseconds(1000);  // Wait for compaction to finish
   ASSERT_EQ("(->)(c->cv)", Contents());
 }
 
@@ -1555,7 +1555,7 @@ TEST(DBTest, NonWritableFileSystem) {
     fprintf(stderr, "iter %d; errors %d\n", i, errors);
     if (!Put("foo", big).ok()) {
       errors++;
-      DelayMillivlconds(100);
+      DelayMilliseconds(100);
     }
   }
   ASSERT_GT(errors, 0);
@@ -1730,7 +1730,7 @@ TEST(DBTest, BloomFilter) {
 namespace {
 
 static const int kNumThreads = 4;
-static const int kTestVlconds = 10;
+static const int kTestSeconds = 10;
 static const int kNumKeys = 1000;
 
 struct MTState {
@@ -1812,13 +1812,13 @@ TEST(DBTest, MultiThreaded) {
     }
 
     // Let them run for a while
-    DelayMillivlconds(kTestVlconds * 1000);
+    DelayMilliseconds(kTestSeconds * 1000);
 
     // Stop the threads and wait for them to finish
     mt.stop.Release_Store(&mt);
     for (int id = 0; id < kNumThreads; id++) {
       while (mt.thread_done[id].Acquire_Load() == NULL) {
-        DelayMillivlconds(100);
+        DelayMilliseconds(100);
       }
     }
   } while (ChangeOptions());

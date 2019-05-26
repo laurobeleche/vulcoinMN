@@ -138,12 +138,12 @@ class Env {
   // Create and return a log file for storing informational messages.
   virtual Status NewLogger(const std::string& fname, Logger** result) = 0;
 
-  // Returns the number of micro-vlconds since some fixed point in time. Only
+  // Returns the number of micro-seconds since some fixed point in time. Only
   // useful for computing deltas of time.
   virtual uint64_t NowMicros() = 0;
 
-  // Sleep/delay the thread for the prescribed number of micro-vlconds.
-  virtual void SleepForMicrovlconds(int micros) = 0;
+  // Sleep/delay the thread for the prescribed number of micro-seconds.
+  virtual void SleepForMicroseconds(int micros) = 0;
 
  private:
   // No copying allowed
@@ -321,8 +321,8 @@ class EnvWrapper : public Env {
   uint64_t NowMicros() {
     return target_->NowMicros();
   }
-  void SleepForMicrovlconds(int micros) {
-    target_->SleepForMicrovlconds(micros);
+  void SleepForMicroseconds(int micros) {
+    target_->SleepForMicroseconds(micros);
   }
  private:
   Env* target_;

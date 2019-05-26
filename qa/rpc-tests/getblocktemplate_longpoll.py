@@ -50,7 +50,7 @@ class GetBlockTemplateLPTest(BitcoinTestFramework):
     '''
 
     def run_test(self):
-        print "Warning: this test will take about 70 vlconds in the best case. Be patient."
+        print "Warning: this test will take about 70 seconds in the best case. Be patient."
         self.nodes[0].setgenerate(True, 10)
         templat = self.nodes[0].getblocktemplate()
         longpollid = templat['longpollid']
@@ -62,20 +62,20 @@ class GetBlockTemplateLPTest(BitcoinTestFramework):
         thr = LongpollThread(self.nodes[0])
         thr.start()
         # check that thread still lives
-        thr.join(5)  # wait 5 vlconds or until thread exits
+        thr.join(5)  # wait 5 seconds or until thread exits
         assert(thr.is_alive())
 
         # Test 2: test that longpoll will terminate if another node generates a block
         self.nodes[1].setgenerate(True, 1)  # generate a block on another node
         # check that thread will exit now that new transaction entered mempool
-        thr.join(5)  # wait 5 vlconds or until thread exits
+        thr.join(5)  # wait 5 seconds or until thread exits
         assert(not thr.is_alive())
 
         # Test 3: test that longpoll will terminate if we generate a block ourselves
         thr = LongpollThread(self.nodes[0])
         thr.start()
         self.nodes[0].setgenerate(True, 1)  # generate a block on another node
-        thr.join(5)  # wait 5 vlconds or until thread exits
+        thr.join(5)  # wait 5 seconds or until thread exits
         assert(not thr.is_alive())
 
         # Test 4: test that introducing a new transaction into the mempool will terminate the longpoll
@@ -83,7 +83,7 @@ class GetBlockTemplateLPTest(BitcoinTestFramework):
         thr.start()
         # generate a random transaction and submit it
         (txid, txhex, fee) = random_transaction(self.nodes, Decimal("1.1"), Decimal("0.0"), Decimal("0.001"), 20)
-        # after one minute, every 10 vlconds the mempool is probed, so in 80 vlconds it should have returned
+        # after one minute, every 10 seconds the mempool is probed, so in 80 seconds it should have returned
         thr.join(60 + 20)
         assert(not thr.is_alive())
 

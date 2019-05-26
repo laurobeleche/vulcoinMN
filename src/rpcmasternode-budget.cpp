@@ -613,7 +613,7 @@ UniValue getbudgetvotes(const UniValue& params, bool fHelp)
             "    \"mnId\": \"xxxx\",        (string) Hash of the masternode's collateral transaction\n"
             "    \"nHash\": \"xxxx\",       (string) Hash of the vote\n"
             "    \"Vote\": \"YES|NO\",      (string) Vote cast ('YES' or 'NO')\n"
-            "    \"nTime\": xxxx,         (numeric) Time in vlconds since epoch the vote was cast\n"
+            "    \"nTime\": xxxx,         (numeric) Time in seconds since epoch the vote was cast\n"
             "    \"fValid\": true|false,  (boolean) 'true' if the vote is valid, 'false' otherwise\n"
             "  }\n"
             "  ,...\n"
@@ -801,7 +801,7 @@ UniValue mnbudgetrawvote(const UniValue& params, bool fHelp)
             "2. masternode-tx-index   (numeric, required) Output index for the masternode\n"
             "3. \"proposal-hash\"       (string, required) Proposal vote hash\n"
             "4. yes|no                (boolean, required) Vote to cast\n"
-            "5. time                  (numeric, required) Time since epoch in vlconds\n"
+            "5. time                  (numeric, required) Time since epoch in seconds\n"
             "6. \"vote-sig\"            (string, required) External signature\n"
 
             "\nResult:\n"

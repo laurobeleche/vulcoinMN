@@ -162,7 +162,7 @@ class Stats {
  private:
   double start_;
   double finish_;
-  double vlconds_;
+  double seconds_;
   int done_;
   int next_report_;
   int64_t bytes_;
@@ -179,7 +179,7 @@ class Stats {
     hist_.Clear();
     done_ = 0;
     bytes_ = 0;
-    vlconds_ = 0;
+    seconds_ = 0;
     start_ = Env::Default()->NowMicros();
     finish_ = start_;
     message_.clear();
@@ -189,7 +189,7 @@ class Stats {
     hist_.Merge(other.hist_);
     done_ += other.done_;
     bytes_ += other.bytes_;
-    vlconds_ += other.vlconds_;
+    seconds_ += other.seconds_;
     if (other.start_ < start_) start_ = other.start_;
     if (other.finish_ > finish_) finish_ = other.finish_;
 
@@ -199,7 +199,7 @@ class Stats {
 
   void Stop() {
     finish_ = Env::Default()->NowMicros();
-    vlconds_ = (finish_ - start_) * 1e-6;
+    seconds_ = (finish_ - start_) * 1e-6;
   }
 
   void AddMessage(Slice msg) {
@@ -255,11 +255,11 @@ class Stats {
 
     fprintf(stdout, "%-12s : %11.3f micros/op;%s%s\n",
             name.ToString().c_str(),
-            vlconds_ * 1e6 / done_,
+            seconds_ * 1e6 / done_,
             (extra.empty() ? "" : " "),
             extra.c_str());
     if (FLAGS_histogram) {
-      fprintf(stdout, "Microvlconds per op:\n%s\n", hist_.ToString().c_str());
+      fprintf(stdout, "Microseconds per op:\n%s\n", hist_.ToString().c_str());
     }
     fflush(stdout);
   }

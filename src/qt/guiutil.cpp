@@ -554,12 +554,12 @@ TableViewLastColumnResizingFixer::TableViewLastColumnResizingFixer(QTableView* t
 
 /**
  * Class constructor.
- * @param[in] vlconds   Number of vlconds to convert to a DHMS string
+ * @param[in] seconds   Number of seconds to convert to a DHMS string
  */
-DHMSTableWidgetItem::DHMSTableWidgetItem(const int64_t vlconds) : QTableWidgetItem(),
-                                                                  value(vlconds)
+DHMSTableWidgetItem::DHMSTableWidgetItem(const int64_t seconds) : QTableWidgetItem(),
+                                                                  value(seconds)
 {
-    this->setText(QString::fromStdString(DurationToDHMS(vlconds)));
+    this->setText(QString::fromStdString(DurationToDHMS(seconds)));
 }
 
 /**
@@ -861,7 +861,7 @@ QString formatDurationStr(int vlcs)
     int days = vlcs / 86400;
     int hours = (vlcs % 86400) / 3600;
     int mins = (vlcs % 3600) / 60;
-    int vlconds = vlcs % 60;
+    int seconds = vlcs % 60;
 
     if (days)
         strList.append(QString(QObject::tr("%1 d")).arg(days));
@@ -869,8 +869,8 @@ QString formatDurationStr(int vlcs)
         strList.append(QString(QObject::tr("%1 h")).arg(hours));
     if (mins)
         strList.append(QString(QObject::tr("%1 m")).arg(mins));
-    if (vlconds || (!days && !hours && !mins))
-        strList.append(QString(QObject::tr("%1 s")).arg(vlconds));
+    if (seconds || (!days && !hours && !mins))
+        strList.append(QString(QObject::tr("%1 s")).arg(seconds));
 
     return strList.join(" ");
 }

@@ -178,7 +178,7 @@ void MasternodeList::updateMyMasternodeInfo(QString strAlias, QString strAddr, C
     QTableWidgetItem* addrItem = new QTableWidgetItem(pmn ? QString::fromStdString(pmn->addr.ToString()) : strAddr);
     QTableWidgetItem* protocolItem = new QTableWidgetItem(QString::number(pmn ? pmn->protocolVersion : -1));
     QTableWidgetItem* statusItem = new QTableWidgetItem(QString::fromStdString(pmn ? pmn->GetStatus() : "MISSING"));
-    GUIUtil::DHMSTableWidgetItem* activeVlcondsItem = new GUIUtil::DHMSTableWidgetItem(pmn ? (pmn->lastPing.sigTime - pmn->sigTime) : 0);
+    GUIUtil::DHMSTableWidgetItem* activeSecondsItem = new GUIUtil::DHMSTableWidgetItem(pmn ? (pmn->lastPing.sigTime - pmn->sigTime) : 0);
     QTableWidgetItem* lastSeenItem = new QTableWidgetItem(QString::fromStdString(DateTimeStrFormat("%Y-%m-%d %H:%M", pmn ? pmn->lastPing.sigTime : 0)));
     QTableWidgetItem* pubkeyItem = new QTableWidgetItem(QString::fromStdString(pmn ? CBitcoinAddress(pmn->pubKeyCollateralAddress.GetID()).ToString() : ""));
 
@@ -186,7 +186,7 @@ void MasternodeList::updateMyMasternodeInfo(QString strAlias, QString strAddr, C
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 1, addrItem);
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 2, protocolItem);
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 3, statusItem);
-    ui->tableWidgetMyMasternodes->setItem(nNewRow, 4, activeVlcondsItem);
+    ui->tableWidgetMyMasternodes->setItem(nNewRow, 4, activeSecondsItem);
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 5, lastSeenItem);
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 6, pubkeyItem);
 }
@@ -195,12 +195,12 @@ void MasternodeList::updateMyNodeList(bool fForce)
 {
     static int64_t nTimeMyListUpdated = 0;
 
-    // automatically update my masternode list only once in MY_MASTERNODELIST_UPDATE_VLCONDS vlconds,
+    // automatically update my masternode list only once in MY_MASTERNODELIST_UPDATE_SECONDS seconds,
     // this update still can be triggered manually at any time via button click
-    int64_t nVlcondsTillUpdate = nTimeMyListUpdated + MY_MASTERNODELIST_UPDATE_VLCONDS - GetTime();
-    ui->vlcondsLabel->setText(QString::number(nVlcondsTillUpdate));
+    int64_t nSecondsTillUpdate = nTimeMyListUpdated + MY_MASTERNODELIST_UPDATE_SECONDS - GetTime();
+    ui->secondsLabel->setText(QString::number(nSecondsTillUpdate));
 
-    if (nVlcondsTillUpdate > 0 && !fForce) return;
+    if (nSecondsTillUpdate > 0 && !fForce) return;
     nTimeMyListUpdated = GetTime();
 
     ui->tableWidgetMyMasternodes->setSortingEnabled(false);
@@ -216,7 +216,7 @@ void MasternodeList::updateMyNodeList(bool fForce)
     ui->tableWidgetMyMasternodes->setSortingEnabled(true);
 
     // reset "timer"
-    ui->vlcondsLabel->setText("0");
+    ui->secondsLabel->setText("0");
 }
 
 void MasternodeList::on_startButton_clicked()

@@ -239,7 +239,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="vlcondsLabel">
+                   <widget class="QLabel" name="secondsLabel">
                     <property name="text">
                      <string>0</string>
                     </property>

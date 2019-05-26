@@ -15,12 +15,12 @@
 #include "util.h"
 
 #define MASTERNODE_MIN_CONFIRMATIONS 15
-#define MASTERNODE_MIN_MNP_VLCONDS (10 * 60)
-#define MASTERNODE_MIN_MNB_VLCONDS (5 * 60)
-#define MASTERNODE_PING_VLCONDS (5 * 60)
-#define MASTERNODE_EXPIRATION_VLCONDS (120 * 60)
-#define MASTERNODE_REMOVAL_VLCONDS (130 * 60)
-#define MASTERNODE_CHECK_VLCONDS 5
+#define MASTERNODE_MIN_MNP_SECONDS (10 * 60)
+#define MASTERNODE_MIN_MNB_SECONDS (5 * 60)
+#define MASTERNODE_PING_SECONDS (5 * 60)
+#define MASTERNODE_EXPIRATION_SECONDS (120 * 60)
+#define MASTERNODE_REMOVAL_SECONDS (130 * 60)
+#define MASTERNODE_CHECK_SECONDS 5
 
 #define MASTERNODE_COLLATERAL 1000000
 
@@ -219,7 +219,7 @@ public:
         READWRITE(nLastScanningErrorBlockHeight);
     }
 
-    int64_t VlcondsSincePayment();
+    int64_t SecondsSincePayment();
 
     bool UpdateFromNewBroadcast(CMasternodeBroadcast& mnb);
 
@@ -232,16 +232,16 @@ public:
 
     void Check(bool forceCheck = false);
 
-    bool IsBroadcastedWithin(int vlconds)
+    bool IsBroadcastedWithin(int seconds)
     {
-        return (GetAdjustedTime() - sigTime) < vlconds;
+        return (GetAdjustedTime() - sigTime) < seconds;
     }
 
-    bool IsPingedWithin(int vlconds, int64_t now = -1)
+    bool IsPingedWithin(int seconds, int64_t now = -1)
     {
         now == -1 ? now = GetAdjustedTime() : now;
 
-        return (lastPing == CMasternodePing()) ? false : now - lastPing.sigTime < vlconds;
+        return (lastPing == CMasternodePing()) ? false : now - lastPing.sigTime < seconds;
     }
 
     void Disable()

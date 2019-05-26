@@ -115,7 +115,7 @@ QT_TRANSLATE_NOOP("vulcoin-core", ""
 "Maximum total fees to use in a single wallet transaction, setting too low "
 "may abort large transactions (default: %s)"),
 QT_TRANSLATE_NOOP("vulcoin-core", ""
-"Number of vlconds to keep misbehaving peers from reconnecting (default: %u)"),
+"Number of seconds to keep misbehaving peers from reconnecting (default: %u)"),
 QT_TRANSLATE_NOOP("vulcoin-core", ""
 "Output debugging information (default: %u, supplying <category> is optional)"),
 QT_TRANSLATE_NOOP("vulcoin-core", ""
@@ -380,7 +380,7 @@ QT_TRANSLATE_NOOP("vulcoin-core", "Signing failed."),
 QT_TRANSLATE_NOOP("vulcoin-core", "Signing timed out."),
 QT_TRANSLATE_NOOP("vulcoin-core", "Signing transaction failed"),
 QT_TRANSLATE_NOOP("vulcoin-core", "Specify configuration file (default: %s)"),
-QT_TRANSLATE_NOOP("vulcoin-core", "Specify connection timeout in millivlconds (minimum: 1, default: %d)"),
+QT_TRANSLATE_NOOP("vulcoin-core", "Specify connection timeout in milliseconds (minimum: 1, default: %d)"),
 QT_TRANSLATE_NOOP("vulcoin-core", "Specify data directory"),
 QT_TRANSLATE_NOOP("vulcoin-core", "Specify masternode configuration file (default: %s)"),
 QT_TRANSLATE_NOOP("vulcoin-core", "Specify pid file (default: %s)"),

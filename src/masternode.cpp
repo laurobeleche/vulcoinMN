@@ -195,7 +195,7 @@ void CMasternode::Check(bool forceCheck)
 {
     if (ShutdownRequested()) return;
 
-    if (!forceCheck && (GetTime() - lastTimeChecked < MASTERNODE_CHECK_VLCONDS)) return;
+    if (!forceCheck && (GetTime() - lastTimeChecked < MASTERNODE_CHECK_SECONDS)) return;
     lastTimeChecked = GetTime();
 
 
@@ -203,12 +203,12 @@ void CMasternode::Check(bool forceCheck)
     if (activeState == MASTERNODE_VIN_SPENT) return;
 
 
-    if (!IsPingedWithin(MASTERNODE_REMOVAL_VLCONDS)) {
+    if (!IsPingedWithin(MASTERNODE_REMOVAL_SECONDS)) {
         activeState = MASTERNODE_REMOVE;
         return;
     }
 
-    if (!IsPingedWithin(MASTERNODE_EXPIRATION_VLCONDS)) {
+    if (!IsPingedWithin(MASTERNODE_EXPIRATION_SECONDS)) {
         activeState = MASTERNODE_EXPIRED;
         return;
     }
@@ -234,14 +234,14 @@ void CMasternode::Check(bool forceCheck)
     activeState = MASTERNODE_ENABLED; // OK
 }
 
-int64_t CMasternode::VlcondsSincePayment()
+int64_t CMasternode::SecondsSincePayment()
 {
     CScript pubkeyScript;
     pubkeyScript = GetScriptForDestination(pubKeyCollateralAddress.GetID());
 
     int64_t vlc = (GetAdjustedTime() - GetLastPaid());
     int64_t month = 60 * 60 * 24 * 30;
-    if (vlc < month) return vlc; //if it's less than 30 days, give vlconds
+    if (vlc < month) return vlc; //if it's less than 30 days, give seconds
 
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
     ss << vin;
@@ -543,7 +543,7 @@ bool CMasternodeBroadcast::CheckAndUpdate(int& nDos)
 
     // mn.pubkey = pubkey, IsVinAssociatedWithPubkey is validated once below,
     //   after that they just need to match
-    if (pmn->pubKeyCollateralAddress == pubKeyCollateralAddress && !pmn->IsBroadcastedWithin(MASTERNODE_MIN_MNB_VLCONDS)) {
+    if (pmn->pubKeyCollateralAddress == pubKeyCollateralAddress && !pmn->IsBroadcastedWithin(MASTERNODE_MIN_MNB_SECONDS)) {
         //take the newest entry
         LogPrint("masternode","mnb - Got updated entry for %s\n", vin.prevout.hash.ToString());
         if (pmn->UpdateFromNewBroadcast((*this))) {
@@ -730,8 +730,8 @@ bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled)
 
         // LogPrint("masternode","mnping - Found corresponding mn for vin: %s\n", vin.ToString());
         // update only if there is no known ping for this masternode or
-        // last ping was more then MASTERNODE_MIN_MNP_VLCONDS-60 ago comparing to this one
-        if (!pmn->IsPingedWithin(MASTERNODE_MIN_MNP_VLCONDS - 60, sigTime)) {
+        // last ping was more then MASTERNODE_MIN_MNP_SECONDS-60 ago comparing to this one
+        if (!pmn->IsPingedWithin(MASTERNODE_MIN_MNP_SECONDS - 60, sigTime)) {
             std::string strMessage = vin.ToString() + blockHash.ToString() + boost::lexical_cast<std::string>(sigTime);
 
             std::string errorMessage = "";

@@ -1031,7 +1031,7 @@
         <translation>Especifique o arquivo de configuração (padrão:%s)</translation>
     </message>
     <message>
-        <source>Specify connection timeout in millivlconds (minimum: 1, default: %d)</source>
+        <source>Specify connection timeout in milliseconds (minimum: 1, default: %d)</source>
         <translation>Especifique o tempo limite da conexão em milissegundos (mínimo: 1, padrão:%d)</translation>
     </message>
     <message>

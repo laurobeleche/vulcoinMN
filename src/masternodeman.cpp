@@ -225,7 +225,7 @@ void CMasternodeMan::AskForMN(CNode* pnode, CTxIn& vin)
 
     LogPrint("masternode", "CMasternodeMan::AskForMN - Asking node for missing entry, vin: %s\n", vin.prevout.hash.ToString());
     pnode->PushMessage("dseg", vin);
-    int64_t askAgain = GetTime() + MASTERNODE_MIN_MNP_VLCONDS;
+    int64_t askAgain = GetTime() + MASTERNODE_MIN_MNP_SECONDS;
     mWeAskedForMasternodeListEntry[vin.prevout] = askAgain;
 }
 
@@ -315,7 +315,7 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
     // remove expired mapSeenMasternodeBroadcast
     map<uint256, CMasternodeBroadcast>::iterator it3 = mapSeenMasternodeBroadcast.begin();
     while (it3 != mapSeenMasternodeBroadcast.end()) {
-        if ((*it3).vlcond.lastPing.sigTime < GetTime() - (MASTERNODE_REMOVAL_VLCONDS * 2)) {
+        if ((*it3).vlcond.lastPing.sigTime < GetTime() - (MASTERNODE_REMOVAL_SECONDS * 2)) {
             mapSeenMasternodeBroadcast.erase(it3++);
             masternodeSync.mapSeenSyncMNB.erase((*it3).vlcond.GetHash());
         } else {
@@ -326,7 +326,7 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
     // remove expired mapSeenMasternodePing
     map<uint256, CMasternodePing>::iterator it4 = mapSeenMasternodePing.begin();
     while (it4 != mapSeenMasternodePing.end()) {
-        if ((*it4).vlcond.sigTime < GetTime() - (MASTERNODE_REMOVAL_VLCONDS * 2)) {
+        if ((*it4).vlcond.sigTime < GetTime() - (MASTERNODE_REMOVAL_SECONDS * 2)) {
             mapSeenMasternodePing.erase(it4++);
         } else {
             ++it4;
@@ -359,7 +359,7 @@ int CMasternodeMan::stable_size ()
         if (IsSporkActive (SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
             nMasternode_Age = GetAdjustedTime() - mn.sigTime;
             if ((nMasternode_Age) < nMasternode_Min_Age) {
-                continue; // Skip masternodes younger than (default) 8000 vlc (MUST be > MASTERNODE_REMOVAL_VLCONDS)
+                continue; // Skip masternodes younger than (default) 8000 vlc (MUST be > MASTERNODE_REMOVAL_SECONDS)
             }
         }
         mn.Check ();
@@ -428,7 +428,7 @@ void CMasternodeMan::DsegUpdate(CNode* pnode)
     }
 
     pnode->PushMessage("dseg", CTxIn());
-    int64_t askAgain = GetTime() + MASTERNODES_DSEG_VLCONDS;
+    int64_t askAgain = GetTime() + MASTERNODES_DSEG_SECONDS;
     mWeAskedForMasternodeList[pnode->addr] = askAgain;
 }
 
@@ -499,7 +499,7 @@ CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment(int nBlockHeight
         //make sure it has as many confirmations as there are masternodes
         if (mn.GetMasternodeInputAge() < nMnCount) continue;
 
-        vecMasternodeLastPaid.push_back(make_pair(mn.VlcondsSincePayment(), mn.vin));
+        vecMasternodeLastPaid.push_back(make_pair(mn.SecondsSincePayment(), mn.vin));
     }
 
     nCount = (int)vecMasternodeLastPaid.size();
@@ -810,7 +810,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
                         return;
                     }
                 }
-                int64_t askAgain = GetTime() + MASTERNODES_DSEG_VLCONDS;
+                int64_t askAgain = GetTime() + MASTERNODES_DSEG_SECONDS;
                 mAskedUsForMasternodeList[pfrom->addr] = askAgain;
             }
         } //else, asking for a specific node which is ok

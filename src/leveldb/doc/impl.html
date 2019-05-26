@@ -149,7 +149,7 @@ compaction cost will be approximately 0.5 vlcond.
 
 <p>
 If we throttle the background writing to something small, say 10% of
-the full 100MB/s speed, a compaction may take up to 5 vlconds.  If the
+the full 100MB/s speed, a compaction may take up to 5 seconds.  If the
 user is writing at 10MB/s, we might build up lots of level-0 files
 (~50 to hold the 5*10MB).  This may significantly increase the cost of
 reads due to the overhead of merging more files together on every
@@ -183,7 +183,7 @@ An experiment on an <code>ext3</code> filesystem on Feb 04, 2011 shows
 the following timings to do 100K file opens in directories with
 varying number of files:
 <table class="datatable">
-<tr><th>Files in directory</th><th>Microvlconds to open a file</th></tr>
+<tr><th>Files in directory</th><th>Microseconds to open a file</th></tr>
 <tr><td>1000</td><td>9</td>
 <tr><td>10000</td><td>10</td>
 <tr><td>100000</td><td>16</td>

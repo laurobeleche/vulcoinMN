@@ -216,9 +216,9 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
             "    \"status\": s,         (string) Status (ENABLED/EXPIRED/REMOVE/etc)\n"
             "    \"addr\": \"addr\",      (string) Masternode VLC address\n"
             "    \"version\": v,        (numeric) Masternode protocol version\n"
-            "    \"lastseen\": ttt,     (numeric) The time in vlconds since epoch (Jan 1 1970 GMT) of the last seen\n"
-            "    \"activetime\": ttt,   (numeric) The time in vlconds since epoch (Jan 1 1970 GMT) masternode has been active\n"
-            "    \"lastpaid\": ttt,     (numeric) The time in vlconds since epoch (Jan 1 1970 GMT) masternode was last paid\n"
+            "    \"lastseen\": ttt,     (numeric) The time in seconds since epoch (Jan 1 1970 GMT) of the last seen\n"
+            "    \"activetime\": ttt,   (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode has been active\n"
+            "    \"lastpaid\": ttt,     (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode was last paid\n"
             "  }\n"
             "  ,...\n"
             "]\n"
@@ -348,7 +348,7 @@ UniValue masternodecurrent (const UniValue& params, bool fHelp)
             "  \"txhash\": \"xxxx\",      (string) Collateral transaction hash\n"
             "  \"pubkey\": \"xxxx\",      (string) MN Public key\n"
             "  \"lastseen\": xxx,       (numeric) Time since epoch of last seen\n"
-            "  \"activevlconds\": xxx,  (numeric) Vlconds MN has been active\n"
+            "  \"activeseconds\": xxx,  (numeric) Seconds MN has been active\n"
             "}\n"
             "\nExamples:\n" +
             HelpExampleCli("masternodecurrent", "") + HelpExampleRpc("masternodecurrent", ""));
@@ -361,7 +361,7 @@ UniValue masternodecurrent (const UniValue& params, bool fHelp)
         obj.push_back(Pair("txhash", winner->vin.prevout.hash.ToString()));
         obj.push_back(Pair("pubkey", CBitcoinAddress(winner->pubKeyCollateralAddress.GetID()).ToString()));
         obj.push_back(Pair("lastseen", (winner->lastPing == CMasternodePing()) ? winner->sigTime : (int64_t)winner->lastPing.sigTime));
-        obj.push_back(Pair("activevlconds", (winner->lastPing == CMasternodePing()) ? 0 : (int64_t)(winner->lastPing.sigTime - winner->sigTime)));
+        obj.push_back(Pair("activeseconds", (winner->lastPing == CMasternodePing()) ? 0 : (int64_t)(winner->lastPing.sigTime - winner->sigTime)));
         return obj;
     }
 

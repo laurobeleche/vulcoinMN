@@ -212,7 +212,7 @@ public:
 
     virtual uint64_t NowMicros();
 
-    virtual void SleepForMicrovlconds(int micros);
+    virtual void SleepForMicroseconds(int micros);
 };
 
 void ToWidePath(const std::string& value, std::wstring& target) {
@@ -718,7 +718,7 @@ void Win32Logger::Logv( const char* format, va_list ap )
             int(st.wHour),
             int(st.wMinute),
             int(st.wMinute),
-            int(st.wMillivlconds),
+            int(st.wMilliseconds),
             static_cast<long long unsigned int>(thread_id));
 
         // Print the message
@@ -792,7 +792,7 @@ Status Win32Env::GetChildren(const std::string& dir, std::vector<std::string>* r
     return sRet;
 }
 
-void Win32Env::SleepForMicrovlconds( int micros )
+void Win32Env::SleepForMicroseconds( int micros )
 {
     ::Sleep((micros + 999) /1000);
 }
