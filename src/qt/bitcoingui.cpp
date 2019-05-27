@@ -993,7 +993,7 @@ void BitcoinGUI::setNumBlocks(int count)
 
     QDateTime lastBlockDate = clientModel->getLastBlockDate();
     QDateTime currentDate = QDateTime::currentDateTime();
-    int vlcs = lastBlockDate.vlcsTo(currentDate);
+    int vlcs = lastBlockDate.secsTo(currentDate);
 
     tooltip = tr("Processed %n blocks of transaction history.", "", count);
 
