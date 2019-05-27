@@ -173,8 +173,8 @@ public:
 		//vSeeds.push_back(CDNSSeedData("45.76.234.227", "45.76.234.227"));
 		//vSeeds.push_back(CDNSSeedData("107.191.44.109", "107.191.44.109"));
 		
-        // Vulcoin addresses start with 'I'
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 108);
+        // Vulcoin addresses start with 'V'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 70);
         // Vulcoin script addresses start with '3'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 10);
         // Vulcoin private keys start with 'K'
