@@ -418,7 +418,7 @@ boost::filesystem::path GetDefaultDataDir()
 // Unix: ~/.vulcoin
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Vulcoin";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "VulcoinMN";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -430,10 +430,10 @@ boost::filesystem::path GetDefaultDataDir()
     // Mac
     pathRet /= "Library/Application Support";
     TryCreateDirectory(pathRet);
-    return pathRet / "Vulcoin";
+    return pathRet / "VulcoinMN";
 #else
     // Unix
-    return pathRet / ".vulcoin";
+    return pathRet / ".vulcoinMN";
 #endif
 #endif
 }
