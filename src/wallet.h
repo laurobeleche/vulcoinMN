@@ -171,7 +171,7 @@ public:
      *      fFileBacked (immutable after instantiation)
      *      strWalletFile (immutable after instantiation)
      */
-    mutable CCriticalVlction cs_wallet;
+    mutable CCriticalSection cs_wallet;
 
     bool fFileBacked;
     bool fWalletUnlockStakingOnly;

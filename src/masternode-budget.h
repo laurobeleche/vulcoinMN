@@ -18,7 +18,7 @@
 
 using namespace std;
 
-extern CCriticalVlction cs_budget;
+extern CCriticalSection cs_budget;
 
 class CBudgetManager;
 class CFinalizedBudgetBroadcast;
@@ -179,7 +179,7 @@ private:
 
 public:
     // critical vlction to protect the inner data structures
-    mutable CCriticalVlction cs;
+    mutable CCriticalSection cs;
 
     // keep track of the scanning errors I've seen
     map<uint256, CBudgetProposal> mapProposals;
@@ -308,7 +308,7 @@ class CFinalizedBudget
 {
 private:
     // critical vlction to protect the inner data structures
-    mutable CCriticalVlction cs;
+    mutable CCriticalSection cs;
     bool fAutoChecked; //If it matches what we see, we'll auto vote for it (masternode only)
 
 public:
@@ -453,7 +453,7 @@ class CBudgetProposal
 {
 private:
     // critical vlction to protect the inner data structures
-    mutable CCriticalVlction cs;
+    mutable CCriticalSection cs;
     CAmount nAlloted;
 
 public:

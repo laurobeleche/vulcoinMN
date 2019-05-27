@@ -1,5 +1,5 @@
 Source: vulcoin
-Vlction: utils
+Section: utils
 Priority: optional
 Maintainer: Jonas Smedegaard <dr@jones.dk> ***TODO***
 Uploaders: Micah Anderson <micah@debian.org> ***TODO***

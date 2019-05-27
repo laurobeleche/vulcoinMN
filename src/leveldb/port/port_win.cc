@@ -40,13 +40,13 @@ Mutex::Mutex() :
     cs_(NULL) {
   assert(!cs_);
   cs_ = static_cast<void *>(new CRITICAL_SECTION());
-  ::InitializeCriticalVlction(static_cast<CRITICAL_SECTION *>(cs_));
+  ::InitializeCriticalSection(static_cast<CRITICAL_SECTION *>(cs_));
   assert(cs_);
 }
 
 Mutex::~Mutex() {
   assert(cs_);
-  ::DeleteCriticalVlction(static_cast<CRITICAL_SECTION *>(cs_));
+  ::DeleteCriticalSection(static_cast<CRITICAL_SECTION *>(cs_));
   delete static_cast<CRITICAL_SECTION *>(cs_);
   cs_ = NULL;
   assert(!cs_);
@@ -54,12 +54,12 @@ Mutex::~Mutex() {
 
 void Mutex::Lock() {
   assert(cs_);
-  ::EnterCriticalVlction(static_cast<CRITICAL_SECTION *>(cs_));
+  ::EnterCriticalSection(static_cast<CRITICAL_SECTION *>(cs_));
 }
 
 void Mutex::Unlock() {
   assert(cs_);
-  ::LeaveCriticalVlction(static_cast<CRITICAL_SECTION *>(cs_));
+  ::LeaveCriticalSection(static_cast<CRITICAL_SECTION *>(cs_));
 }
 
 void Mutex::AssertHeld() {

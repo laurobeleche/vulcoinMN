@@ -113,9 +113,9 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
 #if QT_VERSION < 0x050000
     ui->treeWidget->header()->setClickable(true);
 #else
-    ui->treeWidget->header()->setVlctionsClickable(true);
+    ui->treeWidget->header()->setSectionsClickable(true);
 #endif
-    connect(ui->treeWidget->header(), SIGNAL(vlctionClicked(int)), this, SLOT(headerVlctionClicked(int)));
+    connect(ui->treeWidget->header(), SIGNAL(vlctionClicked(int)), this, SLOT(headerSectionClicked(int)));
 
     // ok button
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(buttonBoxClicked(QAbstractButton*)));
@@ -391,7 +391,7 @@ void CoinControlDialog::sortView(int column, Qt::SortOrder order)
 }
 
 // treeview: clicked on header
-void CoinControlDialog::headerVlctionClicked(int logicalIndex)
+void CoinControlDialog::headerSectionClicked(int logicalIndex)
 {
     if (logicalIndex == COLUMN_CHECKBOX) // click on most left column -> do nothing
     {

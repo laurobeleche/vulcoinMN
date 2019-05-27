@@ -56,7 +56,7 @@ private:
     Ui::MasternodeList* ui;
     ClientModel* clientModel;
     WalletModel* walletModel;
-    CCriticalVlction cs_mnlistupdate;
+    CCriticalSection cs_mnlistupdate;
     QString strCurrentFilter;
 
 private Q_SLOTS:

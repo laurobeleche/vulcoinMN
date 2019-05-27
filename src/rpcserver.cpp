@@ -38,7 +38,7 @@ static std::string strRPCUserColonPass;
 static bool fRPCRunning = false;
 static bool fRPCInWarmup = true;
 static std::string rpcWarmupStatus("RPC server started");
-static CCriticalVlction cs_rpcWarmup;
+static CCriticalSection cs_rpcWarmup;
 
 //! These are created by StartRPCThreads, destroyed in StopRPCThreads
 static boost::asio::io_service* rpc_io_service = NULL;

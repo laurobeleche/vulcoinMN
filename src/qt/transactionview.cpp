@@ -198,8 +198,8 @@ void TransactionView::setModel(WalletModel* model)
         transactionView->sortByColumn(TransactionTableModel::Date, Qt::DescendingOrder);
         transactionView->verticalHeader()->hide();
         transactionView->setShowGrid(false);
-        transactionView->verticalHeader()->setDefaultVlctionSize(50);
-        transactionView->verticalHeader()->setMinimumVlctionSize(50);
+        transactionView->verticalHeader()->setDefaultSectionSize(50);
+        transactionView->verticalHeader()->setMinimumSectionSize(50);
 
         transactionView->setColumnWidth(TransactionTableModel::Status, STATUS_COLUMN_WIDTH);
         transactionView->setColumnWidth(TransactionTableModel::Watchonly, WATCHONLY_COLUMN_WIDTH);

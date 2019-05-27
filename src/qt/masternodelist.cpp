@@ -15,7 +15,7 @@
 #include <QMessageBox>
 #include <QTimer>
 
-CCriticalVlction cs_masternodes;
+CCriticalSection cs_masternodes;
 
 MasternodeList::MasternodeList(QWidget* parent) : QWidget(parent),
                                                   ui(new Ui::MasternodeList),

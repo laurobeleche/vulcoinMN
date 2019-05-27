@@ -22,9 +22,9 @@
 /** Object for who's going to get paid on which blocks */
 CMasternodePayments masternodePayments;
 
-CCriticalVlction cs_vecPayments;
-CCriticalVlction cs_mapMasternodeBlocks;
-CCriticalVlction cs_mapMasternodePayeeVotes;
+CCriticalSection cs_vecPayments;
+CCriticalSection cs_mapMasternodeBlocks;
+CCriticalSection cs_mapMasternodePayeeVotes;
 
 //
 // CMasternodePaymentDB

@@ -14,7 +14,7 @@
 
 using namespace std;
 
-static CCriticalVlction cs_nTimeOffset;
+static CCriticalSection cs_nTimeOffset;
 static int64_t nTimeOffset = 0;
 
 /**

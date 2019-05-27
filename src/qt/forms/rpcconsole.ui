@@ -707,7 +707,7 @@
          <property name="sortingEnabled">
           <bool>true</bool>
          </property>
-         <attribute name="horizontalHeaderHighlightVlctions">
+         <attribute name="horizontalHeaderHighlightSections">
           <bool>false</bool>
          </attribute>
         </widget>

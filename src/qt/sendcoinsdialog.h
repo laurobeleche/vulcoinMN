@@ -67,7 +67,7 @@ private:
     // of a message and message flags for use in emit message().
     // Additional parameter msgArg can be used via .arg(msgArg).
     void processSendCoinsReturn(const WalletModel::SendCoinsReturn& sendCoinsReturn, const QString& msgArg = QString(), bool fPrepare = false);
-    void minimizeFeeVlction(bool fMinimize);
+    void minimizeFeeSection(bool fMinimize);
     void updateFeeMinimizedLabel();
 
 private slots:
@@ -93,7 +93,7 @@ private slots:
     void splitBlockChecked(int);
     void splitBlockLineEditChanged(const QString& text);
     void setMinimumFee();
-    void updateFeeVlctionControls();
+    void updateFeeSectionControls();
     void updateMinFeeLabel();
     void updateSmartFeeLabel();
     void updateGlobalFeeVariables();

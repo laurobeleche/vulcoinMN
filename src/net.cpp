@@ -79,7 +79,7 @@ struct ListenSocket {
 bool fDiscover = true;
 bool fListen = true;
 uint64_t nLocalServices = NODE_NETWORK;
-CCriticalVlction cs_mapLocalHost;
+CCriticalSection cs_mapLocalHost;
 map<CNetAddr, LocalServiceInfo> mapLocalHost;
 static bool vfReachable[NET_MAX] = {};
 static bool vfLimited[NET_MAX] = {};
@@ -91,23 +91,23 @@ int nMaxConnections = 125;
 bool fAddressesInitialized = false;
 
 vector<CNode*> vNodes;
-CCriticalVlction cs_vNodes;
+CCriticalSection cs_vNodes;
 map<CInv, CDataStream> mapRelay;
 deque<pair<int64_t, CInv> > vRelayExpiration;
-CCriticalVlction cs_mapRelay;
+CCriticalSection cs_mapRelay;
 limitedmap<CInv, int64_t> mapAlreadyAskedFor(MAX_INV_SZ);
 
 static deque<string> vOneShots;
-CCriticalVlction cs_vOneShots;
+CCriticalSection cs_vOneShots;
 
 set<CNetAddr> setservAddNodeAddresses;
-CCriticalVlction cs_setservAddNodeAddresses;
+CCriticalSection cs_setservAddNodeAddresses;
 
 vector<std::string> vAddedNodes;
-CCriticalVlction cs_vAddedNodes;
+CCriticalSection cs_vAddedNodes;
 
 NodeId nLastNodeId = 0;
-CCriticalVlction cs_nLastNodeId;
+CCriticalSection cs_nLastNodeId;
 
 static CSemaphore* semOutbound = NULL;
 boost::condition_variable messageHandlerCondition;
@@ -352,8 +352,8 @@ void AddressCurrentlyConnected(const CService& addr)
 
 uint64_t CNode::nTotalBytesRecv = 0;
 uint64_t CNode::nTotalBytesSent = 0;
-CCriticalVlction CNode::cs_totalBytesRecv;
-CCriticalVlction CNode::cs_totalBytesSent;
+CCriticalSection CNode::cs_totalBytesRecv;
+CCriticalSection CNode::cs_totalBytesSent;
 
 CNode* FindNode(const CNetAddr& ip)
 {
@@ -498,7 +498,7 @@ void CNode::PushVersion()
 
 
 banmap_t CNode::setBanned;
-CCriticalVlction CNode::cs_setBanned;
+CCriticalSection CNode::cs_setBanned;
 bool CNode::setBannedIsDirty;
 
 void CNode::ClearBanned()
@@ -627,7 +627,7 @@ void CNode::SetBannedSetDirty(bool dirty)
 
 
 std::vector<CSubNet> CNode::vWhitelistedRange;
-CCriticalVlction CNode::cs_vWhitelistedRange;
+CCriticalSection CNode::cs_vWhitelistedRange;
 
 bool CNode::IsWhitelistedRange(const CNetAddr& addr)
 {

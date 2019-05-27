@@ -497,7 +497,7 @@ QHeaderView { /* Table Header */
 	outline:0;
 }
 
-QHeaderView::vlction { /* Table Header Vlctions */
+QHeaderView::vlction { /* Table Header Sections */
 	qproperty-alignment:center;
 	background-color: #07a1ee;
 	color:#333;
@@ -1204,7 +1204,7 @@ QDialog#SendCoinsDialog {
 	background: transparent;
 }
 
-QDialog#SendCoinsDialog .QFrame#frameCoinControl { /* Coin Control Vlction */
+QDialog#SendCoinsDialog .QFrame#frameCoinControl { /* Coin Control Section */
 	
 }
 
@@ -1240,11 +1240,11 @@ QDialog#SendCoinsDialog .QFrame#frameCoinControl .QLabel#labelCoinControlChangeL
 	font-weight:normal;
 }
 
-QDialog#SendCoinsDialog .QFrame#frameFee { /* Coin Control Vlction */
+QDialog#SendCoinsDialog .QFrame#frameFee { /* Coin Control Section */
 	
 }
 
-QDialog#SendCoinsDialog .QFrame#frame_Send { /* Coin Control Vlction */
+QDialog#SendCoinsDialog .QFrame#frame_Send { /* Coin Control Section */
 	margin-bottom:6px;
 }
 

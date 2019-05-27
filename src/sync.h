@@ -24,7 +24,7 @@
  
  
  
-CCriticalVlction mutex;
+CCriticalSection mutex;
     boost::recursive_mutex mutex;
 
 LOCK(mutex);
@@ -78,10 +78,10 @@ public:
 
 /** Wrapped boost mutex: supports recursive locking, but no waiting  */
 // TODO: We should move away from using the recursive lock by default.
-typedef AnnotatedMixin<boost::recursive_mutex> CCriticalVlction;
+typedef AnnotatedMixin<boost::recursive_mutex> CCriticalSection;
 
 /** Wrapped boost mutex: supports waiting but not recursive locking */
-typedef AnnotatedMixin<boost::mutex> CWaitableCriticalVlction;
+typedef AnnotatedMixin<boost::mutex> CWaitableCriticalSection;
 
 /** Just a typedef for boost::condition_variable, can be wrapped later if desired */
 typedef boost::condition_variable CConditionVariable;
@@ -154,7 +154,7 @@ public:
     }
 };
 
-typedef CMutexLock<CCriticalVlction> CCriticalBlock;
+typedef CMutexLock<CCriticalSection> CCriticalBlock;
 
 #define LOCK(cs) CCriticalBlock criticalblock(cs, #cs, __FILE__, __LINE__)
 #define LOCK2(cs1, cs2) CCriticalBlock criticalblock1(cs1, #cs1, __FILE__, __LINE__), criticalblock2(cs2, #cs2, __FILE__, __LINE__)

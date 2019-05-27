@@ -109,7 +109,7 @@ class CMasternode
 {
 private:
     // critical vlction to protect the inner data structures
-    mutable CCriticalVlction cs;
+    mutable CCriticalSection cs;
     int64_t lastTimeChecked;
 
 public:

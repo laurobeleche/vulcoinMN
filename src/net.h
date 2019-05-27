@@ -132,24 +132,24 @@ extern CAddrMan addrman;
 extern int nMaxConnections;
 
 extern std::vector<CNode*> vNodes;
-extern CCriticalVlction cs_vNodes;
+extern CCriticalSection cs_vNodes;
 extern std::map<CInv, CDataStream> mapRelay;
 extern std::deque<std::pair<int64_t, CInv> > vRelayExpiration;
-extern CCriticalVlction cs_mapRelay;
+extern CCriticalSection cs_mapRelay;
 extern limitedmap<CInv, int64_t> mapAlreadyAskedFor;
 
 extern std::vector<std::string> vAddedNodes;
-extern CCriticalVlction cs_vAddedNodes;
+extern CCriticalSection cs_vAddedNodes;
 
 extern NodeId nLastNodeId;
-extern CCriticalVlction cs_nLastNodeId;
+extern CCriticalSection cs_nLastNodeId;
 
 struct LocalServiceInfo {
     int nScore;
     int nPort;
 };
 
-extern CCriticalVlction cs_mapLocalHost;
+extern CCriticalSection cs_mapLocalHost;
 extern std::map<CNetAddr, LocalServiceInfo> mapLocalHost;
 
 class CNodeStats
@@ -289,11 +289,11 @@ public:
     size_t nSendOffset; // offset inside the first vSendMsg already sent
     uint64_t nSendBytes;
     std::deque<CSerializeData> vSendMsg;
-    CCriticalVlction cs_vSend;
+    CCriticalSection cs_vSend;
 
     std::deque<CInv> vRecvGetData;
     std::deque<CNetMessage> vRecvMsg;
-    CCriticalVlction cs_vRecvMsg;
+    CCriticalSection cs_vRecvMsg;
     uint64_t nRecvBytes;
     int nRecvVersion;
 
@@ -322,7 +322,7 @@ public:
     //    until they have initialized their bloom filter.
     bool fRelayTxes;
     CSemaphoreGrant grantOutbound;
-    CCriticalVlction cs_filter;
+    CCriticalSection cs_filter;
     CBloomFilter* pfilter;
     int nRefCount;
     NodeId id;
@@ -331,7 +331,7 @@ protected:
     // Denial-of-service detection/prevention
     // Key is IP address, value is banned-until-time
     static banmap_t setBanned;
-    static CCriticalVlction cs_setBanned;
+    static CCriticalSection cs_setBanned;
     static bool setBannedIsDirty;
 
     std::vector<std::string> vecRequestsFulfilled; //keep track of what client has asked for
@@ -339,7 +339,7 @@ protected:
     // Whitelisted ranges. Any node connecting from these is automatically
     // whitelisted (as well as those connecting to whitelisted binds).
     static std::vector<CSubNet> vWhitelistedRange;
-    static CCriticalVlction cs_vWhitelistedRange;
+    static CCriticalSection cs_vWhitelistedRange;
 
     // Basic fuzz-testing
     void Fuzz(int nChance); // modifies ssSend
@@ -357,7 +357,7 @@ public:
     // inventory based relay
     mruset<CInv> setInventoryKnown;
     std::vector<CInv> vInventoryToSend;
-    CCriticalVlction cs_inventory;
+    CCriticalSection cs_inventory;
     std::multimap<int64_t, CInv> mapAskFor;
     std::vector<uint256> vBlockRequested;
 
@@ -376,8 +376,8 @@ public:
 
 private:
     // Network usage totals
-    static CCriticalVlction cs_totalBytesRecv;
-    static CCriticalVlction cs_totalBytesSent;
+    static CCriticalSection cs_totalBytesRecv;
+    static CCriticalSection cs_totalBytesSent;
     static uint64_t nTotalBytesRecv;
     static uint64_t nTotalBytesSent;
 

@@ -52,10 +52,10 @@ class CMasternodeMan
 {
 private:
     // critical vlction to protect the inner data structures
-    mutable CCriticalVlction cs;
+    mutable CCriticalSection cs;
 
     // critical vlction to protect the inner data structures specifically on messaging
-    mutable CCriticalVlction cs_process_message;
+    mutable CCriticalSection cs_process_message;
 
     // map to hold all MNs
     std::vector<CMasternode> vMasternodes;

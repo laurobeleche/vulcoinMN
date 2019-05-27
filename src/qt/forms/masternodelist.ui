@@ -152,13 +152,13 @@
                   <property name="sortingEnabled">
                    <bool>true</bool>
                   </property>
-                  <attribute name="horizontalHeaderStretchLastVlction">
+                  <attribute name="horizontalHeaderStretchLastSection">
                    <bool>true</bool>
                   </attribute>
-                  <attribute name="verticalHeaderDefaultVlctionSize">
+                  <attribute name="verticalHeaderDefaultSectionSize">
                    <number>50</number>
                   </attribute>
-                  <attribute name="verticalHeaderMinimumVlctionSize">
+                  <attribute name="verticalHeaderMinimumSectionSize">
                    <number>50</number>
                   </attribute>
                   <column>

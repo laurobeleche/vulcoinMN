@@ -817,13 +817,13 @@ background-color: #094ed9;
              <property name="sortingEnabled">
               <bool>true</bool>
              </property>
-             <attribute name="horizontalHeaderMinimumVlctionSize">
+             <attribute name="horizontalHeaderMinimumSectionSize">
               <number>50</number>
              </attribute>
-             <attribute name="verticalHeaderDefaultVlctionSize">
+             <attribute name="verticalHeaderDefaultSectionSize">
               <number>50</number>
              </attribute>
-             <attribute name="verticalHeaderMinimumVlctionSize">
+             <attribute name="verticalHeaderMinimumSectionSize">
               <number>50</number>
              </attribute>
             </widget>

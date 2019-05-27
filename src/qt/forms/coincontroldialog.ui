@@ -452,7 +452,7 @@
      <attribute name="headerShowSortIndicator" stdset="0">
       <bool>true</bool>
      </attribute>
-     <attribute name="headerStretchLastVlction">
+     <attribute name="headerStretchLastSection">
       <bool>false</bool>
      </attribute>
      <column>

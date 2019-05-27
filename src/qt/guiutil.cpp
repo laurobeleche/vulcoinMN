@@ -461,14 +461,14 @@ void TableViewLastColumnResizingFixer::setViewHeaderResizeMode(int logicalIndex,
 #if QT_VERSION < 0x050000
     tableView->horizontalHeader()->setResizeMode(logicalIndex, resizeMode);
 #else
-    tableView->horizontalHeader()->setVlctionResizeMode(logicalIndex, resizeMode);
+    tableView->horizontalHeader()->setSectionResizeMode(logicalIndex, resizeMode);
 #endif
 }
 
 void TableViewLastColumnResizingFixer::resizeColumn(int nColumnIndex, int width)
 {
     tableView->setColumnWidth(nColumnIndex, width);
-    tableView->horizontalHeader()->resizeVlction(nColumnIndex, width);
+    tableView->horizontalHeader()->resizeSection(nColumnIndex, width);
 }
 
 int TableViewLastColumnResizingFixer::getColumnsWidth()
@@ -547,7 +547,7 @@ TableViewLastColumnResizingFixer::TableViewLastColumnResizingFixer(QTableView* t
     columnCount = tableView->horizontalHeader()->count();
     lastColumnIndex = columnCount - 1;
     secondToLastColumnIndex = columnCount - 2;
-    tableView->horizontalHeader()->setMinimumVlctionSize(allColumnsMinimumWidth);
+    tableView->horizontalHeader()->setMinimumSectionSize(allColumnsMinimumWidth);
     setViewHeaderResizeMode(secondToLastColumnIndex, QHeaderView::Interactive);
     setViewHeaderResizeMode(lastColumnIndex, QHeaderView::Interactive);
 }

@@ -24,7 +24,7 @@ class CActiveMasternode
 {
 private:
     // critical vlction to protect the inner data structures
-    mutable CCriticalVlction cs;
+    mutable CCriticalSection cs;
 
     /// Ping Masternode
     bool SendMasternodePing(std::string& errorMessage);

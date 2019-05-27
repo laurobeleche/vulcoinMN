@@ -20,7 +20,7 @@ class CScriptID;
 class CKeyStore
 {
 protected:
-    mutable CCriticalVlction cs_KeyStore;
+    mutable CCriticalSection cs_KeyStore;
 
 public:
     virtual ~CKeyStore() {}

@@ -26,7 +26,7 @@ SetCompressor /SOLID lzma
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
 # Included files
-!include Vlctions.nsh
+!include Sections.nsh
 !include MUI2.nsh
 !if "@WINDOWS_BITS@" == "64"
 !include x64.nsh
@@ -70,7 +70,7 @@ InstallDirRegKey HKCU "${REGKEY}" Path
 ShowUninstDetails show
 
 # Installer vlctions
-Vlction -Main VLC0000
+Section -Main VLC0000
     SetOutPath $INSTDIR
     SetOverwrite on
     File @abs_top_srcdir@/release/@BITCOIN_GUI_NAME@@EXEEXT@
@@ -83,9 +83,9 @@ Vlction -Main VLC0000
     File /r @abs_top_srcdir@/doc\*.*
     SetOutPath $INSTDIR
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
-VlctionEnd
+SectionEnd
 
-Vlction -post VLC0001
+Section -post VLC0001
     WriteRegStr HKCU "${REGKEY}" Path $INSTDIR
     SetOutPath $INSTDIR
     WriteUninstaller $INSTDIR\uninstall.exe
@@ -107,32 +107,32 @@ Vlction -post VLC0001
     WriteRegStr HKCR "@PACKAGE_TARNAME@" "" "URL:Vulcoin"
     WriteRegStr HKCR "@PACKAGE_TARNAME@\DefaultIcon" "" $INSTDIR\@BITCOIN_GUI_NAME@@EXEEXT@
     WriteRegStr HKCR "@PACKAGE_TARNAME@\shell\open\command" "" '"$INSTDIR\@BITCOIN_GUI_NAME@@EXEEXT@" "%1"'
-VlctionEnd
+SectionEnd
 
 # Macro for selecting uninstaller vlctions
 !macro SELECT_UNSECTION SECTION_NAME UNSECTION_ID
     Push $R0
     ReadRegStr $R0 HKCU "${REGKEY}\Components" "${SECTION_NAME}"
     StrCmp $R0 1 0 next${UNSECTION_ID}
-    !insertmacro SelectVlction "${UNSECTION_ID}"
+    !insertmacro SelectSection "${UNSECTION_ID}"
     GoTo done${UNSECTION_ID}
 next${UNSECTION_ID}:
-    !insertmacro UnselectVlction "${UNSECTION_ID}"
+    !insertmacro UnselectSection "${UNSECTION_ID}"
 done${UNSECTION_ID}:
     Pop $R0
 !macroend
 
 # Uninstaller vlctions
-Vlction /o -un.Main UNVLC0000
+Section /o -un.Main UNVLC0000
     Delete /REBOOTOK $INSTDIR\@BITCOIN_GUI_NAME@@EXEEXT@
     Delete /REBOOTOK $INSTDIR\COPYING.txt
     Delete /REBOOTOK $INSTDIR\readme.txt
     RMDir /r /REBOOTOK $INSTDIR\daemon
     RMDir /r /REBOOTOK $INSTDIR\doc
     DeleteRegValue HKCU "${REGKEY}\Components" Main
-VlctionEnd
+SectionEnd
 
-Vlction -un.post UNVLC0001
+Section -un.post UNVLC0001
     DeleteRegKey HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)"
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk"
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\$(^Name).lnk"
@@ -153,7 +153,7 @@ Vlction -un.post UNVLC0001
     StrCmp $R0 ">" no_smgroup
 no_smgroup:
     Pop $R0
-VlctionEnd
+SectionEnd
 
 # Installer functions
 Function .onInit
