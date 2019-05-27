@@ -3,11 +3,11 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: libvlcp256k1
-Description: Optimized C library for EC operations on curve vlcp256k1
-URL: https://github.com/bitcoin/vlcp256k1
+Name: libsecp256k1
+Description: Optimized C library for EC operations on curve secp256k1
+URL: https://github.com/bitcoin/secp256k1
 Version: @PACKAGE_VERSION@
 Cflags: -I${includedir}
 Libs.private: @VLCP_LIBS@
-Libs: -L${libdir} -lvlcp256k1
+Libs: -L${libdir} -lsecp256k1
 

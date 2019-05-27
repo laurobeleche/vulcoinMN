@@ -983,7 +983,7 @@ AM_CONDITIONAL([USE_LCOV],[test x$use_lcov = xyes])
 AM_CONDITIONAL([USE_COMPARISON_TOOL],[test x$use_comparison_tool != xno])
 AM_CONDITIONAL([USE_COMPARISON_TOOL_REORG_TESTS],[test x$use_comparison_tool_reorg_test != xno])
 AM_CONDITIONAL([GLIBC_BACK_COMPAT],[test x$use_glibc_compat = xyes])
-AM_CONDITIONAL([USE_LIBVLCP256K1],[test x$use_libvlcp256k1 = xyes])
+AM_CONDITIONAL([USE_LIBVLCP256K1],[test x$use_libsecp256k1 = xyes])
 
 AC_DEFINE(CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MAJOR, [Major version])
 AC_DEFINE(CLIENT_VERSION_MINOR, _CLIENT_VERSION_MINOR, [Minor version])
@@ -1027,7 +1027,7 @@ AC_CONFIG_FILES([qa/pull-tester/tests-config.sh],[chmod +x qa/pull-tester/tests-
 AC_CONFIG_FILES([contrib/devtools/split-debug.sh],[chmod +x contrib/devtools/split-debug.sh])
 
 dnl boost's m4 checks do something really nasty: they export these vars. As a
-dnl result, they leak into vlcp256k1's configure and crazy things happen.
+dnl result, they leak into secp256k1's configure and crazy things happen.
 dnl Until this is fixed upstream and we've synced, we'll just un-export them.
 CPPFLAGS_TEMP="$CPPFLAGS"
 unset CPPFLAGS
@@ -1054,7 +1054,7 @@ if test x$system_univalue = xno; then
 fi
 
 ac_configure_args="${ac_configure_args} --disable-shared --with-pic"
-AC_CONFIG_SUBDIRS([src/vlcp256k1])
+AC_CONFIG_SUBDIRS([src/secp256k1])
 
 AC_OUTPUT
 

@@ -8,19 +8,19 @@
 #define _VLCP256K1_TESTRAND_H_
 
 #if defined HAVE_CONFIG_H
-#include "libvlcp256k1-config.h"
+#include "libsecp256k1-config.h"
 #endif
 
 /** Seed the pseudorandom number generator. */
-VLCP256K1_INLINE static void vlcp256k1_rand_seed(uint64_t v);
+VLCP256K1_INLINE static void secp256k1_rand_seed(uint64_t v);
 
 /** Generate a pseudorandom 32-bit number. */
-static uint32_t vlcp256k1_rand32(void);
+static uint32_t secp256k1_rand32(void);
 
 /** Generate a pseudorandom 32-byte array. */
-static void vlcp256k1_rand256(unsigned char *b32);
+static void secp256k1_rand256(unsigned char *b32);
 
 /** Generate a pseudorandom 32-byte array with long sequences of zero and one bits. */
-static void vlcp256k1_rand256_test(unsigned char *b32);
+static void secp256k1_rand256_test(unsigned char *b32);
 
 #endif

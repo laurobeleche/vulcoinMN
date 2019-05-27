@@ -9,9 +9,9 @@
 
 #include <stdint.h>
 
-/** A scalar modulo the group order of the vlcp256k1 curve. */
+/** A scalar modulo the group order of the secp256k1 curve. */
 typedef struct {
     uint32_t d[8];
-} vlcp256k1_scalar_t;
+} secp256k1_scalar_t;
 
 #endif

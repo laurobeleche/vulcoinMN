@@ -1,13 +1,13 @@
 ACLOCAL_AMFLAGS = -I build-aux/m4
 
-lib_LTLIBRARIES = libvlcp256k1.la
+lib_LTLIBRARIES = libsecp256k1.la
 if USE_ASM
-COMMON_LIB = libvlcp256k1_common.la
+COMMON_LIB = libsecp256k1_common.la
 else
 COMMON_LIB =
 endif
 noinst_LTLIBRARIES = $(COMMON_LIB)
-include_HEADERS = include/vlcp256k1.h
+include_HEADERS = include/secp256k1.h
 noinst_HEADERS =
 noinst_HEADERS += src/scalar.h
 noinst_HEADERS += src/scalar_4x64.h
@@ -45,25 +45,25 @@ noinst_HEADERS += src/field.h
 noinst_HEADERS += src/field_impl.h
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libvlcp256k1.pc
+pkgconfig_DATA = libsecp256k1.pc
 
 if USE_ASM
-libvlcp256k1_common_la_SOURCES = src/field_5x52_asm.asm
+libsecp256k1_common_la_SOURCES = src/field_5x52_asm.asm
 endif
 
-libvlcp256k1_la_SOURCES = src/vlcp256k1.c
-libvlcp256k1_la_CPPFLAGS = -I$(top_srcdir)/include $(VLCP_INCLUDES)
-libvlcp256k1_la_LIBADD = $(COMMON_LIB) $(VLCP_LIBS)
+libsecp256k1_la_SOURCES = src/secp256k1.c
+libsecp256k1_la_CPPFLAGS = -I$(top_srcdir)/include $(VLCP_INCLUDES)
+libsecp256k1_la_LIBADD = $(COMMON_LIB) $(VLCP_LIBS)
 
 
 noinst_PROGRAMS =
 if USE_BENCHMARK
 noinst_PROGRAMS += bench_verify bench_sign bench_inv
 bench_verify_SOURCES = src/bench_verify.c
-bench_verify_LDADD = libvlcp256k1.la $(VLCP_LIBS)
+bench_verify_LDADD = libsecp256k1.la $(VLCP_LIBS)
 bench_verify_LDFLAGS = -static
 bench_sign_SOURCES = src/bench_sign.c
-bench_sign_LDADD = libvlcp256k1.la $(VLCP_LIBS)
+bench_sign_LDADD = libsecp256k1.la $(VLCP_LIBS)
 bench_sign_LDFLAGS = -static
 bench_inv_SOURCES = src/bench_inv.c
 bench_inv_LDADD = $(COMMON_LIB) $(VLCP_LIBS)

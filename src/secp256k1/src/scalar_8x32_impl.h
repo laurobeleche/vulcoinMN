@@ -7,7 +7,7 @@
 #ifndef _VLCP256K1_SCALAR_REPR_IMPL_H_
 #define _VLCP256K1_SCALAR_REPR_IMPL_H_
 
-/* Limbs of the vlcp256k1 order. */
+/* Limbs of the secp256k1 order. */
 #define VLCP256K1_N_0 ((uint32_t)0xD0364141UL)
 #define VLCP256K1_N_1 ((uint32_t)0xBFD25E8CUL)
 #define VLCP256K1_N_2 ((uint32_t)0xAF48A03BUL)
@@ -17,14 +17,14 @@
 #define VLCP256K1_N_6 ((uint32_t)0xFFFFFFFFUL)
 #define VLCP256K1_N_7 ((uint32_t)0xFFFFFFFFUL)
 
-/* Limbs of 2^256 minus the vlcp256k1 order. */
+/* Limbs of 2^256 minus the secp256k1 order. */
 #define VLCP256K1_N_C_0 (~VLCP256K1_N_0 + 1)
 #define VLCP256K1_N_C_1 (~VLCP256K1_N_1)
 #define VLCP256K1_N_C_2 (~VLCP256K1_N_2)
 #define VLCP256K1_N_C_3 (~VLCP256K1_N_3)
 #define VLCP256K1_N_C_4 (1)
 
-/* Limbs of half the vlcp256k1 order. */
+/* Limbs of half the secp256k1 order. */
 #define VLCP256K1_N_H_0 ((uint32_t)0x681B20A0UL)
 #define VLCP256K1_N_H_1 ((uint32_t)0xDFE92F46UL)
 #define VLCP256K1_N_H_2 ((uint32_t)0x57A4501DUL)
@@ -34,7 +34,7 @@
 #define VLCP256K1_N_H_6 ((uint32_t)0xFFFFFFFFUL)
 #define VLCP256K1_N_H_7 ((uint32_t)0x7FFFFFFFUL)
 
-VLCP256K1_INLINE static void vlcp256k1_scalar_clear(vlcp256k1_scalar_t *r) {
+VLCP256K1_INLINE static void secp256k1_scalar_clear(secp256k1_scalar_t *r) {
     r->d[0] = 0;
     r->d[1] = 0;
     r->d[2] = 0;
@@ -45,7 +45,7 @@ VLCP256K1_INLINE static void vlcp256k1_scalar_clear(vlcp256k1_scalar_t *r) {
     r->d[7] = 0;
 }
 
-VLCP256K1_INLINE static void vlcp256k1_scalar_set_int(vlcp256k1_scalar_t *r, unsigned int v) {
+VLCP256K1_INLINE static void secp256k1_scalar_set_int(secp256k1_scalar_t *r, unsigned int v) {
     r->d[0] = v;
     r->d[1] = 0;
     r->d[2] = 0;
@@ -56,23 +56,23 @@ VLCP256K1_INLINE static void vlcp256k1_scalar_set_int(vlcp256k1_scalar_t *r, uns
     r->d[7] = 0;
 }
 
-VLCP256K1_INLINE static unsigned int vlcp256k1_scalar_get_bits(const vlcp256k1_scalar_t *a, unsigned int offset, unsigned int count) {
+VLCP256K1_INLINE static unsigned int secp256k1_scalar_get_bits(const secp256k1_scalar_t *a, unsigned int offset, unsigned int count) {
     VERIFY_CHECK((offset + count - 1) >> 5 == offset >> 5);
     return (a->d[offset >> 5] >> (offset & 0x1F)) & ((1 << count) - 1);
 }
 
-VLCP256K1_INLINE static unsigned int vlcp256k1_scalar_get_bits_var(const vlcp256k1_scalar_t *a, unsigned int offset, unsigned int count) {
+VLCP256K1_INLINE static unsigned int secp256k1_scalar_get_bits_var(const secp256k1_scalar_t *a, unsigned int offset, unsigned int count) {
     VERIFY_CHECK(count < 32);
     VERIFY_CHECK(offset + count <= 256);
     if ((offset + count - 1) >> 5 == offset >> 5) {
-        return vlcp256k1_scalar_get_bits(a, offset, count);
+        return secp256k1_scalar_get_bits(a, offset, count);
     } else {
         VERIFY_CHECK((offset >> 5) + 1 < 8);
         return ((a->d[offset >> 5] >> (offset & 0x1F)) | (a->d[(offset >> 5) + 1] << (32 - (offset & 0x1F)))) & ((((uint32_t)1) << count) - 1);
     }
 }
 
-VLCP256K1_INLINE static int vlcp256k1_scalar_check_overflow(const vlcp256k1_scalar_t *a) {
+VLCP256K1_INLINE static int secp256k1_scalar_check_overflow(const secp256k1_scalar_t *a) {
     int yes = 0;
     int no = 0;
     no |= (a->d[7] < VLCP256K1_N_7); /* No need for a > check. */
@@ -90,7 +90,7 @@ VLCP256K1_INLINE static int vlcp256k1_scalar_check_overflow(const vlcp256k1_scal
     return yes;
 }
 
-VLCP256K1_INLINE static int vlcp256k1_scalar_reduce(vlcp256k1_scalar_t *r, uint32_t overflow) {
+VLCP256K1_INLINE static int secp256k1_scalar_reduce(secp256k1_scalar_t *r, uint32_t overflow) {
     VERIFY_CHECK(overflow <= 1);
     uint64_t t = (uint64_t)r->d[0] + overflow * VLCP256K1_N_C_0;
     r->d[0] = t & 0xFFFFFFFFUL; t >>= 32;
@@ -111,7 +111,7 @@ VLCP256K1_INLINE static int vlcp256k1_scalar_reduce(vlcp256k1_scalar_t *r, uint3
     return overflow;
 }
 
-static int vlcp256k1_scalar_add(vlcp256k1_scalar_t *r, const vlcp256k1_scalar_t *a, const vlcp256k1_scalar_t *b) {
+static int secp256k1_scalar_add(secp256k1_scalar_t *r, const secp256k1_scalar_t *a, const secp256k1_scalar_t *b) {
     uint64_t t = (uint64_t)a->d[0] + b->d[0];
     r->d[0] = t & 0xFFFFFFFFULL; t >>= 32;
     t += (uint64_t)a->d[1] + b->d[1];
@@ -128,13 +128,13 @@ static int vlcp256k1_scalar_add(vlcp256k1_scalar_t *r, const vlcp256k1_scalar_t 
     r->d[6] = t & 0xFFFFFFFFULL; t >>= 32;
     t += (uint64_t)a->d[7] + b->d[7];
     r->d[7] = t & 0xFFFFFFFFULL; t >>= 32;
-    int overflow = t + vlcp256k1_scalar_check_overflow(r);
+    int overflow = t + secp256k1_scalar_check_overflow(r);
     VERIFY_CHECK(overflow == 0 || overflow == 1);
-    vlcp256k1_scalar_reduce(r, overflow);
+    secp256k1_scalar_reduce(r, overflow);
     return overflow;
 }
 
-static void vlcp256k1_scalar_add_bit(vlcp256k1_scalar_t *r, unsigned int bit) {
+static void secp256k1_scalar_add_bit(secp256k1_scalar_t *r, unsigned int bit) {
     VERIFY_CHECK(bit < 256);
     uint64_t t = (uint64_t)r->d[0] + (((uint32_t)((bit >> 5) == 0)) << (bit & 0x1F));
     r->d[0] = t & 0xFFFFFFFFULL; t >>= 32;
@@ -154,11 +154,11 @@ static void vlcp256k1_scalar_add_bit(vlcp256k1_scalar_t *r, unsigned int bit) {
     r->d[7] = t & 0xFFFFFFFFULL;
 #ifdef VERIFY
     VERIFY_CHECK((t >> 32) == 0);
-    VERIFY_CHECK(vlcp256k1_scalar_check_overflow(r) == 0);
+    VERIFY_CHECK(secp256k1_scalar_check_overflow(r) == 0);
 #endif
 }
 
-static void vlcp256k1_scalar_set_b32(vlcp256k1_scalar_t *r, const unsigned char *b32, int *overflow) {
+static void secp256k1_scalar_set_b32(secp256k1_scalar_t *r, const unsigned char *b32, int *overflow) {
     r->d[0] = (uint32_t)b32[31] | (uint32_t)b32[30] << 8 | (uint32_t)b32[29] << 16 | (uint32_t)b32[28] << 24;
     r->d[1] = (uint32_t)b32[27] | (uint32_t)b32[26] << 8 | (uint32_t)b32[25] << 16 | (uint32_t)b32[24] << 24;
     r->d[2] = (uint32_t)b32[23] | (uint32_t)b32[22] << 8 | (uint32_t)b32[21] << 16 | (uint32_t)b32[20] << 24;
@@ -167,13 +167,13 @@ static void vlcp256k1_scalar_set_b32(vlcp256k1_scalar_t *r, const unsigned char 
     r->d[5] = (uint32_t)b32[11] | (uint32_t)b32[10] << 8 | (uint32_t)b32[9] << 16 | (uint32_t)b32[8] << 24;
     r->d[6] = (uint32_t)b32[7] | (uint32_t)b32[6] << 8 | (uint32_t)b32[5] << 16 | (uint32_t)b32[4] << 24;
     r->d[7] = (uint32_t)b32[3] | (uint32_t)b32[2] << 8 | (uint32_t)b32[1] << 16 | (uint32_t)b32[0] << 24;
-    int over = vlcp256k1_scalar_reduce(r, vlcp256k1_scalar_check_overflow(r));
+    int over = secp256k1_scalar_reduce(r, secp256k1_scalar_check_overflow(r));
     if (overflow) {
         *overflow = over;
     }
 }
 
-static void vlcp256k1_scalar_get_b32(unsigned char *bin, const vlcp256k1_scalar_t* a) {
+static void secp256k1_scalar_get_b32(unsigned char *bin, const secp256k1_scalar_t* a) {
     bin[0] = a->d[7] >> 24; bin[1] = a->d[7] >> 16; bin[2] = a->d[7] >> 8; bin[3] = a->d[7];
     bin[4] = a->d[6] >> 24; bin[5] = a->d[6] >> 16; bin[6] = a->d[6] >> 8; bin[7] = a->d[6];
     bin[8] = a->d[5] >> 24; bin[9] = a->d[5] >> 16; bin[10] = a->d[5] >> 8; bin[11] = a->d[5];
@@ -184,12 +184,12 @@ static void vlcp256k1_scalar_get_b32(unsigned char *bin, const vlcp256k1_scalar_
     bin[28] = a->d[0] >> 24; bin[29] = a->d[0] >> 16; bin[30] = a->d[0] >> 8; bin[31] = a->d[0];
 }
 
-VLCP256K1_INLINE static int vlcp256k1_scalar_is_zero(const vlcp256k1_scalar_t *a) {
+VLCP256K1_INLINE static int secp256k1_scalar_is_zero(const secp256k1_scalar_t *a) {
     return (a->d[0] | a->d[1] | a->d[2] | a->d[3] | a->d[4] | a->d[5] | a->d[6] | a->d[7]) == 0;
 }
 
-static void vlcp256k1_scalar_negate(vlcp256k1_scalar_t *r, const vlcp256k1_scalar_t *a) {
-    uint32_t nonzero = 0xFFFFFFFFUL * (vlcp256k1_scalar_is_zero(a) == 0);
+static void secp256k1_scalar_negate(secp256k1_scalar_t *r, const secp256k1_scalar_t *a) {
+    uint32_t nonzero = 0xFFFFFFFFUL * (secp256k1_scalar_is_zero(a) == 0);
     uint64_t t = (uint64_t)(~a->d[0]) + VLCP256K1_N_0 + 1;
     r->d[0] = t & nonzero; t >>= 32;
     t += (uint64_t)(~a->d[1]) + VLCP256K1_N_1;
@@ -208,11 +208,11 @@ static void vlcp256k1_scalar_negate(vlcp256k1_scalar_t *r, const vlcp256k1_scala
     r->d[7] = t & nonzero;
 }
 
-VLCP256K1_INLINE static int vlcp256k1_scalar_is_one(const vlcp256k1_scalar_t *a) {
+VLCP256K1_INLINE static int secp256k1_scalar_is_one(const secp256k1_scalar_t *a) {
     return ((a->d[0] ^ 1) | a->d[1] | a->d[2] | a->d[3] | a->d[4] | a->d[5] | a->d[6] | a->d[7]) == 0;
 }
 
-static int vlcp256k1_scalar_is_high(const vlcp256k1_scalar_t *a) {
+static int secp256k1_scalar_is_high(const secp256k1_scalar_t *a) {
     int yes = 0;
     int no = 0;
     no |= (a->d[7] < VLCP256K1_N_H_7);
@@ -315,7 +315,7 @@ static int vlcp256k1_scalar_is_high(const vlcp256k1_scalar_t *a) {
     VERIFY_CHECK(c2 == 0); \
 }
 
-static void vlcp256k1_scalar_reduce_512(vlcp256k1_scalar_t *r, const uint32_t *l) {
+static void secp256k1_scalar_reduce_512(secp256k1_scalar_t *r, const uint32_t *l) {
     uint32_t n0 = l[8], n1 = l[9], n2 = l[10], n3 = l[11], n4 = l[12], n5 = l[13], n6 = l[14], n7 = l[15];
 
     /* 96 bit accumulator. */
@@ -451,10 +451,10 @@ static void vlcp256k1_scalar_reduce_512(vlcp256k1_scalar_t *r, const uint32_t *l
     r->d[7] = c & 0xFFFFFFFFUL; c >>= 32;
 
     /* Final reduction of r. */
-    vlcp256k1_scalar_reduce(r, c + vlcp256k1_scalar_check_overflow(r));
+    secp256k1_scalar_reduce(r, c + secp256k1_scalar_check_overflow(r));
 }
 
-static void vlcp256k1_scalar_mul_512(uint32_t l[16], const vlcp256k1_scalar_t *a, const vlcp256k1_scalar_t *b) {
+static void secp256k1_scalar_mul_512(uint32_t l[16], const secp256k1_scalar_t *a, const secp256k1_scalar_t *b) {
     /* 96 bit accumulator. */
     uint32_t c0 = 0, c1 = 0, c2 = 0;
 
@@ -542,7 +542,7 @@ static void vlcp256k1_scalar_mul_512(uint32_t l[16], const vlcp256k1_scalar_t *a
     l[15] = c0;
 }
 
-static void vlcp256k1_scalar_sqr_512(uint32_t l[16], const vlcp256k1_scalar_t *a) {
+static void secp256k1_scalar_sqr_512(uint32_t l[16], const secp256k1_scalar_t *a) {
     /* 96 bit accumulator. */
     uint32_t c0 = 0, c1 = 0, c2 = 0;
 
@@ -610,19 +610,19 @@ static void vlcp256k1_scalar_sqr_512(uint32_t l[16], const vlcp256k1_scalar_t *a
 #undef extract
 #undef extract_fast
 
-static void vlcp256k1_scalar_mul(vlcp256k1_scalar_t *r, const vlcp256k1_scalar_t *a, const vlcp256k1_scalar_t *b) {
+static void secp256k1_scalar_mul(secp256k1_scalar_t *r, const secp256k1_scalar_t *a, const secp256k1_scalar_t *b) {
     uint32_t l[16];
-    vlcp256k1_scalar_mul_512(l, a, b);
-    vlcp256k1_scalar_reduce_512(r, l);
+    secp256k1_scalar_mul_512(l, a, b);
+    secp256k1_scalar_reduce_512(r, l);
 }
 
-static void vlcp256k1_scalar_sqr(vlcp256k1_scalar_t *r, const vlcp256k1_scalar_t *a) {
+static void secp256k1_scalar_sqr(secp256k1_scalar_t *r, const secp256k1_scalar_t *a) {
     uint32_t l[16];
-    vlcp256k1_scalar_sqr_512(l, a);
-    vlcp256k1_scalar_reduce_512(r, l);
+    secp256k1_scalar_sqr_512(l, a);
+    secp256k1_scalar_reduce_512(r, l);
 }
 
-static void vlcp256k1_scalar_split_128(vlcp256k1_scalar_t *r1, vlcp256k1_scalar_t *r2, const vlcp256k1_scalar_t *a) {
+static void secp256k1_scalar_split_128(secp256k1_scalar_t *r1, secp256k1_scalar_t *r2, const secp256k1_scalar_t *a) {
     r1->d[0] = a->d[0];
     r1->d[1] = a->d[1];
     r1->d[2] = a->d[2];
@@ -641,14 +641,14 @@ static void vlcp256k1_scalar_split_128(vlcp256k1_scalar_t *r1, vlcp256k1_scalar_
     r2->d[7] = 0;
 }
 
-VLCP256K1_INLINE static int vlcp256k1_scalar_eq(const vlcp256k1_scalar_t *a, const vlcp256k1_scalar_t *b) {
+VLCP256K1_INLINE static int secp256k1_scalar_eq(const secp256k1_scalar_t *a, const secp256k1_scalar_t *b) {
     return ((a->d[0] ^ b->d[0]) | (a->d[1] ^ b->d[1]) | (a->d[2] ^ b->d[2]) | (a->d[3] ^ b->d[3]) | (a->d[4] ^ b->d[4]) | (a->d[5] ^ b->d[5]) | (a->d[6] ^ b->d[6]) | (a->d[7] ^ b->d[7])) == 0;
 }
 
-VLCP256K1_INLINE static void vlcp256k1_scalar_mul_shift_var(vlcp256k1_scalar_t *r, const vlcp256k1_scalar_t *a, const vlcp256k1_scalar_t *b, unsigned int shift) {
+VLCP256K1_INLINE static void secp256k1_scalar_mul_shift_var(secp256k1_scalar_t *r, const secp256k1_scalar_t *a, const secp256k1_scalar_t *b, unsigned int shift) {
     VERIFY_CHECK(shift >= 256);
     uint32_t l[16];
-    vlcp256k1_scalar_mul_512(l, a, b);
+    secp256k1_scalar_mul_512(l, a, b);
     unsigned int shiftlimbs = shift >> 5;
     unsigned int shiftlow = shift & 0x1F;
     unsigned int shifthigh = 32 - shiftlow;
@@ -661,7 +661,7 @@ VLCP256K1_INLINE static void vlcp256k1_scalar_mul_shift_var(vlcp256k1_scalar_t *
     r->d[6] = shift < 320 ? (l[6 + shiftlimbs] >> shiftlow | (shift < 288 && shiftlow ? (l[7 + shiftlimbs] << shifthigh) : 0)) : 0;
     r->d[7] = shift < 288 ? (l[7 + shiftlimbs] >> shiftlow)  : 0;
     if ((l[(shift - 1) >> 5] >> ((shift - 1) & 0x1f)) & 1) {
-        vlcp256k1_scalar_add_bit(r, 0);
+        secp256k1_scalar_add_bit(r, 0);
     }
 }
 

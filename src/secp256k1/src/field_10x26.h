@@ -16,6 +16,6 @@ typedef struct {
     int magnitude;
     int normalized;
 #endif
-} vlcp256k1_fe_t;
+} secp256k1_fe_t;
 
 #endif

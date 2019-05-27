@@ -15,18 +15,18 @@
 #include "num.h"
 
 #ifdef VERIFY
-static void vlcp256k1_num_sanity(const vlcp256k1_num_t *a) {
+static void secp256k1_num_sanity(const secp256k1_num_t *a) {
     VERIFY_CHECK(a->limbs == 1 || (a->limbs > 1 && a->data[a->limbs-1] != 0));
 }
 #else
-#define vlcp256k1_num_sanity(a) do { } while(0)
+#define secp256k1_num_sanity(a) do { } while(0)
 #endif
 
-static void vlcp256k1_num_copy(vlcp256k1_num_t *r, const vlcp256k1_num_t *a) {
+static void secp256k1_num_copy(secp256k1_num_t *r, const secp256k1_num_t *a) {
     *r = *a;
 }
 
-static void vlcp256k1_num_get_bin(unsigned char *r, unsigned int rlen, const vlcp256k1_num_t *a) {
+static void secp256k1_num_get_bin(unsigned char *r, unsigned int rlen, const secp256k1_num_t *a) {
     unsigned char tmp[65];
     int len = 0;
     if (a->limbs>1 || a->data[0] != 0) {
@@ -42,7 +42,7 @@ static void vlcp256k1_num_get_bin(unsigned char *r, unsigned int rlen, const vlc
     memset(tmp, 0, sizeof(tmp));
 }
 
-static void vlcp256k1_num_set_bin(vlcp256k1_num_t *r, const unsigned char *a, unsigned int alen) {
+static void secp256k1_num_set_bin(secp256k1_num_t *r, const unsigned char *a, unsigned int alen) {
     VERIFY_CHECK(alen > 0);
     VERIFY_CHECK(alen <= 64);
     int len = mpn_set_str(r->data, a, alen, 256);
@@ -56,7 +56,7 @@ static void vlcp256k1_num_set_bin(vlcp256k1_num_t *r, const unsigned char *a, un
     while (r->limbs > 1 && r->data[r->limbs-1]==0) r->limbs--;
 }
 
-static void vlcp256k1_num_add_abs(vlcp256k1_num_t *r, const vlcp256k1_num_t *a, const vlcp256k1_num_t *b) {
+static void secp256k1_num_add_abs(secp256k1_num_t *r, const secp256k1_num_t *a, const secp256k1_num_t *b) {
     mp_limb_t c = mpn_add(r->data, a->data, a->limbs, b->data, b->limbs);
     r->limbs = a->limbs;
     if (c != 0) {
@@ -65,16 +65,16 @@ static void vlcp256k1_num_add_abs(vlcp256k1_num_t *r, const vlcp256k1_num_t *a, 
     }
 }
 
-static void vlcp256k1_num_sub_abs(vlcp256k1_num_t *r, const vlcp256k1_num_t *a, const vlcp256k1_num_t *b) {
+static void secp256k1_num_sub_abs(secp256k1_num_t *r, const secp256k1_num_t *a, const secp256k1_num_t *b) {
     mp_limb_t c = mpn_sub(r->data, a->data, a->limbs, b->data, b->limbs);
     VERIFY_CHECK(c == 0);
     r->limbs = a->limbs;
     while (r->limbs > 1 && r->data[r->limbs-1]==0) r->limbs--;
 }
 
-static void vlcp256k1_num_mod(vlcp256k1_num_t *r, const vlcp256k1_num_t *m) {
-    vlcp256k1_num_sanity(r);
-    vlcp256k1_num_sanity(m);
+static void secp256k1_num_mod(secp256k1_num_t *r, const secp256k1_num_t *m) {
+    secp256k1_num_sanity(r);
+    secp256k1_num_sanity(m);
 
     if (r->limbs >= m->limbs) {
         mp_limb_t t[2*NUM_LIMBS];
@@ -85,14 +85,14 @@ static void vlcp256k1_num_mod(vlcp256k1_num_t *r, const vlcp256k1_num_t *m) {
     }
 
     if (r->neg && (r->limbs > 1 || r->data[0] != 0)) {
-        vlcp256k1_num_sub_abs(r, m, r);
+        secp256k1_num_sub_abs(r, m, r);
         r->neg = 0;
     }
 }
 
-static void vlcp256k1_num_mod_inverse(vlcp256k1_num_t *r, const vlcp256k1_num_t *a, const vlcp256k1_num_t *m) {
-    vlcp256k1_num_sanity(a);
-    vlcp256k1_num_sanity(m);
+static void secp256k1_num_mod_inverse(secp256k1_num_t *r, const secp256k1_num_t *a, const secp256k1_num_t *m) {
+    secp256k1_num_sanity(a);
+    secp256k1_num_sanity(m);
 
     /** mpn_gcdext computes: (G,S) = gcdext(U,V), where
      *  * G = gcd(U,V)
@@ -130,61 +130,61 @@ static void vlcp256k1_num_mod_inverse(vlcp256k1_num_t *r, const vlcp256k1_num_t 
     memset(v, 0, sizeof(v));
 }
 
-static int vlcp256k1_num_is_zero(const vlcp256k1_num_t *a) {
+static int secp256k1_num_is_zero(const secp256k1_num_t *a) {
     return (a->limbs == 1 && a->data[0] == 0);
 }
 
-static int vlcp256k1_num_is_neg(const vlcp256k1_num_t *a) {
+static int secp256k1_num_is_neg(const secp256k1_num_t *a) {
     return (a->limbs > 1 || a->data[0] != 0) && a->neg;
 }
 
-static int vlcp256k1_num_cmp(const vlcp256k1_num_t *a, const vlcp256k1_num_t *b) {
+static int secp256k1_num_cmp(const secp256k1_num_t *a, const secp256k1_num_t *b) {
     if (a->limbs > b->limbs) return 1;
     if (a->limbs < b->limbs) return -1;
     return mpn_cmp(a->data, b->data, a->limbs);
 }
 
-static int vlcp256k1_num_eq(const vlcp256k1_num_t *a, const vlcp256k1_num_t *b) {
+static int secp256k1_num_eq(const secp256k1_num_t *a, const secp256k1_num_t *b) {
     if (a->limbs > b->limbs) return 0;
     if (a->limbs < b->limbs) return 0;
-    if ((a->neg && !vlcp256k1_num_is_zero(a)) != (b->neg && !vlcp256k1_num_is_zero(b))) return 0;
+    if ((a->neg && !secp256k1_num_is_zero(a)) != (b->neg && !secp256k1_num_is_zero(b))) return 0;
     return mpn_cmp(a->data, b->data, a->limbs) == 0;
 }
 
-static void vlcp256k1_num_subadd(vlcp256k1_num_t *r, const vlcp256k1_num_t *a, const vlcp256k1_num_t *b, int bneg) {
+static void secp256k1_num_subadd(secp256k1_num_t *r, const secp256k1_num_t *a, const secp256k1_num_t *b, int bneg) {
     if (!(b->neg ^ bneg ^ a->neg)) { /* a and b have the same sign */
         r->neg = a->neg;
         if (a->limbs >= b->limbs) {
-            vlcp256k1_num_add_abs(r, a, b);
+            secp256k1_num_add_abs(r, a, b);
         } else {
-            vlcp256k1_num_add_abs(r, b, a);
+            secp256k1_num_add_abs(r, b, a);
         }
     } else {
-        if (vlcp256k1_num_cmp(a, b) > 0) {
+        if (secp256k1_num_cmp(a, b) > 0) {
             r->neg = a->neg;
-            vlcp256k1_num_sub_abs(r, a, b);
+            secp256k1_num_sub_abs(r, a, b);
         } else {
             r->neg = b->neg ^ bneg;
-            vlcp256k1_num_sub_abs(r, b, a);
+            secp256k1_num_sub_abs(r, b, a);
         }
     }
 }
 
-static void vlcp256k1_num_add(vlcp256k1_num_t *r, const vlcp256k1_num_t *a, const vlcp256k1_num_t *b) {
-    vlcp256k1_num_sanity(a);
-    vlcp256k1_num_sanity(b);
-    vlcp256k1_num_subadd(r, a, b, 0);
+static void secp256k1_num_add(secp256k1_num_t *r, const secp256k1_num_t *a, const secp256k1_num_t *b) {
+    secp256k1_num_sanity(a);
+    secp256k1_num_sanity(b);
+    secp256k1_num_subadd(r, a, b, 0);
 }
 
-static void vlcp256k1_num_sub(vlcp256k1_num_t *r, const vlcp256k1_num_t *a, const vlcp256k1_num_t *b) {
-    vlcp256k1_num_sanity(a);
-    vlcp256k1_num_sanity(b);
-    vlcp256k1_num_subadd(r, a, b, 1);
+static void secp256k1_num_sub(secp256k1_num_t *r, const secp256k1_num_t *a, const secp256k1_num_t *b) {
+    secp256k1_num_sanity(a);
+    secp256k1_num_sanity(b);
+    secp256k1_num_subadd(r, a, b, 1);
 }
 
-static void vlcp256k1_num_mul(vlcp256k1_num_t *r, const vlcp256k1_num_t *a, const vlcp256k1_num_t *b) {
-    vlcp256k1_num_sanity(a);
-    vlcp256k1_num_sanity(b);
+static void secp256k1_num_mul(secp256k1_num_t *r, const secp256k1_num_t *a, const secp256k1_num_t *b) {
+    secp256k1_num_sanity(a);
+    secp256k1_num_sanity(b);
 
     mp_limb_t tmp[2*NUM_LIMBS+1];
     VERIFY_CHECK(a->limbs + b->limbs <= 2*NUM_LIMBS+1);
@@ -206,7 +206,7 @@ static void vlcp256k1_num_mul(vlcp256k1_num_t *r, const vlcp256k1_num_t *a, cons
     memset(tmp, 0, sizeof(tmp));
 }
 
-static void vlcp256k1_num_shift(vlcp256k1_num_t *r, int bits) {
+static void secp256k1_num_shift(secp256k1_num_t *r, int bits) {
     if (bits % GMP_NUMB_BITS) {
         // Shift within limbs.
         mpn_rshift(r->data, r->data, r->limbs, bits % GMP_NUMB_BITS);
@@ -225,7 +225,7 @@ static void vlcp256k1_num_shift(vlcp256k1_num_t *r, int bits) {
     while (r->limbs>1 && r->data[r->limbs-1]==0) r->limbs--;
 }
 
-static void vlcp256k1_num_negate(vlcp256k1_num_t *r) {
+static void secp256k1_num_negate(secp256k1_num_t *r) {
     r->neg ^= 1;
 }
 

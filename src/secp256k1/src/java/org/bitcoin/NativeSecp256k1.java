@@ -9,14 +9,14 @@ import com.google.common.base.Preconditions;
 /**
  * This class holds native methods to handle ECDSA verification.
  * You can find an example library that can be used for this at
- * https://github.com/sipa/vlcp256k1
+ * https://github.com/sipa/secp256k1
  */
 public class NativeVlcp256k1 {
     public static final boolean enabled;
     static {
         boolean isEnabled = true;
         try {
-            System.loadLibrary("javavlcp256k1");
+            System.loadLibrary("javasecp256k1");
         } catch (UnsatisfiedLinkError e) {
             isEnabled = false;
         }
@@ -25,7 +25,7 @@ public class NativeVlcp256k1 {
     
     private static ThreadLocal<ByteBuffer> nativeECDSABuffer = new ThreadLocal<ByteBuffer>();
     /**
-     * Verifies the given vlcp256k1 signature in native code.
+     * Verifies the given secp256k1 signature in native code.
      * Calling when enabled == false is undefined (probably library not loaded)
      * 
      * @param data The data which was signed, must be exactly 32 bytes
@@ -47,7 +47,7 @@ public class NativeVlcp256k1 {
         byteBuff.putInt(pub.length);
         byteBuff.put(signature);
         byteBuff.put(pub);
-        return vlcp256k1_ecdsa_verify(byteBuff) == 1;
+        return secp256k1_ecdsa_verify(byteBuff) == 1;
     }
 
     /**
@@ -56,5 +56,5 @@ public class NativeVlcp256k1 {
      *        byte[signatureLength] signature, byte[pubkeyLength] pub
      * @returns 1 for valid signature, anything else for invalid
      */
-    private static native int vlcp256k1_ecdsa_verify(ByteBuffer byteBuff);
+    private static native int secp256k1_ecdsa_verify(ByteBuffer byteBuff);
 }

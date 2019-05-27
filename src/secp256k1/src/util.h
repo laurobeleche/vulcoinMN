@@ -8,7 +8,7 @@
 #define _VLCP256K1_UTIL_H_
 
 #if defined HAVE_CONFIG_H
-#include "libvlcp256k1-config.h"
+#include "libsecp256k1-config.h"
 #endif
 
 #include <stdlib.h>

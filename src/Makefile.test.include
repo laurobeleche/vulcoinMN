@@ -110,7 +110,7 @@ vulcoin_test_clean : FORCE
 	rm -f $(CLEAN_BITCOIN_TEST) $(test_test_vulcoin_OBJECTS) $(TEST_BINARY)
 
 check-local:
-	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C vlcp256k1 check
+	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C secp256k1 check
 if EMBEDDED_UNIVALUE
 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C univalue check
 endif

@@ -14,7 +14,7 @@
 #include <vector>
 
 /** 
- * vlcp256k1:
+ * secp256k1:
  * const unsigned int PRIVATE_KEY_SIZE = 279;
  * const unsigned int PUBLIC_KEY_SIZE  = 65;
  * const unsigned int SIGNATURE_SIZE   = 72;

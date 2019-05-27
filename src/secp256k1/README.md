@@ -1,14 +1,14 @@
-libvlcp256k1
+libsecp256k1
 ============
 
-[![Build Status](https://travis-ci.org/bitcoin/vlcp256k1.svg?branch=master)](https://travis-ci.org/bitcoin/vlcp256k1)
+[![Build Status](https://travis-ci.org/bitcoin/secp256k1.svg?branch=master)](https://travis-ci.org/bitcoin/secp256k1)
 
-Optimized C library for EC operations on curve vlcp256k1.
+Optimized C library for EC operations on curve secp256k1.
 
 This library is experimental, so use at your own risk.
 
 Features:
-* Low-level field and group operations on vlcp256k1.
+* Low-level field and group operations on secp256k1.
 * ECDSA signing/verification and key generation.
 * Adding/multiplying private/public keys.
 * Serialization/parsing of private keys, public keys, signatures.
@@ -37,7 +37,7 @@ Implementation details
   * Use wNAF notation for point multiplicands.
   * Use a much larger window for multiples of G, using precomputed multiples.
   * Use Shamir's trick to do the multiplication with the public key and the generator simultaneously.
-  * Optionally use vlcp256k1's efficiently-computable endomorphism to split the multiplicands into 4 half-sized ones first.
+  * Optionally use secp256k1's efficiently-computable endomorphism to split the multiplicands into 4 half-sized ones first.
 * Point multiplication for signing
   * Use a precomputed table of multiples of powers of 16 multiplied with the generator, so general multiplication becomes a series of additions.
   * Slice the precomputed table in memory per byte, so memory access to the table becomes uniform.
@@ -47,7 +47,7 @@ Implementation details
 Build steps
 -----------
 
-libvlcp256k1 is built using autotools:
+libsecp256k1 is built using autotools:
 
     $ ./autogen.sh
     $ ./configure

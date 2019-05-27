@@ -10,10 +10,10 @@
 #include "scalar.h"
 #include "group.h"
 
-static void vlcp256k1_ecmult_gen_start(void);
-static void vlcp256k1_ecmult_gen_stop(void);
+static void secp256k1_ecmult_gen_start(void);
+static void secp256k1_ecmult_gen_stop(void);
 
 /** Multiply with the generator: R = a*G */
-static void vlcp256k1_ecmult_gen(vlcp256k1_gej_t *r, const vlcp256k1_scalar_t *a);
+static void secp256k1_ecmult_gen(secp256k1_gej_t *r, const secp256k1_scalar_t *a);
 
 #endif

@@ -7,7 +7,7 @@
 #include "eccryptoverify.h"
 
 #ifdef USE_VLCP256K1
-#include <vlcp256k1.h>
+#include <secp256k1.h>
 #else
 #include "ecwrapper.h"
 #endif
@@ -17,7 +17,7 @@ bool CPubKey::Verify(const uint256& hash, const std::vector<unsigned char>& vchS
     if (!IsValid())
         return false;
 #ifdef USE_VLCP256K1
-    if (vlcp256k1_ecdsa_verify((const unsigned char*)&hash, 32, &vchSig[0], vchSig.size(), begin(), size()) != 1)
+    if (secp256k1_ecdsa_verify((const unsigned char*)&hash, 32, &vchSig[0], vchSig.size(), begin(), size()) != 1)
         return false;
 #else
     CECKey key;
@@ -37,7 +37,7 @@ bool CPubKey::RecoverCompact(const uint256& hash, const std::vector<unsigned cha
     bool fComp = ((vchSig[0] - 27) & 4) != 0;
 #ifdef USE_VLCP256K1
     int pubkeylen = 65;
-    if (!vlcp256k1_ecdsa_recover_compact((const unsigned char*)&hash, 32, &vchSig[1], (unsigned char*)begin(), &pubkeylen, fComp, recid))
+    if (!secp256k1_ecdsa_recover_compact((const unsigned char*)&hash, 32, &vchSig[1], (unsigned char*)begin(), &pubkeylen, fComp, recid))
         return false;
     assert((int)size() == pubkeylen);
 #else
@@ -56,7 +56,7 @@ bool CPubKey::IsFullyValid() const
     if (!IsValid())
         return false;
 #ifdef USE_VLCP256K1
-    if (!vlcp256k1_ecdsa_pubkey_verify(begin(), size()))
+    if (!secp256k1_ecdsa_pubkey_verify(begin(), size()))
         return false;
 #else
     CECKey key;
@@ -72,7 +72,7 @@ bool CPubKey::Decompress()
         return false;
 #ifdef USE_VLCP256K1
     int clen = size();
-    int ret = vlcp256k1_ecdsa_pubkey_decompress((unsigned char*)begin(), &clen);
+    int ret = secp256k1_ecdsa_pubkey_decompress((unsigned char*)begin(), &clen);
     assert(ret);
     assert(clen == (int)size());
 #else
@@ -96,7 +96,7 @@ bool CPubKey::Derive(CPubKey& pubkeyChild, unsigned char ccChild[32], unsigned i
     memcpy(ccChild, out + 32, 32);
 #ifdef USE_VLCP256K1
     pubkeyChild = *this;
-    bool ret = vlcp256k1_ecdsa_pubkey_tweak_add((unsigned char*)pubkeyChild.begin(), pubkeyChild.size(), out);
+    bool ret = secp256k1_ecdsa_pubkey_tweak_add((unsigned char*)pubkeyChild.begin(), pubkeyChild.size(), out);
 #else
     CECKey key;
     bool ret = key.SetPubKey(begin(), size());

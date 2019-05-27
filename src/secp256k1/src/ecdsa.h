@@ -10,18 +10,18 @@
 #include "scalar.h"
 #include "group.h"
 
-static void vlcp256k1_ecsda_start(void);
-static void vlcp256k1_ecdsa_stop(void);
+static void secp256k1_ecsda_start(void);
+static void secp256k1_ecdsa_stop(void);
 
 typedef struct {
-    vlcp256k1_scalar_t r, s;
-} vlcp256k1_ecdsa_sig_t;
+    secp256k1_scalar_t r, s;
+} secp256k1_ecdsa_sig_t;
 
-static int vlcp256k1_ecdsa_sig_parse(vlcp256k1_ecdsa_sig_t *r, const unsigned char *sig, int size);
-static int vlcp256k1_ecdsa_sig_serialize(unsigned char *sig, int *size, const vlcp256k1_ecdsa_sig_t *a);
-static int vlcp256k1_ecdsa_sig_verify(const vlcp256k1_ecdsa_sig_t *sig, const vlcp256k1_ge_t *pubkey, const vlcp256k1_scalar_t *message);
-static int vlcp256k1_ecdsa_sig_sign(vlcp256k1_ecdsa_sig_t *sig, const vlcp256k1_scalar_t *vlckey, const vlcp256k1_scalar_t *message, const vlcp256k1_scalar_t *nonce, int *recid);
-static int vlcp256k1_ecdsa_sig_recover(const vlcp256k1_ecdsa_sig_t *sig, vlcp256k1_ge_t *pubkey, const vlcp256k1_scalar_t *message, int recid);
-static void vlcp256k1_ecdsa_sig_set_rs(vlcp256k1_ecdsa_sig_t *sig, const vlcp256k1_scalar_t *r, const vlcp256k1_scalar_t *s);
+static int secp256k1_ecdsa_sig_parse(secp256k1_ecdsa_sig_t *r, const unsigned char *sig, int size);
+static int secp256k1_ecdsa_sig_serialize(unsigned char *sig, int *size, const secp256k1_ecdsa_sig_t *a);
+static int secp256k1_ecdsa_sig_verify(const secp256k1_ecdsa_sig_t *sig, const secp256k1_ge_t *pubkey, const secp256k1_scalar_t *message);
+static int secp256k1_ecdsa_sig_sign(secp256k1_ecdsa_sig_t *sig, const secp256k1_scalar_t *vlckey, const secp256k1_scalar_t *message, const secp256k1_scalar_t *nonce, int *recid);
+static int secp256k1_ecdsa_sig_recover(const secp256k1_ecdsa_sig_t *sig, secp256k1_ge_t *pubkey, const secp256k1_scalar_t *message, int recid);
+static void secp256k1_ecdsa_sig_set_rs(secp256k1_ecdsa_sig_t *sig, const secp256k1_scalar_t *r, const secp256k1_scalar_t *s);
 
 #endif

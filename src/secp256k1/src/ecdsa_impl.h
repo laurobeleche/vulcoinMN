@@ -16,18 +16,18 @@
 #include "ecdsa.h"
 
 typedef struct {
-    vlcp256k1_fe_t order_as_fe;
-    vlcp256k1_fe_t p_minus_order;
-} vlcp256k1_ecdsa_consts_t;
+    secp256k1_fe_t order_as_fe;
+    secp256k1_fe_t p_minus_order;
+} secp256k1_ecdsa_consts_t;
 
-static const vlcp256k1_ecdsa_consts_t *vlcp256k1_ecdsa_consts = NULL;
+static const secp256k1_ecdsa_consts_t *secp256k1_ecdsa_consts = NULL;
 
-static void vlcp256k1_ecdsa_start(void) {
-    if (vlcp256k1_ecdsa_consts != NULL)
+static void secp256k1_ecdsa_start(void) {
+    if (secp256k1_ecdsa_consts != NULL)
         return;
 
     /* Allocate. */
-    vlcp256k1_ecdsa_consts_t *ret = (vlcp256k1_ecdsa_consts_t*)malloc(sizeof(vlcp256k1_ecdsa_consts_t));
+    secp256k1_ecdsa_consts_t *ret = (secp256k1_ecdsa_consts_t*)malloc(sizeof(secp256k1_ecdsa_consts_t));
 
     static const unsigned char order[] = {
         0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
@@ -36,24 +36,24 @@ static void vlcp256k1_ecdsa_start(void) {
         0xBF,0xD2,0x5E,0x8C,0xD0,0x36,0x41,0x41
     };
 
-    vlcp256k1_fe_set_b32(&ret->order_as_fe, order);
-    vlcp256k1_fe_negate(&ret->p_minus_order, &ret->order_as_fe, 1);
-    vlcp256k1_fe_normalize(&ret->p_minus_order);
+    secp256k1_fe_set_b32(&ret->order_as_fe, order);
+    secp256k1_fe_negate(&ret->p_minus_order, &ret->order_as_fe, 1);
+    secp256k1_fe_normalize(&ret->p_minus_order);
 
     /* Set the global pointer. */
-    vlcp256k1_ecdsa_consts = ret;
+    secp256k1_ecdsa_consts = ret;
 }
 
-static void vlcp256k1_ecdsa_stop(void) {
-    if (vlcp256k1_ecdsa_consts == NULL)
+static void secp256k1_ecdsa_stop(void) {
+    if (secp256k1_ecdsa_consts == NULL)
         return;
 
-    vlcp256k1_ecdsa_consts_t *c = (vlcp256k1_ecdsa_consts_t*)vlcp256k1_ecdsa_consts;
-    vlcp256k1_ecdsa_consts = NULL;
+    secp256k1_ecdsa_consts_t *c = (secp256k1_ecdsa_consts_t*)secp256k1_ecdsa_consts;
+    secp256k1_ecdsa_consts = NULL;
     free(c);
 }
 
-static int vlcp256k1_ecdsa_sig_parse(vlcp256k1_ecdsa_sig_t *r, const unsigned char *sig, int size) {
+static int secp256k1_ecdsa_sig_parse(secp256k1_ecdsa_sig_t *r, const unsigned char *sig, int size) {
     if (sig[0] != 0x30) return 0;
     int lenr = sig[3];
     if (5+lenr >= size) return 0;
@@ -80,17 +80,17 @@ static int vlcp256k1_ecdsa_sig_parse(vlcp256k1_ecdsa_sig_t *r, const unsigned ch
     memcpy(ra + 32 - lenr, rp, lenr);
     memcpy(sa + 32 - lens, sp, lens);
     int overflow = 0;
-    vlcp256k1_scalar_set_b32(&r->r, ra, &overflow);
+    secp256k1_scalar_set_b32(&r->r, ra, &overflow);
     if (overflow) return 0;
-    vlcp256k1_scalar_set_b32(&r->s, sa, &overflow);
+    secp256k1_scalar_set_b32(&r->s, sa, &overflow);
     if (overflow) return 0;
     return 1;
 }
 
-static int vlcp256k1_ecdsa_sig_serialize(unsigned char *sig, int *size, const vlcp256k1_ecdsa_sig_t *a) {
+static int secp256k1_ecdsa_sig_serialize(unsigned char *sig, int *size, const secp256k1_ecdsa_sig_t *a) {
     unsigned char r[33] = {0}, s[33] = {0};
-    vlcp256k1_scalar_get_b32(&r[1], &a->r);
-    vlcp256k1_scalar_get_b32(&s[1], &a->s);
+    secp256k1_scalar_get_b32(&r[1], &a->r);
+    secp256k1_scalar_get_b32(&s[1], &a->s);
     unsigned char *rp = r, *sp = s;
     int lenR = 33, lenS = 33;
     while (lenR > 1 && rp[0] == 0 && rp[1] < 0x80) { lenR--; rp++; }
@@ -109,95 +109,95 @@ static int vlcp256k1_ecdsa_sig_serialize(unsigned char *sig, int *size, const vl
     return 1;
 }
 
-static int vlcp256k1_ecdsa_sig_recompute(vlcp256k1_scalar_t *r2, const vlcp256k1_ecdsa_sig_t *sig, const vlcp256k1_ge_t *pubkey, const vlcp256k1_scalar_t *message) {
-    if (vlcp256k1_scalar_is_zero(&sig->r) || vlcp256k1_scalar_is_zero(&sig->s))
+static int secp256k1_ecdsa_sig_recompute(secp256k1_scalar_t *r2, const secp256k1_ecdsa_sig_t *sig, const secp256k1_ge_t *pubkey, const secp256k1_scalar_t *message) {
+    if (secp256k1_scalar_is_zero(&sig->r) || secp256k1_scalar_is_zero(&sig->s))
         return 0;
 
     int ret = 0;
-    vlcp256k1_scalar_t sn, u1, u2;
-    vlcp256k1_scalar_inverse_var(&sn, &sig->s);
-    vlcp256k1_scalar_mul(&u1, &sn, message);
-    vlcp256k1_scalar_mul(&u2, &sn, &sig->r);
-    vlcp256k1_gej_t pubkeyj; vlcp256k1_gej_set_ge(&pubkeyj, pubkey);
-    vlcp256k1_gej_t pr; vlcp256k1_ecmult(&pr, &pubkeyj, &u2, &u1);
-    if (!vlcp256k1_gej_is_infinity(&pr)) {
-        vlcp256k1_fe_t xr; vlcp256k1_gej_get_x_var(&xr, &pr);
-        vlcp256k1_fe_normalize(&xr);
-        unsigned char xrb[32]; vlcp256k1_fe_get_b32(xrb, &xr);
-        vlcp256k1_scalar_set_b32(r2, xrb, NULL);
+    secp256k1_scalar_t sn, u1, u2;
+    secp256k1_scalar_inverse_var(&sn, &sig->s);
+    secp256k1_scalar_mul(&u1, &sn, message);
+    secp256k1_scalar_mul(&u2, &sn, &sig->r);
+    secp256k1_gej_t pubkeyj; secp256k1_gej_set_ge(&pubkeyj, pubkey);
+    secp256k1_gej_t pr; secp256k1_ecmult(&pr, &pubkeyj, &u2, &u1);
+    if (!secp256k1_gej_is_infinity(&pr)) {
+        secp256k1_fe_t xr; secp256k1_gej_get_x_var(&xr, &pr);
+        secp256k1_fe_normalize(&xr);
+        unsigned char xrb[32]; secp256k1_fe_get_b32(xrb, &xr);
+        secp256k1_scalar_set_b32(r2, xrb, NULL);
         ret = 1;
     }
     return ret;
 }
 
-static int vlcp256k1_ecdsa_sig_recover(const vlcp256k1_ecdsa_sig_t *sig, vlcp256k1_ge_t *pubkey, const vlcp256k1_scalar_t *message, int recid) {
-    if (vlcp256k1_scalar_is_zero(&sig->r) || vlcp256k1_scalar_is_zero(&sig->s))
+static int secp256k1_ecdsa_sig_recover(const secp256k1_ecdsa_sig_t *sig, secp256k1_ge_t *pubkey, const secp256k1_scalar_t *message, int recid) {
+    if (secp256k1_scalar_is_zero(&sig->r) || secp256k1_scalar_is_zero(&sig->s))
         return 0;
 
     unsigned char brx[32];
-    vlcp256k1_scalar_get_b32(brx, &sig->r);
-    vlcp256k1_fe_t fx;
-    VERIFY_CHECK(vlcp256k1_fe_set_b32(&fx, brx)); /* brx comes from a scalar, so is less than the order; certainly less than p */
+    secp256k1_scalar_get_b32(brx, &sig->r);
+    secp256k1_fe_t fx;
+    VERIFY_CHECK(secp256k1_fe_set_b32(&fx, brx)); /* brx comes from a scalar, so is less than the order; certainly less than p */
     if (recid & 2) {
-        if (vlcp256k1_fe_cmp_var(&fx, &vlcp256k1_ecdsa_consts->p_minus_order) >= 0)
+        if (secp256k1_fe_cmp_var(&fx, &secp256k1_ecdsa_consts->p_minus_order) >= 0)
             return 0;
-        vlcp256k1_fe_add(&fx, &vlcp256k1_ecdsa_consts->order_as_fe);
+        secp256k1_fe_add(&fx, &secp256k1_ecdsa_consts->order_as_fe);
     }
-    vlcp256k1_ge_t x;
-    if (!vlcp256k1_ge_set_xo(&x, &fx, recid & 1))
+    secp256k1_ge_t x;
+    if (!secp256k1_ge_set_xo(&x, &fx, recid & 1))
         return 0;
-    vlcp256k1_gej_t xj;
-    vlcp256k1_gej_set_ge(&xj, &x);
-    vlcp256k1_scalar_t rn, u1, u2;
-    vlcp256k1_scalar_inverse_var(&rn, &sig->r);
-    vlcp256k1_scalar_mul(&u1, &rn, message);
-    vlcp256k1_scalar_negate(&u1, &u1);
-    vlcp256k1_scalar_mul(&u2, &rn, &sig->s);
-    vlcp256k1_gej_t qj;
-    vlcp256k1_ecmult(&qj, &xj, &u2, &u1);
-    vlcp256k1_ge_set_gej_var(pubkey, &qj);
-    return !vlcp256k1_gej_is_infinity(&qj);
+    secp256k1_gej_t xj;
+    secp256k1_gej_set_ge(&xj, &x);
+    secp256k1_scalar_t rn, u1, u2;
+    secp256k1_scalar_inverse_var(&rn, &sig->r);
+    secp256k1_scalar_mul(&u1, &rn, message);
+    secp256k1_scalar_negate(&u1, &u1);
+    secp256k1_scalar_mul(&u2, &rn, &sig->s);
+    secp256k1_gej_t qj;
+    secp256k1_ecmult(&qj, &xj, &u2, &u1);
+    secp256k1_ge_set_gej_var(pubkey, &qj);
+    return !secp256k1_gej_is_infinity(&qj);
 }
 
-static int vlcp256k1_ecdsa_sig_verify(const vlcp256k1_ecdsa_sig_t *sig, const vlcp256k1_ge_t *pubkey, const vlcp256k1_scalar_t *message) {
-    vlcp256k1_scalar_t r2;
+static int secp256k1_ecdsa_sig_verify(const secp256k1_ecdsa_sig_t *sig, const secp256k1_ge_t *pubkey, const secp256k1_scalar_t *message) {
+    secp256k1_scalar_t r2;
     int ret = 0;
-    ret = vlcp256k1_ecdsa_sig_recompute(&r2, sig, pubkey, message) && vlcp256k1_scalar_eq(&sig->r, &r2);
+    ret = secp256k1_ecdsa_sig_recompute(&r2, sig, pubkey, message) && secp256k1_scalar_eq(&sig->r, &r2);
     return ret;
 }
 
-static int vlcp256k1_ecdsa_sig_sign(vlcp256k1_ecdsa_sig_t *sig, const vlcp256k1_scalar_t *vlckey, const vlcp256k1_scalar_t *message, const vlcp256k1_scalar_t *nonce, int *recid) {
-    vlcp256k1_gej_t rp;
-    vlcp256k1_ecmult_gen(&rp, nonce);
-    vlcp256k1_ge_t r;
-    vlcp256k1_ge_set_gej(&r, &rp);
+static int secp256k1_ecdsa_sig_sign(secp256k1_ecdsa_sig_t *sig, const secp256k1_scalar_t *vlckey, const secp256k1_scalar_t *message, const secp256k1_scalar_t *nonce, int *recid) {
+    secp256k1_gej_t rp;
+    secp256k1_ecmult_gen(&rp, nonce);
+    secp256k1_ge_t r;
+    secp256k1_ge_set_gej(&r, &rp);
     unsigned char b[32];
-    vlcp256k1_fe_normalize(&r.x);
-    vlcp256k1_fe_normalize(&r.y);
-    vlcp256k1_fe_get_b32(b, &r.x);
+    secp256k1_fe_normalize(&r.x);
+    secp256k1_fe_normalize(&r.y);
+    secp256k1_fe_get_b32(b, &r.x);
     int overflow = 0;
-    vlcp256k1_scalar_set_b32(&sig->r, b, &overflow);
+    secp256k1_scalar_set_b32(&sig->r, b, &overflow);
     if (recid)
-        *recid = (overflow ? 2 : 0) | (vlcp256k1_fe_is_odd(&r.y) ? 1 : 0);
-    vlcp256k1_scalar_t n;
-    vlcp256k1_scalar_mul(&n, &sig->r, vlckey);
-    vlcp256k1_scalar_add(&n, &n, message);
-    vlcp256k1_scalar_inverse(&sig->s, nonce);
-    vlcp256k1_scalar_mul(&sig->s, &sig->s, &n);
-    vlcp256k1_scalar_clear(&n);
-    vlcp256k1_gej_clear(&rp);
-    vlcp256k1_ge_clear(&r);
-    if (vlcp256k1_scalar_is_zero(&sig->s))
+        *recid = (overflow ? 2 : 0) | (secp256k1_fe_is_odd(&r.y) ? 1 : 0);
+    secp256k1_scalar_t n;
+    secp256k1_scalar_mul(&n, &sig->r, vlckey);
+    secp256k1_scalar_add(&n, &n, message);
+    secp256k1_scalar_inverse(&sig->s, nonce);
+    secp256k1_scalar_mul(&sig->s, &sig->s, &n);
+    secp256k1_scalar_clear(&n);
+    secp256k1_gej_clear(&rp);
+    secp256k1_ge_clear(&r);
+    if (secp256k1_scalar_is_zero(&sig->s))
         return 0;
-    if (vlcp256k1_scalar_is_high(&sig->s)) {
-        vlcp256k1_scalar_negate(&sig->s, &sig->s);
+    if (secp256k1_scalar_is_high(&sig->s)) {
+        secp256k1_scalar_negate(&sig->s, &sig->s);
         if (recid)
             *recid ^= 1;
     }
     return 1;
 }
 
-static void vlcp256k1_ecdsa_sig_set_rs(vlcp256k1_ecdsa_sig_t *sig, const vlcp256k1_scalar_t *r, const vlcp256k1_scalar_t *s) {
+static void secp256k1_ecdsa_sig_set_rs(secp256k1_ecdsa_sig_t *sig, const secp256k1_scalar_t *r, const secp256k1_scalar_t *s) {
     sig->r = *r;
     sig->s = *s;
 }

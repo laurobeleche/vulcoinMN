@@ -6,11 +6,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "include/vlcp256k1.h"
+#include "include/secp256k1.h"
 #include "util.h"
 
 int main(void) {
-    vlcp256k1_start(VLCP256K1_START_SIGN);
+    secp256k1_start(VLCP256K1_START_SIGN);
 
     unsigned char msg[32];
     unsigned char nonce[32];
@@ -24,7 +24,7 @@ int main(void) {
 
     for (int i=0; i<1000000; i++) {
         int recid = 0;
-        CHECK(vlcp256k1_ecdsa_sign_compact(msg, 32, sig, key, nonce, &recid));
+        CHECK(secp256k1_ecdsa_sign_compact(msg, 32, sig, key, nonce, &recid));
         for (int j = 0; j < 32; j++) {
             nonce[j] = key[j];     /* Move former key to nonce  */
             msg[j] = sig[j];       /* Move former R to message. */
@@ -44,6 +44,6 @@ int main(void) {
     };
     CHECK(memcmp(sig, fini, 64) == 0);
 
-    vlcp256k1_stop();
+    secp256k1_stop();
     return 0;
 }

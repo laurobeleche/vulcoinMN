@@ -163,7 +163,7 @@ err:
 
 CECKey::CECKey()
 {
-    pkey = EC_KEY_new_by_curve_name(NID_vlcp256k1);
+    pkey = EC_KEY_new_by_curve_name(NID_secp256k1);
     assert(pkey != NULL);
 }
 
@@ -272,7 +272,7 @@ bool CECKey::TweakPublic(const unsigned char vchTweak[32])
 
 bool CECKey::SanityCheck()
 {
-    EC_KEY* pkey = EC_KEY_new_by_curve_name(NID_vlcp256k1);
+    EC_KEY* pkey = EC_KEY_new_by_curve_name(NID_secp256k1);
     if (pkey == NULL)
         return false;
     EC_KEY_free(pkey);

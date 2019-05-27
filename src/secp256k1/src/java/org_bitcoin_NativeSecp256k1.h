@@ -9,10 +9,10 @@ extern "C" {
 #endif
 /*
  * Class:     org_bitcoin_NativeVlcp256k1
- * Method:    vlcp256k1_ecdsa_verify
+ * Method:    secp256k1_ecdsa_verify
  * Signature: (Ljava/nio/ByteBuffer;)I
  */
-JNIEXPORT jint JNICALL Java_org_bitcoin_NativeVlcp256k1_vlcp256k1_1ecdsa_1verify
+JNIEXPORT jint JNICALL Java_org_bitcoin_NativeVlcp256k1_secp256k1_1ecdsa_1verify
   (JNIEnv *, jclass, jobject);
 
 #ifdef __cplusplus

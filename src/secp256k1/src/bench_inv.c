@@ -5,7 +5,7 @@
  **********************************************************************/
 #include <stdio.h>
 
-#include "include/vlcp256k1.h"
+#include "include/secp256k1.h"
 
 #include "util.h"
 #include "num_impl.h"
@@ -26,16 +26,16 @@ int main(void) {
         0xe0, 0xaa, 0x84, 0x53, 0xf6, 0x80, 0xfc, 0x23,
         0x88, 0x3c, 0xd6, 0x74, 0x9f, 0x27, 0x09, 0x03
     };
-    vlcp256k1_ge_start();
-    vlcp256k1_scalar_t base, x;
-    vlcp256k1_scalar_set_b32(&base, init, NULL);
-    vlcp256k1_scalar_set_b32(&x, init, NULL);
+    secp256k1_ge_start();
+    secp256k1_scalar_t base, x;
+    secp256k1_scalar_set_b32(&base, init, NULL);
+    secp256k1_scalar_set_b32(&x, init, NULL);
     for (int i=0; i<1000000; i++) {
-        vlcp256k1_scalar_inverse(&x, &x);
-        vlcp256k1_scalar_add(&x, &x, &base);
+        secp256k1_scalar_inverse(&x, &x);
+        secp256k1_scalar_add(&x, &x, &base);
     }
     unsigned char res[32];
-    vlcp256k1_scalar_get_b32(res, &x);
+    secp256k1_scalar_get_b32(res, &x);
     CHECK(memcmp(res, fini, 32) == 0);
     return 0;
 }

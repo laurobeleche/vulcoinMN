@@ -17,7 +17,7 @@
 #include "wallet.h"
 
 #include <fstream>
-#include <vlcp256k1.h>
+#include <secp256k1.h>
 #include <stdint.h>
 
 #include <boost/algorithm/string.hpp>

@@ -1,5 +1,5 @@
 AC_PREREQ([2.60])
-AC_INIT([libvlcp256k1],[0.1])
+AC_INIT([libsecp256k1],[0.1])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux/m4])
 AC_CANONICAL_HOST
@@ -265,8 +265,8 @@ AC_MSG_NOTICE([Using field implementation: $set_field])
 AC_MSG_NOTICE([Using bignum implementation: $set_bignum])
 AC_MSG_NOTICE([Using scalar implementation: $set_scalar])
 
-AC_CONFIG_HEADERS([src/libvlcp256k1-config.h])
-AC_CONFIG_FILES([Makefile libvlcp256k1.pc])
+AC_CONFIG_HEADERS([src/libsecp256k1-config.h])
+AC_CONFIG_FILES([Makefile libsecp256k1.pc])
 AC_SUBST(VLCP_INCLUDES)
 AC_SUBST(VLCP_LIBS)
 AC_SUBST(VLCP_TEST_LIBS)

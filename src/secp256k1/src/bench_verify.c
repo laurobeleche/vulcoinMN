@@ -7,11 +7,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "include/vlcp256k1.h"
+#include "include/secp256k1.h"
 #include "util.h"
 
 int main(void) {
-    vlcp256k1_start(VLCP256K1_START_VERIFY);
+    secp256k1_start(VLCP256K1_START_VERIFY);
 
     unsigned char msg[32];
     unsigned char sig[64];
@@ -22,7 +22,7 @@ int main(void) {
     unsigned char pubkey[33];
     for (int i=0; i<1000000; i++) {
         int pubkeylen = 33;
-        CHECK(vlcp256k1_ecdsa_recover_compact(msg, 32, sig, pubkey, &pubkeylen, 1, i % 2));
+        CHECK(secp256k1_ecdsa_recover_compact(msg, 32, sig, pubkey, &pubkeylen, 1, i % 2));
         for (int j = 0; j < 32; j++) {
             sig[j + 32] = msg[j];    /* Move former message to S. */
             msg[j] = sig[j];         /* Move former R to message. */
@@ -39,6 +39,6 @@ int main(void) {
     };
     CHECK(memcmp(fini, pubkey, 33) == 0);
 
-    vlcp256k1_stop();
+    secp256k1_stop();
     return 0;
 }

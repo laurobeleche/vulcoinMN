@@ -13,6 +13,6 @@
 
 typedef struct {
     mp_limb_t n[FIELD_LIMBS+1];
-} vlcp256k1_fe_t;
+} secp256k1_fe_t;
 
 #endif

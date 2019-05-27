@@ -26,14 +26,14 @@ DEPENDPATH += . \
               src/qt/forms \
               src/qt/locale \
               src/qt/test \
-              src/vlcp256k1/include \
-              src/vlcp256k1/src \
+              src/secp256k1/include \
+              src/secp256k1/src \
               src/test/data \
               src/leveldb/doc/bench \
               src/leveldb/helpers/memenv \
               src/leveldb/include/leveldb \
               src/leveldb/port/win \
-              src/vlcp256k1/src/java
+              src/secp256k1/src/java
 INCLUDEPATH += . \
                src \
                src/config \
@@ -47,13 +47,13 @@ INCLUDEPATH += . \
                src/qt \
                src/qt/forms \
                src/compat \
-               src/vlcp256k1/include \
+               src/secp256k1/include \
                src/leveldb/helpers/memenv \
                src/test/data \
                src/test \
                src/qt/test \
-               src/vlcp256k1/src \
-               src/vlcp256k1/src/java
+               src/secp256k1/src \
+               src/secp256k1/src/java
 
 # Input
 HEADERS += src/activemasternode.h \
@@ -266,41 +266,41 @@ HEADERS += src/activemasternode.h \
            src/qt/test/paymentrequestdata.h \
            src/qt/test/paymentservertests.h \
            src/qt/test/uritests.h \
-           src/vlcp256k1/include/vlcp256k1.h \
-           src/vlcp256k1/src/ecdsa.h \
-           src/vlcp256k1/src/ecdsa_impl.h \
-           src/vlcp256k1/src/eckey.h \
-           src/vlcp256k1/src/eckey_impl.h \
-           src/vlcp256k1/src/ecmult.h \
-           src/vlcp256k1/src/ecmult_gen.h \
-           src/vlcp256k1/src/ecmult_gen_impl.h \
-           src/vlcp256k1/src/ecmult_impl.h \
-           src/vlcp256k1/src/field.h \
-           src/vlcp256k1/src/field_10x26.h \
-           src/vlcp256k1/src/field_10x26_impl.h \
-           src/vlcp256k1/src/field_5x52.h \
-           src/vlcp256k1/src/field_5x52_asm_impl.h \
-           src/vlcp256k1/src/field_5x52_impl.h \
-           src/vlcp256k1/src/field_5x52_int128_impl.h \
-           src/vlcp256k1/src/field_gmp.h \
-           src/vlcp256k1/src/field_gmp_impl.h \
-           src/vlcp256k1/src/field_impl.h \
-           src/vlcp256k1/src/group.h \
-           src/vlcp256k1/src/group_impl.h \
-           src/vlcp256k1/src/libvlcp256k1-config.h \
-           src/vlcp256k1/src/num.h \
-           src/vlcp256k1/src/num_gmp.h \
-           src/vlcp256k1/src/num_gmp_impl.h \
-           src/vlcp256k1/src/num_impl.h \
-           src/vlcp256k1/src/scalar.h \
-           src/vlcp256k1/src/scalar_4x64.h \
-           src/vlcp256k1/src/scalar_4x64_impl.h \
-           src/vlcp256k1/src/scalar_8x32.h \
-           src/vlcp256k1/src/scalar_8x32_impl.h \
-           src/vlcp256k1/src/scalar_impl.h \
-           src/vlcp256k1/src/testrand.h \
-           src/vlcp256k1/src/testrand_impl.h \
-           src/vlcp256k1/src/util.h \
+           src/secp256k1/include/secp256k1.h \
+           src/secp256k1/src/ecdsa.h \
+           src/secp256k1/src/ecdsa_impl.h \
+           src/secp256k1/src/eckey.h \
+           src/secp256k1/src/eckey_impl.h \
+           src/secp256k1/src/ecmult.h \
+           src/secp256k1/src/ecmult_gen.h \
+           src/secp256k1/src/ecmult_gen_impl.h \
+           src/secp256k1/src/ecmult_impl.h \
+           src/secp256k1/src/field.h \
+           src/secp256k1/src/field_10x26.h \
+           src/secp256k1/src/field_10x26_impl.h \
+           src/secp256k1/src/field_5x52.h \
+           src/secp256k1/src/field_5x52_asm_impl.h \
+           src/secp256k1/src/field_5x52_impl.h \
+           src/secp256k1/src/field_5x52_int128_impl.h \
+           src/secp256k1/src/field_gmp.h \
+           src/secp256k1/src/field_gmp_impl.h \
+           src/secp256k1/src/field_impl.h \
+           src/secp256k1/src/group.h \
+           src/secp256k1/src/group_impl.h \
+           src/secp256k1/src/libsecp256k1-config.h \
+           src/secp256k1/src/num.h \
+           src/secp256k1/src/num_gmp.h \
+           src/secp256k1/src/num_gmp_impl.h \
+           src/secp256k1/src/num_impl.h \
+           src/secp256k1/src/scalar.h \
+           src/secp256k1/src/scalar_4x64.h \
+           src/secp256k1/src/scalar_4x64_impl.h \
+           src/secp256k1/src/scalar_8x32.h \
+           src/secp256k1/src/scalar_8x32_impl.h \
+           src/secp256k1/src/scalar_impl.h \
+           src/secp256k1/src/testrand.h \
+           src/secp256k1/src/testrand_impl.h \
+           src/secp256k1/src/util.h \
            src/test/data/alertTests.raw.h \
            src/test/data/base58_encode_decode.json.h \
            src/test/data/base58_keys_invalid.json.h \
@@ -328,14 +328,14 @@ HEADERS += src/activemasternode.h \
            src/leveldb/include/leveldb/table_builder.h \
            src/leveldb/include/leveldb/write_batch.h \
            src/leveldb/port/win/stdint.h \
-           src/vlcp256k1/src/java/org_bitcoin_NativeVlcp256k1.h \
+           src/secp256k1/src/java/org_bitcoin_NativeVlcp256k1.h \
            src/crypto/aes_helper.c \
            src/qt/bitcoinamountfield.moc \
            src/qt/vulcoin.moc \
            src/qt/intro.moc \
            src/qt/overviewpage.moc \
            src/qt/rpcconsole.moc \
-           src/vlcp256k1/src/vlcp256k1.c
+           src/secp256k1/src/secp256k1.c
 FORMS += src/qt/forms/addressbookpage.ui \
          src/qt/forms/askpassphrasedialog.ui \
          src/qt/forms/coincontroldialog.ui \
@@ -626,16 +626,16 @@ SOURCES += src/activemasternode.cpp \
            src/qt/test/paymentservertests.cpp \
            src/qt/test/test_main.cpp \
            src/qt/test/uritests.cpp \
-           src/vlcp256k1/src/bench_inv.c \
-           src/vlcp256k1/src/bench_sign.c \
-           src/vlcp256k1/src/bench_verify.c \
-           src/vlcp256k1/src/vlcp256k1.c \
-           src/vlcp256k1/src/tests.c \
+           src/secp256k1/src/bench_inv.c \
+           src/secp256k1/src/bench_sign.c \
+           src/secp256k1/src/bench_verify.c \
+           src/secp256k1/src/secp256k1.c \
+           src/secp256k1/src/tests.c \
            src/leveldb/doc/bench/db_bench_sqlite3.cc \
            src/leveldb/doc/bench/db_bench_tree_db.cc \
            src/leveldb/helpers/memenv/memenv.cc \
            src/leveldb/helpers/memenv/memenv_test.cc \
-           src/vlcp256k1/src/java/org_bitcoin_NativeVlcp256k1.c
+           src/secp256k1/src/java/org_bitcoin_NativeVlcp256k1.c
 RESOURCES += src/qt/vulcoin.qrc src/qt/vulcoin_locale.qrc
 
 TRANSLATIONS += src/qt/locale/vulcoin_bg.ts \
