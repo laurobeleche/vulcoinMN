@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
  * You can find an example library that can be used for this at
  * https://github.com/sipa/secp256k1
  */
-public class NativeVlcp256k1 {
+public class NativeSecp256k1 {
     public static final boolean enabled;
     static {
         boolean isEnabled = true;

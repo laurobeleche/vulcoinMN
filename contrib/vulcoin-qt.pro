@@ -328,7 +328,7 @@ HEADERS += src/activemasternode.h \
            src/leveldb/include/leveldb/table_builder.h \
            src/leveldb/include/leveldb/write_batch.h \
            src/leveldb/port/win/stdint.h \
-           src/secp256k1/src/java/org_bitcoin_NativeVlcp256k1.h \
+           src/secp256k1/src/java/org_bitcoin_NativeSecp256k1.h \
            src/crypto/aes_helper.c \
            src/qt/bitcoinamountfield.moc \
            src/qt/vulcoin.moc \
@@ -635,7 +635,7 @@ SOURCES += src/activemasternode.cpp \
            src/leveldb/doc/bench/db_bench_tree_db.cc \
            src/leveldb/helpers/memenv/memenv.cc \
            src/leveldb/helpers/memenv/memenv_test.cc \
-           src/secp256k1/src/java/org_bitcoin_NativeVlcp256k1.c
+           src/secp256k1/src/java/org_bitcoin_NativeSecp256k1.c
 RESOURCES += src/qt/vulcoin.qrc src/qt/vulcoin_locale.qrc
 
 TRANSLATIONS += src/qt/locale/vulcoin_bg.ts \
