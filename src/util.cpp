@@ -494,16 +494,36 @@ boost::filesystem::path GetMasternodeConfigFile()
     return pathConfigFile;
 }
 
+void createConf()
+{
+    srand(static_cast<unsigned int>(time(NULL)));
+
+    ofstream pConf;
+#if BOOST_FILESYSTEM_VERSION >= 3
+    pConf.open(GetConfigFile().generic_string().c_str());
+#else
+    pConf.open(GetConfigFile().string().c_str());
+#endif
+    pConf << "rpcuser=user\nrpcpassword="
+            + randomStrGen(15)
+			+ "\nlisten=1"
+    pConf.close();
+}
+
 void ReadConfigFile(map<string, string>& mapSettingsRet,
     map<string, vector<string> >& mapMultiSettingsRet)
 {
     boost::filesystem::ifstream streamConfig(GetConfigFile());
     if (!streamConfig.good()) {
         // Create empty vulcoin.conf if it does not exist
-        FILE* configFile = fopen(GetConfigFile().string().c_str(), "a");
+        /*FILE* configFile = fopen(GetConfigFile().string().c_str(), "a");
         if (configFile != NULL)
             fclose(configFile);
-        return; // Nothing to read, so just return
+        return; // Nothing to read, so just return*/
+		createConf();
+        new(&streamConfig) boost::filesystem::ifstream(GetConfigFile());
+        if(!streamConfig.good())
+            return;
     }
 
     set<string> setOptions;
