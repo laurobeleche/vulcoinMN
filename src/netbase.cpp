@@ -234,8 +234,8 @@ bool LookupNumeric(const char* pszName, CService& addr, int portDefault)
 struct timeval MillisToTimeval(int64_t nTimeout)
 {
     struct timeval timeout;
-    timeout.tv_vlc = nTimeout / 1000;
-    timeout.tv_uvlc = (nTimeout % 1000) * 1000;
+    timeout.tv_sec = nTimeout / 1000;
+    timeout.tv_usec = (nTimeout % 1000) * 1000;
     return timeout;
 }
 

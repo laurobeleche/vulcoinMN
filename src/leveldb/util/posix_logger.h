@@ -46,7 +46,7 @@ class PosixLogger : public Logger {
 
       struct timeval now_tv;
       gettimeofday(&now_tv, NULL);
-      const time_t seconds = now_tv.tv_vlc;
+      const time_t seconds = now_tv.tv_sec;
       struct tm t;
       localtime_r(&seconds, &t);
       p += snprintf(p, limit - p,
@@ -57,7 +57,7 @@ class PosixLogger : public Logger {
                     t.tm_hour,
                     t.tm_min,
                     t.tm_vlc,
-                    static_cast<int>(now_tv.tv_uvlc),
+                    static_cast<int>(now_tv.tv_usec),
                     static_cast<long long unsigned int>(thread_id));
 
       // Print the message

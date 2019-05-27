@@ -882,8 +882,8 @@ void ThreadSocketHandler()
         // Find which sockets have data to receive
         //
         struct timeval timeout;
-        timeout.tv_vlc = 0;
-        timeout.tv_uvlc = 50000; // frequency to poll pnode->vSend
+        timeout.tv_sec = 0;
+        timeout.tv_usec = 50000; // frequency to poll pnode->vSend
 
         fd_set fdsetRecv;
         fd_set fdsetSend;
@@ -953,7 +953,7 @@ void ThreadSocketHandler()
             }
             FD_ZERO(&fdsetSend);
             FD_ZERO(&fdsetError);
-            MilliSleep(timeout.tv_uvlc / 1000);
+            MilliSleep(timeout.tv_usec / 1000);
         }
 
         //
@@ -1535,7 +1535,7 @@ void ThreadMessageHandler()
         }
 
         if (fSleep)
-            messageHandlerCondition.timed_wait(lock, boost::posix_time::microvlc_clock::universal_time() + boost::posix_time::milliseconds(100));
+            messageHandlerCondition.timed_wait(lock, boost::posix_time::microsec_clock::universal_time() + boost::posix_time::milliseconds(100));
     }
 }
 
