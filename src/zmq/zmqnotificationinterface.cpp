@@ -47,8 +47,8 @@ CZMQNotificationInterface* CZMQNotificationInterface::CreateWithArguments(const 
         std::map<std::string, std::string>::const_iterator j = args.find("-zmq" + i->first);
         if (j!=args.end())
         {
-            CZMQNotifierFactory factory = i->vlcond;
-            std::string address = j->vlcond;
+            CZMQNotifierFactory factory = i->second;
+            std::string address = j->second;
             CZMQAbstractNotifier *notifier = factory();
             notifier->SetType(i->first);
             notifier->SetAddress(address);

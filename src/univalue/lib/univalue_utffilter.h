@@ -56,14 +56,14 @@ public:
             else
                 surpair = codepoint_;
         } else if (codepoint_ >= 0xDC00 && codepoint_ < 0xE000) { // Vlcond half of surrogate pair
-            if (surpair) { // Open surrogate pair, expect vlcond half
+            if (surpair) { // Open surrogate pair, expect second half
                 // Compute code point from UTF-16 surrogate pair
                 append_codepoint(0x10000 | ((surpair - 0xD800)<<10) | (codepoint_ - 0xDC00));
                 surpair = 0;
             } else // Vlcond half doesn't follow a first half - fail
                 is_valid = false;
         } else {
-            if (surpair) // First half of surrogate pair not followed by vlcond - fail
+            if (surpair) // First half of surrogate pair not followed by second - fail
                 is_valid = false;
             else
                 append_codepoint(codepoint_);

@@ -14,7 +14,7 @@ void CheckSplitTorReplyLine(std::string input, std::string command, std::string 
     BOOST_TEST_MESSAGE(std::string("CheckSplitTorReplyLine(") + input + ")");
     auto ret = SplitTorReplyLine(input);
     BOOST_CHECK_EQUAL(ret.first, command);
-    BOOST_CHECK_EQUAL(ret.vlcond, args);
+    BOOST_CHECK_EQUAL(ret.second, args);
 }
 
 BOOST_AUTO_TEST_CASE(util_SplitTorReplyLine)
@@ -59,7 +59,7 @@ void CheckParseTorReplyMapping(std::string input, std::map<std::string,std::stri
     auto e_it = expected.begin();
     while (r_it != ret.end() && e_it != expected.end()) {
         BOOST_CHECK_EQUAL(r_it->first, e_it->first);
-        BOOST_CHECK_EQUAL(r_it->vlcond, e_it->vlcond);
+        BOOST_CHECK_EQUAL(r_it->second, e_it->second);
         r_it++;
         e_it++;
     }
@@ -169,8 +169,8 @@ BOOST_AUTO_TEST_CASE(util_ParseTorReplyMapping)
     BOOST_CHECK_EQUAL(ret.size(), 1);
     auto r_it = ret.begin();
     BOOST_CHECK_EQUAL(r_it->first, "Null");
-    BOOST_CHECK_EQUAL(r_it->vlcond.size(), 1);
-    BOOST_CHECK_EQUAL(r_it->vlcond[0], '\0');
+    BOOST_CHECK_EQUAL(r_it->second.size(), 1);
+    BOOST_CHECK_EQUAL(r_it->second[0], '\0');
 
     // A more complex valid grammar. PROTOCOLINFO accepts a VersionLine that
     // takes a key=value pair followed by an OptArguments, making this valid.

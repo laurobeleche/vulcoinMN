@@ -102,7 +102,7 @@ TEST(FilterBlockTest, MultiChunk) {
   ASSERT_TRUE(! reader.KeyMayMatch(0, "box"));
   ASSERT_TRUE(! reader.KeyMayMatch(0, "hello"));
 
-  // Check vlcond filter
+  // Check second filter
   ASSERT_TRUE(reader.KeyMayMatch(3100, "box"));
   ASSERT_TRUE(! reader.KeyMayMatch(3100, "foo"));
   ASSERT_TRUE(! reader.KeyMayMatch(3100, "bar"));

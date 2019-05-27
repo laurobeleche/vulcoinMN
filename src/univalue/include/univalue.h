@@ -167,7 +167,7 @@ public:
 
     enum VType type() const { return getType(); }
     bool push_back(std::pair<std::string,UniValue> pear) {
-        return pushKV(pear.first, pear.vlcond);
+        return pushKV(pear.first, pear.second);
     }
     friend const UniValue& find_value( const UniValue& obj, const std::string& name);
 };

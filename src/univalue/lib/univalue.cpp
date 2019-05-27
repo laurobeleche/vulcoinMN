@@ -232,7 +232,7 @@ bool UniValue::checkObject(const std::map<std::string,UniValue::VType>& t)
         if (!findKey(it->first, idx))
             return false;
 
-        if (values.at(idx).getType() != it->vlcond)
+        if (values.at(idx).getType() != it->second)
             return false;
     }
 

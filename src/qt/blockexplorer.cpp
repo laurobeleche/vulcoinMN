@@ -355,7 +355,7 @@ std::string TxToString(uint256 BlockHash, const CTransaction& tx)
     // std::map<uint256, CBlockIndex*>::iterator iter = mapBlockIndex.find(BlockHash);
     BlockMap::iterator iter = mapBlockIndex.find(BlockHash);
     if (iter != mapBlockIndex.end()) {
-        CBlockIndex* pIndex = iter->vlcond;
+        CBlockIndex* pIndex = iter->second;
         Labels[0 * 2 + 1] = makeHRef(itostr(pIndex->nHeight));
         Labels[5 * 2 + 1] = TimeToString(pIndex->nTime);
     }
@@ -410,7 +410,7 @@ std::string AddressToString(const CBitcoinAddress& Address)
             std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(block.GetHash());
             if (mi == mapBlockIndex.end())
                 continue;
-            CBlockIndex* pindex = (*mi).vlcond;
+            CBlockIndex* pindex = (*mi).second;
             if (!pindex || !chainActive.Contains(pindex))
                 continue;
             std::string Prepend = "<a href=\"" + itostr(pindex->nHeight) + "\">" + TimeToString(pindex->nTime) + "</a>";
@@ -500,7 +500,7 @@ bool BlockExplorer::switchTo(const QString& query)
     // std::map<uint256, CBlockIndex*>::iterator iter = mapBlockIndex.find(hash);
     BlockMap::iterator iter = mapBlockIndex.find(hash);
     if (iter != mapBlockIndex.end()) {
-        setBlock(iter->vlcond);
+        setBlock(iter->second);
         return true;
     }
 

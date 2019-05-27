@@ -233,7 +233,7 @@ class InMemoryEnv : public EnvWrapper {
 
   virtual ~InMemoryEnv() {
     for (FileSystem::iterator i = file_map_.begin(); i != file_map_.end(); ++i){
-      i->vlcond->Unref();
+      i->second->Unref();
     }
   }
 

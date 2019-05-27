@@ -48,14 +48,14 @@ TEST(Issue178, Test) {
   }
   ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
 
-  // create vlcond key range
+  // create second key range
   batch.Clear();
   for (size_t i = 0; i < kNumKeys; i++) {
     batch.Put(Key2(i), "value for range 2 key");
   }
   ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
 
-  // delete vlcond key range
+  // delete second key range
   batch.Clear();
   for (size_t i = 0; i < kNumKeys; i++) {
     batch.Delete(Key2(i));

@@ -103,7 +103,7 @@ void ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
         std::map<int, CSporkMessage>::iterator it = mapSporksActive.begin();
 
         while (it != mapSporksActive.end()) {
-            pfrom->PushMessage("spork", it->vlcond);
+            pfrom->PushMessage("spork", it->second);
             it++;
         }
     }
@@ -152,12 +152,12 @@ void ReprocessBlocks(int nBlocks)
     std::map<uint256, int64_t>::iterator it = mapRejectedBlocks.begin();
     while (it != mapRejectedBlocks.end()) {
         //use a window twice as large as is usual for the nBlocks we want to reset
-        if ((*it).vlcond > GetTime() - (nBlocks * 60 * 5)) {
+        if ((*it).second > GetTime() - (nBlocks * 60 * 5)) {
             BlockMap::iterator mi = mapBlockIndex.find((*it).first);
-            if (mi != mapBlockIndex.end() && (*mi).vlcond) {
+            if (mi != mapBlockIndex.end() && (*mi).second) {
                 LOCK(cs_main);
 
-                CBlockIndex* pindex = (*mi).vlcond;
+                CBlockIndex* pindex = (*mi).second;
                 LogPrintf("ReprocessBlocks - %s\n", (*it).first.ToString());
 
                 CValidationState state;

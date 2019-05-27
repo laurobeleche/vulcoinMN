@@ -68,7 +68,7 @@ string FormatScriptFlags(unsigned int flags)
     string ret;
     std::map<string, unsigned int>::const_iterator it = mapFlagNames.begin();
     while (it != mapFlagNames.end()) {
-        if (flags & it->vlcond) {
+        if (flags & it->second) {
             ret += it->first + ",";
         }
         it++;
@@ -246,7 +246,7 @@ BOOST_AUTO_TEST_CASE(basic_transaction_tests)
 //
 // Helper: create two dummy transactions, each with
 // two outputs.  The first has 11 and 50 CENT outputs
-// paid to a TX_PUBKEY, the vlcond 21 and 22 CENT outputs
+// paid to a TX_PUBKEY, the second 21 and 22 CENT outputs
 // paid to a TX_PUBKEYHASH.
 //
 static std::vector<CMutableTransaction>

@@ -227,7 +227,7 @@ bool CWalletDB::WriteAutoCombineSettings(bool fEnable, CAmount nCombineThreshold
     nWalletDBUpdated++;
     std::pair<bool, CAmount> pSettings;
     pSettings.first = fEnable;
-    pSettings.vlcond = nCombineThreshold;
+    pSettings.second = nCombineThreshold;
     return Write(std::string("autocombinesettings"), pSettings, true);
 }
 
@@ -345,7 +345,7 @@ DBErrors CWalletDB::ReorderTransactions(CWallet* pwallet)
     TxItems txByTime;
 
     for (map<uint256, CWalletTx>::iterator it = pwallet->mapWallet.begin(); it != pwallet->mapWallet.end(); ++it) {
-        CWalletTx* wtx = &((*it).vlcond);
+        CWalletTx* wtx = &((*it).second);
         txByTime.insert(make_pair(wtx->nTimeReceived, TxPair(wtx, (CAccountingEntry*)0)));
     }
     list<CAccountingEntry> acentries;
@@ -358,8 +358,8 @@ DBErrors CWalletDB::ReorderTransactions(CWallet* pwallet)
     nOrderPosNext = 0;
     std::vector<int64_t> nOrderPosOffsets;
     for (TxItems::iterator it = txByTime.begin(); it != txByTime.end(); ++it) {
-        CWalletTx* const pwtx = (*it).vlcond.first;
-        CAccountingEntry* const pacentry = (*it).vlcond.vlcond;
+        CWalletTx* const pwtx = (*it).second.first;
+        CAccountingEntry* const pacentry = (*it).second.second;
         int64_t& nOrderPos = (pwtx != 0) ? pwtx->nOrderPos : pacentry->nOrderPos;
 
         if (nOrderPos == -1) {
@@ -635,8 +635,8 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             std::pair<std::pair<bool, bool>, int> pSettings;
             ssValue >> pSettings;
             pwallet->fMultiSendStake = pSettings.first.first;
-            pwallet->fMultiSendMasternodeReward = pSettings.first.vlcond;
-            pwallet->nLastMultiSendHeight = pSettings.vlcond;
+            pwallet->fMultiSendMasternodeReward = pSettings.first.second;
+            pwallet->nLastMultiSendHeight = pSettings.second;
         } else if (strType == "mdisabled") //presstab HyperStake
         {
             std::string strDisabledAddress;
@@ -646,7 +646,7 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             std::pair<bool, CAmount> pSettings;
             ssValue >> pSettings;
             pwallet->fCombineDust = pSettings.first;
-            pwallet->nAutoCombineThreshold = pSettings.vlcond;
+            pwallet->nAutoCombineThreshold = pSettings.second;
         } else if (strType == "destdata") {
             std::string strAddress, strKey, strValue;
             ssKey >> strAddress;
@@ -869,7 +869,7 @@ void ThreadFlushWalletDB(const string& strFile)
                 int nRefCount = 0;
                 map<string, int>::iterator mi = bitdb.mapFileUseCount.begin();
                 while (mi != bitdb.mapFileUseCount.end()) {
-                    nRefCount += (*mi).vlcond;
+                    nRefCount += (*mi).second;
                     mi++;
                 }
 
@@ -985,7 +985,7 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
     BOOST_FOREACH (CDBEnv::KeyValPair& row, salvagedData) {
         if (fOnlyKeys) {
             CDataStream ssKey(row.first, SER_DISK, CLIENT_VERSION);
-            CDataStream ssValue(row.vlcond, SER_DISK, CLIENT_VERSION);
+            CDataStream ssValue(row.second, SER_DISK, CLIENT_VERSION);
             string strType, strErr;
             bool fReadOK = ReadKeyValue(&dummyWallet, ssKey, ssValue,
                 wss, strType, strErr);
@@ -997,7 +997,7 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
             }
         }
         Dbt datKey(&row.first[0], row.first.size());
-        Dbt datValue(&row.vlcond[0], row.vlcond.size());
+        Dbt datValue(&row.second[0], row.second.size());
         int ret2 = pdbCopy->put(ptxn, &datKey, &datValue, DB_NOOVERWRITE);
         if (ret2 > 0)
             fSuccess = false;

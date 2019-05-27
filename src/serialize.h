@@ -783,21 +783,21 @@ void Unserialize(Stream& is, CScript& v, int nType, int nVersion)
 template <typename K, typename T>
 unsigned int GetSerializeSize(const std::pair<K, T>& item, int nType, int nVersion)
 {
-    return GetSerializeSize(item.first, nType, nVersion) + GetSerializeSize(item.vlcond, nType, nVersion);
+    return GetSerializeSize(item.first, nType, nVersion) + GetSerializeSize(item.second, nType, nVersion);
 }
 
 template <typename Stream, typename K, typename T>
 void Serialize(Stream& os, const std::pair<K, T>& item, int nType, int nVersion)
 {
     Serialize(os, item.first, nType, nVersion);
-    Serialize(os, item.vlcond, nType, nVersion);
+    Serialize(os, item.second, nType, nVersion);
 }
 
 template <typename Stream, typename K, typename T>
 void Unserialize(Stream& is, std::pair<K, T>& item, int nType, int nVersion)
 {
     Unserialize(is, item.first, nType, nVersion);
-    Unserialize(is, item.vlcond, nType, nVersion);
+    Unserialize(is, item.second, nType, nVersion);
 }
 
 

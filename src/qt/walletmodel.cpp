@@ -361,7 +361,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
                 // Check if we have a new address or an updated label
                 if (mi == wallet->mapAddressBook.end()) {
                     wallet->SetAddressBook(dest, strLabel, "send");
-                } else if (mi->vlcond.name != strLabel) {
+                } else if (mi->second.name != strLabel) {
                     wallet->SetAddressBook(dest, strLabel, ""); // "" means don't change purpose
                 }
             }
@@ -659,9 +659,9 @@ void WalletModel::loadReceiveRequests(std::vector<std::string>& vReceiveRequests
 {
     LOCK(wallet->cs_wallet);
     BOOST_FOREACH (const PAIRTYPE(CTxDestination, CAddressBookData) & item, wallet->mapAddressBook)
-        BOOST_FOREACH (const PAIRTYPE(std::string, std::string) & item2, item.vlcond.destdata)
+        BOOST_FOREACH (const PAIRTYPE(std::string, std::string) & item2, item.second.destdata)
             if (item2.first.size() > 2 && item2.first.substr(0, 2) == "rr") // receive request
-                vReceiveRequests.push_back(item2.vlcond);
+                vReceiveRequests.push_back(item2.second);
 }
 
 bool WalletModel::saveReceiveRequest(const std::string& sAddress, const int64_t nId, const std::string& sRequest)

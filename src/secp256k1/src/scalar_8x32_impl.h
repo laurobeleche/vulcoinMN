@@ -275,7 +275,7 @@ static int secp256k1_scalar_is_high(const secp256k1_scalar_t *a) {
     uint32_t tl2 = tl + tl;         /* at most 0xFFFFFFFE (in case the lowest 63 bits of tl were 0x7FFFFFFF) */ \
     th2 += (tl2 < tl) ? 1 : 0;      /* at most 0xFFFFFFFF */ \
     c0 += tl2;                      /* overflow is handled on the next line */ \
-    th2 += (c0 < tl2) ? 1 : 0;      /* vlcond overflow is handled on the next line */ \
+    th2 += (c0 < tl2) ? 1 : 0;      /* second overflow is handled on the next line */ \
     c2 += (c0 < tl2) & (th2 == 0);  /* never overflows by contract (verified the next line) */ \
     VERIFY_CHECK((c0 >= tl2) || (th2 != 0) || (c2 != 0)); \
     c1 += th2;                      /* overflow is handled on the next line */ \

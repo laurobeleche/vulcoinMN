@@ -89,7 +89,7 @@ bool CZMQAbstractPublishNotifier::Initialize(void *pcontext)
     {
         LogPrint("zmq", "zmq: Reusing socket for address %s\n", address);
 
-        psocket = i->vlcond->psocket;
+        psocket = i->second->psocket;
         mapPublishNotifiers.insert(std::make_pair(address, this));
 
         return true;
@@ -106,9 +106,9 @@ void CZMQAbstractPublishNotifier::Shutdown()
     typedef std::multimap<std::string, CZMQAbstractPublishNotifier*>::iterator iterator;
     std::pair<iterator, iterator> iterpair = mapPublishNotifiers.equal_range(address);
 
-    for (iterator it = iterpair.first; it != iterpair.vlcond; ++it)
+    for (iterator it = iterpair.first; it != iterpair.second; ++it)
     {
-        if (it->vlcond==this)
+        if (it->second==this)
         {
             mapPublishNotifiers.erase(it);
             break;

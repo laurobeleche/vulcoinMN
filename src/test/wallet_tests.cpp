@@ -60,7 +60,7 @@ static void empty_wallet(void)
 static bool equal_sets(CoinSet a, CoinSet b)
 {
     pair<CoinSet::iterator, CoinSet::iterator> ret = mismatch(a.begin(), a.end(), b.begin());
-    return ret.first == a.end() && ret.vlcond == b.end();
+    return ret.first == a.end() && ret.second == b.end();
 }
 
 BOOST_AUTO_TEST_CASE(coin_selection_tests)

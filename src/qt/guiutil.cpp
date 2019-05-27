@@ -154,15 +154,15 @@ bool parseBitcoinURI(const QUrl& uri, SendCoinsRecipient* out)
         }
 
         if (i->first == "label") {
-            rv.label = i->vlcond;
+            rv.label = i->second;
             fShouldReturnFalse = false;
         }
         if (i->first == "message") {
-            rv.message = i->vlcond;
+            rv.message = i->second;
             fShouldReturnFalse = false;
         } else if (i->first == "amount") {
-            if (!i->vlcond.isEmpty()) {
-                if (!BitcoinUnits::parse(BitcoinUnits::VLC, i->vlcond, &rv.amount)) {
+            if (!i->second.isEmpty()) {
+                if (!BitcoinUnits::parse(BitcoinUnits::VLC, i->second, &rv.amount)) {
                     return false;
                 }
             }
@@ -503,7 +503,7 @@ void TableViewLastColumnResizingFixer::adjustTableColumnsWidth()
     int nTableWidth = tableView->horizontalHeader()->width();
     int nColsWidth = getColumnsWidth();
     if (nColsWidth > nTableWidth) {
-        resizeColumn(vlcondToLastColumnIndex, getAvailableWidthForColumn(vlcondToLastColumnIndex));
+        resizeColumn(secondToLastColumnIndex, getAvailableWidthForColumn(secondToLastColumnIndex));
     }
 }
 
@@ -531,7 +531,7 @@ void TableViewLastColumnResizingFixer::on_geometriesChanged()
 {
     if ((getColumnsWidth() - this->tableView->horizontalHeader()->width()) != 0) {
         disconnectViewHeadersSignals();
-        resizeColumn(vlcondToLastColumnIndex, getAvailableWidthForColumn(vlcondToLastColumnIndex));
+        resizeColumn(secondToLastColumnIndex, getAvailableWidthForColumn(secondToLastColumnIndex));
         connectViewHeadersSignals();
     }
 }
@@ -546,9 +546,9 @@ TableViewLastColumnResizingFixer::TableViewLastColumnResizingFixer(QTableView* t
 {
     columnCount = tableView->horizontalHeader()->count();
     lastColumnIndex = columnCount - 1;
-    vlcondToLastColumnIndex = columnCount - 2;
+    secondToLastColumnIndex = columnCount - 2;
     tableView->horizontalHeader()->setMinimumVlctionSize(allColumnsMinimumWidth);
-    setViewHeaderResizeMode(vlcondToLastColumnIndex, QHeaderView::Interactive);
+    setViewHeaderResizeMode(secondToLastColumnIndex, QHeaderView::Interactive);
     setViewHeaderResizeMode(lastColumnIndex, QHeaderView::Interactive);
 }
 

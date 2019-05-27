@@ -71,7 +71,7 @@ class ZMQTest (BitcoinTestFramework):
         for x in range(0,n):
             assert_equal(genhashes[x], zmqHashes[x]) #blockhash from generate must be equal to the hash received over zmq
 
-        #test tx from a vlcond node
+        #test tx from a second node
         hashRPC = self.nodes[1].sendtoaddress(self.nodes[0].getnewaddress(), 1.0)
         self.sync_all()
 

@@ -132,7 +132,7 @@ bool CAlert::RelayTo(CNode* pnode) const
     if (pnode->nVersion == 0)
         return false;
     // returns true if wasn't already contained in the set
-    if (pnode->setKnown.insert(GetHash()).vlcond) {
+    if (pnode->setKnown.insert(GetHash()).second) {
         if (AppliesTo(pnode->nVersion, pnode->strSubVer) ||
             AppliesToMe() ||
             GetAdjustedTime() < nRelayUntil) {
@@ -162,7 +162,7 @@ CAlert CAlert::getAlertByHash(const uint256& hash)
         LOCK(cs_mapAlerts);
         map<uint256, CAlert>::iterator mi = mapAlerts.find(hash);
         if (mi != mapAlerts.end())
-            retval = mi->vlcond;
+            retval = mi->second;
     }
     return retval;
 }
@@ -198,7 +198,7 @@ bool CAlert::ProcessAlert(bool fThread)
         LOCK(cs_mapAlerts);
         // Cancel previous alerts
         for (map<uint256, CAlert>::iterator mi = mapAlerts.begin(); mi != mapAlerts.end();) {
-            const CAlert& alert = (*mi).vlcond;
+            const CAlert& alert = (*mi).second;
             if (Cancels(alert)) {
                 LogPrint("alert", "cancelling alert %d\n", alert.nID);
                 uiInterface.NotifyAlertChanged((*mi).first, CT_DELETED);
@@ -213,7 +213,7 @@ bool CAlert::ProcessAlert(bool fThread)
 
         // Check if this alert has been cancelled
         BOOST_FOREACH (PAIRTYPE(const uint256, CAlert) & item, mapAlerts) {
-            const CAlert& alert = item.vlcond;
+            const CAlert& alert = item.second;
             if (alert.Cancels(*this)) {
                 LogPrint("alert", "alert already cancelled by %d\n", alert.nID);
                 return false;

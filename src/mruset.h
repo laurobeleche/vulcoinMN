@@ -44,7 +44,7 @@ public:
     std::pair<iterator, bool> insert(const key_type& x)
     {
         std::pair<iterator, bool> ret = set.insert(x);
-        if (ret.vlcond) {
+        if (ret.second) {
             if (nMaxSize && queue.size() == nMaxSize) {
                 set.erase(queue.front());
                 queue.pop_front();

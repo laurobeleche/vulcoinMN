@@ -55,7 +55,7 @@ string HTTPPost(const string& strMsg, const map<string, string>& mapRequestHeade
       << "Connection: close\r\n"
       << "Accept: application/json\r\n";
     BOOST_FOREACH (const PAIRTYPE(string, string) & item, mapRequestHeaders)
-        s << item.first << ": " << item.vlcond << "\r\n";
+        s << item.first << ": " << item.second << "\r\n";
     s << "\r\n"
       << strMsg;
 

@@ -79,8 +79,8 @@ bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, s
     int conf = GetIXConfirmations(nTxCollateralHash);
     if (nBlockHash != uint256(0)) {
         BlockMap::iterator mi = mapBlockIndex.find(nBlockHash);
-        if (mi != mapBlockIndex.end() && (*mi).vlcond) {
-            CBlockIndex* pindex = (*mi).vlcond;
+        if (mi != mapBlockIndex.end() && (*mi).second) {
+            CBlockIndex* pindex = (*mi).second;
             if (chainActive.Contains(pindex)) {
                 conf += chainActive.Height() - pindex->nHeight + 1;
                 nTime = pindex->nTime;
@@ -107,7 +107,7 @@ void CBudgetManager::CheckOrphanVotes()
     std::string strError = "";
     std::map<uint256, CBudgetVote>::iterator it1 = mapOrphanMasternodeBudgetVotes.begin();
     while (it1 != mapOrphanMasternodeBudgetVotes.end()) {
-        if (budget.UpdateProposal(((*it1).vlcond), NULL, strError)) {
+        if (budget.UpdateProposal(((*it1).second), NULL, strError)) {
             LogPrint("masternode","CBudgetManager::CheckOrphanVotes - Proposal/Budget is known, activating and removing orphan vote\n");
             mapOrphanMasternodeBudgetVotes.erase(it1++);
         } else {
@@ -116,7 +116,7 @@ void CBudgetManager::CheckOrphanVotes()
     }
     std::map<uint256, CFinalizedBudgetVote>::iterator it2 = mapOrphanFinalizedBudgetVotes.begin();
     while (it2 != mapOrphanFinalizedBudgetVotes.end()) {
-        if (budget.UpdateFinalizedBudget(((*it2).vlcond), NULL, strError)) {
+        if (budget.UpdateFinalizedBudget(((*it2).second), NULL, strError)) {
             LogPrint("masternode","CBudgetManager::CheckOrphanVotes - Proposal/Budget is known, activating and removing orphan vote\n");
             mapOrphanFinalizedBudgetVotes.erase(it2++);
         } else {
@@ -211,8 +211,8 @@ void CBudgetManager::SubmitFinalBudget()
 
     if (nBlockHash != uint256(0)) {
         BlockMap::iterator mi = mapBlockIndex.find(nBlockHash);
-        if (mi != mapBlockIndex.end() && (*mi).vlcond) {
-            CBlockIndex* pindex = (*mi).vlcond;
+        if (mi != mapBlockIndex.end() && (*mi).second) {
+            CBlockIndex* pindex = (*mi).second;
             if (chainActive.Contains(pindex)) {
                 conf += chainActive.Height() - pindex->nHeight + 1;
             }
@@ -443,7 +443,7 @@ void CBudgetManager::CheckAndRemove()
     LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapFinalizedBudgets cleanup - size before: %d\n", mapFinalizedBudgets.size());
     std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin();
     while (it != mapFinalizedBudgets.end()) {
-        CFinalizedBudget* pfinalizedBudget = &((*it).vlcond);
+        CFinalizedBudget* pfinalizedBudget = &((*it).second);
 
         pfinalizedBudget->fValid = pfinalizedBudget->IsValid(strError);
         if (!strError.empty ()) {
@@ -465,7 +465,7 @@ void CBudgetManager::CheckAndRemove()
     LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapProposals cleanup - size before: %d\n", mapProposals.size());
     std::map<uint256, CBudgetProposal>::iterator it2 = mapProposals.begin();
     while (it2 != mapProposals.end()) {
-        CBudgetProposal* pbudgetProposal = &((*it2).vlcond);
+        CBudgetProposal* pbudgetProposal = &((*it2).second);
         pbudgetProposal->fValid = pbudgetProposal->IsValid(strError);
         if (!strError.empty ()) {
             LogPrint("masternode","CBudgetManager::CheckAndRemove - Invalid budget proposal - %s\n", strError);
@@ -505,7 +505,7 @@ void CBudgetManager::FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, b
 
     std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin();
     while (it != mapFinalizedBudgets.end()) {
-        CFinalizedBudget* pfinalizedBudget = &((*it).vlcond);
+        CFinalizedBudget* pfinalizedBudget = &((*it).second);
         if (pfinalizedBudget->GetVoteCount() > nHighestCount &&
             pindexPrev->nHeight + 1 >= pfinalizedBudget->GetBlockStart() &&
             pindexPrev->nHeight + 1 <= pfinalizedBudget->GetBlockEnd() &&
@@ -570,8 +570,8 @@ CBudgetProposal* CBudgetManager::FindProposal(const std::string& strProposalName
 
     std::map<uint256, CBudgetProposal>::iterator it = mapProposals.begin();
     while (it != mapProposals.end()) {
-        if ((*it).vlcond.strProposalName == strProposalName && (*it).vlcond.GetYeas() > nYesCount) {
-            pbudgetProposal = &((*it).vlcond);
+        if ((*it).second.strProposalName == strProposalName && (*it).second.GetYeas() > nYesCount) {
+            pbudgetProposal = &((*it).second);
             nYesCount = pbudgetProposal->GetYeas();
         }
         ++it;
@@ -599,7 +599,7 @@ bool CBudgetManager::IsBudgetPaymentBlock(int nBlockHeight)
 
     std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin();
     while (it != mapFinalizedBudgets.end()) {
-        CFinalizedBudget* pfinalizedBudget = &((*it).vlcond);
+        CFinalizedBudget* pfinalizedBudget = &((*it).second);
         if (pfinalizedBudget->GetVoteCount() > nHighestCount &&
             nBlockHeight >= pfinalizedBudget->GetBlockStart() &&
             nBlockHeight <= pfinalizedBudget->GetBlockEnd()) {
@@ -630,7 +630,7 @@ bool CBudgetManager::IsTransactionValid(const CTransaction& txNew, int nBlockHei
 
     std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin();
     while (it != mapFinalizedBudgets.end()) {
-        CFinalizedBudget* pfinalizedBudget = &((*it).vlcond);
+        CFinalizedBudget* pfinalizedBudget = &((*it).second);
         if (pfinalizedBudget->GetVoteCount() > nHighestCount &&
             nBlockHeight >= pfinalizedBudget->GetBlockStart() &&
             nBlockHeight <= pfinalizedBudget->GetBlockEnd()) {
@@ -651,7 +651,7 @@ bool CBudgetManager::IsTransactionValid(const CTransaction& txNew, int nBlockHei
 
     it = mapFinalizedBudgets.begin();
     while (it != mapFinalizedBudgets.end()) {
-        CFinalizedBudget* pfinalizedBudget = &((*it).vlcond);
+        CFinalizedBudget* pfinalizedBudget = &((*it).second);
 
         if (pfinalizedBudget->GetVoteCount() > nHighestCount - mnodeman.CountEnabled(ActiveProtocol()) / 10) {
             if (nBlockHeight >= pfinalizedBudget->GetBlockStart() && nBlockHeight <= pfinalizedBudget->GetBlockEnd()) {
@@ -676,9 +676,9 @@ std::vector<CBudgetProposal*> CBudgetManager::GetAllProposals()
 
     std::map<uint256, CBudgetProposal>::iterator it = mapProposals.begin();
     while (it != mapProposals.end()) {
-        (*it).vlcond.CleanAndRemove(false);
+        (*it).second.CleanAndRemove(false);
 
-        CBudgetProposal* pbudgetProposal = &((*it).vlcond);
+        CBudgetProposal* pbudgetProposal = &((*it).second);
         vBudgetProposalRet.push_back(pbudgetProposal);
 
         ++it;
@@ -693,8 +693,8 @@ std::vector<CBudgetProposal*> CBudgetManager::GetAllProposals()
 struct sortProposalsByVotes {
     bool operator()(const std::pair<CBudgetProposal*, int>& left, const std::pair<CBudgetProposal*, int>& right)
     {
-        if (left.vlcond != right.vlcond)
-            return (left.vlcond > right.vlcond);
+        if (left.second != right.second)
+            return (left.second > right.second);
         return (left.first->nFeeTXHash > right.first->nFeeTXHash);
     }
 };
@@ -710,8 +710,8 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
 
     std::map<uint256, CBudgetProposal>::iterator it = mapProposals.begin();
     while (it != mapProposals.end()) {
-        (*it).vlcond.CleanAndRemove(false);
-        vBudgetPorposalsSort.push_back(make_pair(&((*it).vlcond), (*it).vlcond.GetYeas() - (*it).vlcond.GetNays()));
+        (*it).second.CleanAndRemove(false);
+        vBudgetPorposalsSort.push_back(make_pair(&((*it).second), (*it).second.GetYeas() - (*it).second.GetNays()));
         ++it;
     }
 
@@ -772,7 +772,7 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
 struct sortFinalizedBudgetsByVotes {
     bool operator()(const std::pair<CFinalizedBudget*, int>& left, const std::pair<CFinalizedBudget*, int>& right)
     {
-        return left.vlcond > right.vlcond;
+        return left.second > right.second;
     }
 };
 
@@ -787,7 +787,7 @@ std::vector<CFinalizedBudget*> CBudgetManager::GetFinalizedBudgets()
 
     std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin();
     while (it != mapFinalizedBudgets.end()) {
-        CFinalizedBudget* pfinalizedBudget = &((*it).vlcond);
+        CFinalizedBudget* pfinalizedBudget = &((*it).second);
 
         vFinalizedBudgetsSort.push_back(make_pair(pfinalizedBudget, pfinalizedBudget->GetVoteCount()));
         ++it;
@@ -811,7 +811,7 @@ std::string CBudgetManager::GetRequiredPaymentsString(int nBlockHeight)
 
     std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin();
     while (it != mapFinalizedBudgets.end()) {
-        CFinalizedBudget* pfinalizedBudget = &((*it).vlcond);
+        CFinalizedBudget* pfinalizedBudget = &((*it).second);
         if (nBlockHeight >= pfinalizedBudget->GetBlockStart() && nBlockHeight <= pfinalizedBudget->GetBlockEnd()) {
             CTxBudgetPayment payment;
             if (pfinalizedBudget->GetBudgetPaymentByBlock(nBlockHeight, payment)) {
@@ -916,7 +916,7 @@ void CBudgetManager::NewBlock()
     LogPrint("masternode","CBudgetManager::NewBlock - askedForSourceProposalOrBudget cleanup - size: %d\n", askedForSourceProposalOrBudget.size());
     std::map<uint256, int64_t>::iterator it = askedForSourceProposalOrBudget.begin();
     while (it != askedForSourceProposalOrBudget.end()) {
-        if ((*it).vlcond > GetTime() - (60 * 60 * 24)) {
+        if ((*it).second > GetTime() - (60 * 60 * 24)) {
             ++it;
         } else {
             askedForSourceProposalOrBudget.erase(it++);
@@ -926,14 +926,14 @@ void CBudgetManager::NewBlock()
     LogPrint("masternode","CBudgetManager::NewBlock - mapProposals cleanup - size: %d\n", mapProposals.size());
     std::map<uint256, CBudgetProposal>::iterator it2 = mapProposals.begin();
     while (it2 != mapProposals.end()) {
-        (*it2).vlcond.CleanAndRemove(false);
+        (*it2).second.CleanAndRemove(false);
         ++it2;
     }
 
     LogPrint("masternode","CBudgetManager::NewBlock - mapFinalizedBudgets cleanup - size: %d\n", mapFinalizedBudgets.size());
     std::map<uint256, CFinalizedBudget>::iterator it3 = mapFinalizedBudgets.begin();
     while (it3 != mapFinalizedBudgets.end()) {
-        (*it3).vlcond.CleanAndRemove(false);
+        (*it3).second.CleanAndRemove(false);
         ++it3;
     }
 
@@ -1183,7 +1183,7 @@ void CBudgetManager::ResetSync()
             //mark votes
             std::map<uint256, CBudgetVote>::iterator it2 = pbudgetProposal->mapVotes.begin();
             while (it2 != pbudgetProposal->mapVotes.end()) {
-                (*it2).vlcond.fSynced = false;
+                (*it2).second.fSynced = false;
                 ++it2;
             }
         }
@@ -1197,7 +1197,7 @@ void CBudgetManager::ResetSync()
             //send votes
             std::map<uint256, CFinalizedBudgetVote>::iterator it4 = pfinalizedBudget->mapVotes.begin();
             while (it4 != pfinalizedBudget->mapVotes.end()) {
-                (*it4).vlcond.fSynced = false;
+                (*it4).second.fSynced = false;
                 ++it4;
             }
         }
@@ -1220,8 +1220,8 @@ void CBudgetManager::MarkSynced()
             //mark votes
             std::map<uint256, CBudgetVote>::iterator it2 = pbudgetProposal->mapVotes.begin();
             while (it2 != pbudgetProposal->mapVotes.end()) {
-                if ((*it2).vlcond.fValid)
-                    (*it2).vlcond.fSynced = true;
+                if ((*it2).second.fValid)
+                    (*it2).second.fSynced = true;
                 ++it2;
             }
         }
@@ -1235,8 +1235,8 @@ void CBudgetManager::MarkSynced()
             //mark votes
             std::map<uint256, CFinalizedBudgetVote>::iterator it4 = pfinalizedBudget->mapVotes.begin();
             while (it4 != pfinalizedBudget->mapVotes.end()) {
-                if ((*it4).vlcond.fValid)
-                    (*it4).vlcond.fSynced = true;
+                if ((*it4).second.fValid)
+                    (*it4).second.fSynced = true;
                 ++it4;
             }
         }
@@ -1265,15 +1265,15 @@ void CBudgetManager::Sync(CNode* pfrom, uint256 nProp, bool fPartial)
     while (it1 != mapSeenMasternodeBudgetProposals.end()) {
         CBudgetProposal* pbudgetProposal = FindProposal((*it1).first);
         if (pbudgetProposal && pbudgetProposal->fValid && (nProp == 0 || (*it1).first == nProp)) {
-            pfrom->PushInventory(CInv(MSG_BUDGET_PROPOSAL, (*it1).vlcond.GetHash()));
+            pfrom->PushInventory(CInv(MSG_BUDGET_PROPOSAL, (*it1).second.GetHash()));
             nInvCount++;
 
             //send votes
             std::map<uint256, CBudgetVote>::iterator it2 = pbudgetProposal->mapVotes.begin();
             while (it2 != pbudgetProposal->mapVotes.end()) {
-                if ((*it2).vlcond.fValid) {
-                    if ((fPartial && !(*it2).vlcond.fSynced) || !fPartial) {
-                        pfrom->PushInventory(CInv(MSG_BUDGET_VOTE, (*it2).vlcond.GetHash()));
+                if ((*it2).second.fValid) {
+                    if ((fPartial && !(*it2).second.fSynced) || !fPartial) {
+                        pfrom->PushInventory(CInv(MSG_BUDGET_VOTE, (*it2).second.GetHash()));
                         nInvCount++;
                     }
                 }
@@ -1293,15 +1293,15 @@ void CBudgetManager::Sync(CNode* pfrom, uint256 nProp, bool fPartial)
     while (it3 != mapSeenFinalizedBudgets.end()) {
         CFinalizedBudget* pfinalizedBudget = FindFinalizedBudget((*it3).first);
         if (pfinalizedBudget && pfinalizedBudget->fValid && (nProp == 0 || (*it3).first == nProp)) {
-            pfrom->PushInventory(CInv(MSG_BUDGET_FINALIZED, (*it3).vlcond.GetHash()));
+            pfrom->PushInventory(CInv(MSG_BUDGET_FINALIZED, (*it3).second.GetHash()));
             nInvCount++;
 
             //send votes
             std::map<uint256, CFinalizedBudgetVote>::iterator it4 = pfinalizedBudget->mapVotes.begin();
             while (it4 != pfinalizedBudget->mapVotes.end()) {
-                if ((*it4).vlcond.fValid) {
-                    if ((fPartial && !(*it4).vlcond.fSynced) || !fPartial) {
-                        pfrom->PushInventory(CInv(MSG_BUDGET_FINALIZED_VOTE, (*it4).vlcond.GetHash()));
+                if ((*it4).second.fValid) {
+                    if ((fPartial && !(*it4).second.fSynced) || !fPartial) {
+                        pfrom->PushInventory(CInv(MSG_BUDGET_FINALIZED_VOTE, (*it4).second.GetHash()));
                         nInvCount++;
                     }
                 }
@@ -1520,7 +1520,7 @@ void CBudgetProposal::CleanAndRemove(bool fSignatureCheck)
     std::map<uint256, CBudgetVote>::iterator it = mapVotes.begin();
 
     while (it != mapVotes.end()) {
-        (*it).vlcond.fValid = (*it).vlcond.SignatureValid(fSignatureCheck);
+        (*it).second.fValid = (*it).second.SignatureValid(fSignatureCheck);
         ++it;
     }
 }
@@ -1533,8 +1533,8 @@ double CBudgetProposal::GetRatio()
     std::map<uint256, CBudgetVote>::iterator it = mapVotes.begin();
 
     while (it != mapVotes.end()) {
-        if ((*it).vlcond.nVote == VOTE_YES) yeas++;
-        if ((*it).vlcond.nVote == VOTE_NO) nays++;
+        if ((*it).second.nVote == VOTE_YES) yeas++;
+        if ((*it).second.nVote == VOTE_NO) nays++;
         ++it;
     }
 
@@ -1549,7 +1549,7 @@ int CBudgetProposal::GetYeas()
 
     std::map<uint256, CBudgetVote>::iterator it = mapVotes.begin();
     while (it != mapVotes.end()) {
-        if ((*it).vlcond.nVote == VOTE_YES && (*it).vlcond.fValid) ret++;
+        if ((*it).second.nVote == VOTE_YES && (*it).second.fValid) ret++;
         ++it;
     }
 
@@ -1562,7 +1562,7 @@ int CBudgetProposal::GetNays()
 
     std::map<uint256, CBudgetVote>::iterator it = mapVotes.begin();
     while (it != mapVotes.end()) {
-        if ((*it).vlcond.nVote == VOTE_NO && (*it).vlcond.fValid) ret++;
+        if ((*it).second.nVote == VOTE_NO && (*it).second.fValid) ret++;
         ++it;
     }
 
@@ -1575,7 +1575,7 @@ int CBudgetProposal::GetAbstains()
 
     std::map<uint256, CBudgetVote>::iterator it = mapVotes.begin();
     while (it != mapVotes.end()) {
-        if ((*it).vlcond.nVote == VOTE_ABSTAIN && (*it).vlcond.fValid) ret++;
+        if ((*it).second.nVote == VOTE_ABSTAIN && (*it).second.fValid) ret++;
         ++it;
     }
 
@@ -1865,7 +1865,7 @@ void CFinalizedBudget::CleanAndRemove(bool fSignatureCheck)
     std::map<uint256, CFinalizedBudgetVote>::iterator it = mapVotes.begin();
 
     while (it != mapVotes.end()) {
-        (*it).vlcond.fValid = (*it).vlcond.SignatureValid(fSignatureCheck);
+        (*it).second.fValid = (*it).second.SignatureValid(fSignatureCheck);
         ++it;
     }
 }

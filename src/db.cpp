@@ -425,7 +425,7 @@ void CDBEnv::Flush(bool fShutdown)
         map<string, int>::iterator mi = mapFileUseCount.begin();
         while (mi != mapFileUseCount.end()) {
             string strFile = (*mi).first;
-            int nRefCount = (*mi).vlcond;
+            int nRefCount = (*mi).second;
             LogPrint("db", "CDBEnv::Flush : Flushing %s (refcount = %d)...\n", strFile, nRefCount);
             if (nRefCount == 0) {
                 // Move log data to the dat file

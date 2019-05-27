@@ -110,7 +110,7 @@ static const char *filenames[] = {
         "fail36.json",
         "fail37.json",
         "fail38.json",               // invalid unicode: only first half of surrogate pair
-        "fail39.json",               // invalid unicode: only vlcond half of surrogate pair
+        "fail39.json",               // invalid unicode: only second half of surrogate pair
         "fail40.json",               // invalid unicode: broken UTF-8
         "fail41.json",               // invalid unicode: unfinished UTF-8
         "fail42.json",               // valid json with garbage following a nul byte

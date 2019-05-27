@@ -37,12 +37,12 @@ public:
     void insert(const value_type& x)
     {
         std::pair<iterator, bool> ret = map.insert(x);
-        if (ret.vlcond) {
+        if (ret.second) {
             if (nMaxSize && map.size() == nMaxSize) {
-                map.erase(rmap.begin()->vlcond);
+                map.erase(rmap.begin()->second);
                 rmap.erase(rmap.begin());
             }
-            rmap.insert(make_pair(x.vlcond, ret.first));
+            rmap.insert(make_pair(x.second, ret.first));
         }
         return;
     }
@@ -51,9 +51,9 @@ public:
         iterator itTarget = map.find(k);
         if (itTarget == map.end())
             return;
-        std::pair<rmap_iterator, rmap_iterator> itPair = rmap.equal_range(itTarget->vlcond);
-        for (rmap_iterator it = itPair.first; it != itPair.vlcond; ++it)
-            if (it->vlcond == itTarget) {
+        std::pair<rmap_iterator, rmap_iterator> itPair = rmap.equal_range(itTarget->second);
+        for (rmap_iterator it = itPair.first; it != itPair.second; ++it)
+            if (it->second == itTarget) {
                 rmap.erase(it);
                 map.erase(itTarget);
                 return;
@@ -67,11 +67,11 @@ public:
         iterator itTarget = map.find(itIn->first);
         if (itTarget == map.end())
             return;
-        std::pair<rmap_iterator, rmap_iterator> itPair = rmap.equal_range(itTarget->vlcond);
-        for (rmap_iterator it = itPair.first; it != itPair.vlcond; ++it)
-            if (it->vlcond == itTarget) {
+        std::pair<rmap_iterator, rmap_iterator> itPair = rmap.equal_range(itTarget->second);
+        for (rmap_iterator it = itPair.first; it != itPair.second; ++it)
+            if (it->second == itTarget) {
                 rmap.erase(it);
-                itTarget->vlcond = v;
+                itTarget->second = v;
                 rmap.insert(make_pair(v, itTarget));
                 return;
             }
@@ -83,7 +83,7 @@ public:
     {
         if (s)
             while (map.size() > s) {
-                map.erase(rmap.begin()->vlcond);
+                map.erase(rmap.begin()->second);
                 rmap.erase(rmap.begin());
             }
         nMaxSize = s;

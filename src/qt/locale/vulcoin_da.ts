@@ -1571,7 +1571,7 @@ Kontroller adressen og prøv igen.</translation>
         <translation>Aktiver mønt &amp;kontrolfeatures</translation>
     </message>
     <message>
-        <source>Show additional tab listing all your masternodes in first sub-tab&lt;br/&gt;and all masternodes on the network in vlcond sub-tab.</source>
+        <source>Show additional tab listing all your masternodes in first sub-tab&lt;br/&gt;and all masternodes on the network in second sub-tab.</source>
         <translation>Vis en liste over alle Deres masternoder i første underfane &lt;br/&gt; og vis en liste over  alle masternoder på netværket i anden underfane</translation>
     </message>
     <message>

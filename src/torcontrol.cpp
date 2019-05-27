@@ -469,7 +469,7 @@ TorController::TorController(struct event_base* _base, const std::string& _targe
     std::pair<bool,std::string> pkf = ReadBinaryFile(GetPrivateKeyFile());
     if (pkf.first) {
         LogPrint("tor", "tor: Reading cached private key from %s\n", GetPrivateKeyFile());
-        private_key = pkf.vlcond;
+        private_key = pkf.second;
     }
 }
 
@@ -492,9 +492,9 @@ void TorController::add_onion_cb(TorControlConnection& _conn, const TorControlRe
             std::map<std::string,std::string> m = ParseTorReplyMapping(s);
             std::map<std::string,std::string>::iterator i;
             if ((i = m.find("ServiceID")) != m.end())
-                service_id = i->vlcond;
+                service_id = i->second;
             if ((i = m.find("PrivateKey")) != m.end())
-                private_key = i->vlcond;
+                private_key = i->second;
         }
         if (service_id.empty()) {
             LogPrintf("tor: Error parsing ADD_ONION parameters:\n");
@@ -580,9 +580,9 @@ void TorController::authchallenge_cb(TorControlConnection& _conn, const TorContr
         LogPrint("tor", "tor: SAFECOOKIE authentication challenge successful\n");
         std::pair<std::string,std::string> l = SplitTorReplyLine(reply.lines[0]);
         if (l.first == "AUTHCHALLENGE") {
-            std::map<std::string,std::string> m = ParseTorReplyMapping(l.vlcond);
+            std::map<std::string,std::string> m = ParseTorReplyMapping(l.second);
             if (m.empty()) {
-                LogPrintf("tor: Error parsing AUTHCHALLENGE parameters: %s\n", SanitizeString(l.vlcond));
+                LogPrintf("tor: Error parsing AUTHCHALLENGE parameters: %s\n", SanitizeString(l.second));
                 return;
             }
             std::vector<uint8_t> serverHash = ParseHex(m["SERVERHASH"]);
@@ -622,17 +622,17 @@ void TorController::protocolinfo_cb(TorControlConnection& _conn, const TorContro
         BOOST_FOREACH(const std::string &s, reply.lines) {
             std::pair<std::string,std::string> l = SplitTorReplyLine(s);
             if (l.first == "AUTH") {
-                std::map<std::string,std::string> m = ParseTorReplyMapping(l.vlcond);
+                std::map<std::string,std::string> m = ParseTorReplyMapping(l.second);
                 std::map<std::string,std::string>::iterator i;
                 if ((i = m.find("METHODS")) != m.end())
-                    boost::split(methods, i->vlcond, boost::is_any_of(","));
+                    boost::split(methods, i->second, boost::is_any_of(","));
                 if ((i = m.find("COOKIEFILE")) != m.end())
-                    cookiefile = i->vlcond;
+                    cookiefile = i->second;
             } else if (l.first == "VERSION") {
-                std::map<std::string,std::string> m = ParseTorReplyMapping(l.vlcond);
+                std::map<std::string,std::string> m = ParseTorReplyMapping(l.second);
                 std::map<std::string,std::string>::iterator i;
                 if ((i = m.find("Tor")) != m.end()) {
-                    LogPrint("tor", "tor: Connected to Tor version %s\n", i->vlcond);
+                    LogPrint("tor", "tor: Connected to Tor version %s\n", i->second);
                 }
             }
         }
@@ -660,9 +660,9 @@ void TorController::protocolinfo_cb(TorControlConnection& _conn, const TorContro
             // Cookie: hexdump -e '32/1 "%02x""\n"'  ~/.tor/control_auth_cookie
             LogPrint("tor", "tor: Using SAFECOOKIE authentication, reading cookie authentication from %s\n", cookiefile);
             std::pair<bool,std::string> status_cookie = ReadBinaryFile(cookiefile, TOR_COOKIE_SIZE);
-            if (status_cookie.first && status_cookie.vlcond.size() == TOR_COOKIE_SIZE) {
-                // _conn.Command("AUTHENTICATE " + HexStr(status_cookie.vlcond), boost::bind(&TorController::auth_cb, this, _1, _2));
-                cookie = std::vector<uint8_t>(status_cookie.vlcond.begin(), status_cookie.vlcond.end());
+            if (status_cookie.first && status_cookie.second.size() == TOR_COOKIE_SIZE) {
+                // _conn.Command("AUTHENTICATE " + HexStr(status_cookie.second), boost::bind(&TorController::auth_cb, this, _1, _2));
+                cookie = std::vector<uint8_t>(status_cookie.second.begin(), status_cookie.second.end());
                 clientNonce = std::vector<uint8_t>(TOR_NONCE_SIZE, 0);
                 GetRandBytes(&clientNonce[0], TOR_NONCE_SIZE);
                 _conn.Command("AUTHCHALLENGE SAFECOOKIE " + HexStr(clientNonce), boost::bind(&TorController::authchallenge_cb, this, _1, _2));

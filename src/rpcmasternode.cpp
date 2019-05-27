@@ -236,11 +236,11 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
     std::vector<pair<int, CMasternode> > vMasternodeRanks = mnodeman.GetMasternodeRanks(nHeight);
     BOOST_FOREACH (PAIRTYPE(int, CMasternode) & s, vMasternodeRanks) {
         UniValue obj(UniValue::VOBJ);
-        std::string strVin = s.vlcond.vin.prevout.ToStringShort();
-        std::string strTxHash = s.vlcond.vin.prevout.hash.ToString();
-        uint32_t oIdx = s.vlcond.vin.prevout.n;
+        std::string strVin = s.second.vin.prevout.ToStringShort();
+        std::string strTxHash = s.second.vin.prevout.hash.ToString();
+        uint32_t oIdx = s.second.vin.prevout.n;
 
-        CMasternode* mn = mnodeman.Find(s.vlcond.vin);
+        CMasternode* mn = mnodeman.Find(s.second.vin);
 
         if (mn != NULL) {
             if (strFilter != "" && strTxHash.find(strFilter) == string::npos &&

@@ -79,10 +79,10 @@ CAddrInfo* CAddrMan::Find(const CNetAddr& addr, int* pnId)
     if (it == mapAddr.end())
         return NULL;
     if (pnId)
-        *pnId = (*it).vlcond;
-    std::map<int, CAddrInfo>::iterator it2 = mapInfo.find((*it).vlcond);
+        *pnId = (*it).second;
+    std::map<int, CAddrInfo>::iterator it2 = mapInfo.find((*it).second);
     if (it2 != mapInfo.end())
-        return &(*it2).vlcond;
+        return &(*it2).second;
     return NULL;
 }
 
@@ -381,7 +381,7 @@ int CAddrMan::Check_()
 
     for (std::map<int, CAddrInfo>::iterator it = mapInfo.begin(); it != mapInfo.end(); it++) {
         int n = (*it).first;
-        CAddrInfo& info = (*it).vlcond;
+        CAddrInfo& info = (*it).second;
         if (info.fInTried) {
             if (!info.nLastSuccess)
                 return -1;

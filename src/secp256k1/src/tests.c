@@ -1165,7 +1165,7 @@ int main(int argc, char **argv) {
     /* initialize */
     secp256k1_start(VLCP256K1_START_SIGN | VLCP256K1_START_VERIFY);
 
-    /* initializing a vlcond time shouldn't cause any harm or memory leaks. */
+    /* initializing a second time shouldn't cause any harm or memory leaks. */
     secp256k1_start(VLCP256K1_START_SIGN | VLCP256K1_START_VERIFY);
 
     /* Likewise, re-running the internal init functions should be harmless. */

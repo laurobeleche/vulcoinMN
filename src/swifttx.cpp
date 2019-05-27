@@ -109,7 +109,7 @@ void ProcessMessageSwiftTX(CNode* pfrom, std::string& strCommand, CDataStream& v
             std::map<uint256, CTransactionLock>::iterator i = mapTxLocks.find(tx.GetHash());
             if (i != mapTxLocks.end()) {
                 //we only care if we have a complete tx lock
-                if ((*i).vlcond.CountSignatures() >= SWIFTTX_SIGNATURES_REQUIRED) {
+                if ((*i).second.CountSignatures() >= SWIFTTX_SIGNATURES_REQUIRED) {
                     if (!CheckForConflictingLocks(tx)) {
                         LogPrintf("ProcessMessageSwiftTX::ix - Found Existing Complete IX Lock\n");
 
@@ -333,7 +333,7 @@ bool ProcessConsensusVote(CNode* pnode, CConsensusVote& ctx)
     //compile consessus vote
     std::map<uint256, CTransactionLock>::iterator i = mapTxLocks.find(ctx.txHash);
     if (i != mapTxLocks.end()) {
-        (*i).vlcond.AddSignature(ctx);
+        (*i).second.AddSignature(ctx);
 
 #ifdef ENABLE_WALLET
         if (pwalletMain) {
@@ -343,16 +343,16 @@ bool ProcessConsensusVote(CNode* pnode, CConsensusVote& ctx)
         }
 #endif
 
-        LogPrint("swifttx", "SwiftTX::ProcessConsensusVote - Transaction Lock Votes %d - %s !\n", (*i).vlcond.CountSignatures(), ctx.GetHash().ToString().c_str());
+        LogPrint("swifttx", "SwiftTX::ProcessConsensusVote - Transaction Lock Votes %d - %s !\n", (*i).second.CountSignatures(), ctx.GetHash().ToString().c_str());
 
-        if ((*i).vlcond.CountSignatures() >= SWIFTTX_SIGNATURES_REQUIRED) {
-            LogPrint("swifttx", "SwiftTX::ProcessConsensusVote - Transaction Lock Is Complete %s !\n", (*i).vlcond.GetHash().ToString().c_str());
+        if ((*i).second.CountSignatures() >= SWIFTTX_SIGNATURES_REQUIRED) {
+            LogPrint("swifttx", "SwiftTX::ProcessConsensusVote - Transaction Lock Is Complete %s !\n", (*i).second.GetHash().ToString().c_str());
 
             CTransaction& tx = mapTxLockReq[ctx.txHash];
             if (!CheckForConflictingLocks(tx)) {
 #ifdef ENABLE_WALLET
                 if (pwalletMain) {
-                    if (pwalletMain->UpdatedTransaction((*i).vlcond.txHash)) {
+                    if (pwalletMain->UpdatedTransaction((*i).second.txHash)) {
                         nCompleteTXLocks++;
                     }
                 }
@@ -369,7 +369,7 @@ bool ProcessConsensusVote(CNode* pnode, CConsensusVote& ctx)
                 // resolve conflicts
 
                 //if this tx lock was rejected, we need to remove the conflicting blocks
-                if (mapTxLockReqRejected.count((*i).vlcond.txHash)) {
+                if (mapTxLockReqRejected.count((*i).second.txHash)) {
                     //reprocess the last 15 blocks
                     ReprocessBlocks(15);
                 }
@@ -412,7 +412,7 @@ int64_t GetAverageVoteTime()
     int64_t count = 0;
 
     while (it != mapUnknownVotes.end()) {
-        total += it->vlcond;
+        total += it->second;
         count++;
         it++;
     }
@@ -427,19 +427,19 @@ void CleanTransactionLocksList()
     std::map<uint256, CTransactionLock>::iterator it = mapTxLocks.begin();
 
     while (it != mapTxLocks.end()) {
-        if (GetTime() > it->vlcond.nExpiration) { //keep them for an hour
-            LogPrintf("Removing old transaction lock %s\n", it->vlcond.txHash.ToString().c_str());
+        if (GetTime() > it->second.nExpiration) { //keep them for an hour
+            LogPrintf("Removing old transaction lock %s\n", it->second.txHash.ToString().c_str());
 
-            if (mapTxLockReq.count(it->vlcond.txHash)) {
-                CTransaction& tx = mapTxLockReq[it->vlcond.txHash];
+            if (mapTxLockReq.count(it->second.txHash)) {
+                CTransaction& tx = mapTxLockReq[it->second.txHash];
 
                 BOOST_FOREACH (const CTxIn& in, tx.vin)
                     mapLockedInputs.erase(in.prevout);
 
-                mapTxLockReq.erase(it->vlcond.txHash);
-                mapTxLockReqRejected.erase(it->vlcond.txHash);
+                mapTxLockReq.erase(it->second.txHash);
+                mapTxLockReqRejected.erase(it->second.txHash);
 
-                BOOST_FOREACH (CConsensusVote& v, it->vlcond.vecConsensusVotes)
+                BOOST_FOREACH (CConsensusVote& v, it->second.vecConsensusVotes)
                     mapTxLockVote.erase(v.GetHash());
             }
 

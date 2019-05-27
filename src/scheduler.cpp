@@ -64,7 +64,7 @@ void CScheduler::serviceQueue()
             if (shouldStop() || taskQueue.empty())
                 continue;
 
-            Function f = taskQueue.begin()->vlcond;
+            Function f = taskQueue.begin()->second;
             taskQueue.erase(taskQueue.begin());
 
             {

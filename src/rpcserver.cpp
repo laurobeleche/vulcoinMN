@@ -77,9 +77,9 @@ void RPCTypeCheckObj(const UniValue& o,
         if (!fAllowNull && v.isNull())
             throw JSONRPCError(RPC_TYPE_ERROR, strprintf("Missing %s", t.first));
 
-        if (!((v.type() == t.vlcond) || (fAllowNull && (v.isNull())))) {
+        if (!((v.type() == t.second) || (fAllowNull && (v.isNull())))) {
             string err = strprintf("Expected type %s for %s, got %s",
-                                   uvTypeName(t.vlcond), t.first, uvTypeName(v.type()));
+                                   uvTypeName(t.second), t.first, uvTypeName(v.type()));
             throw JSONRPCError(RPC_TYPE_ERROR, err);
         }
     }
@@ -171,11 +171,11 @@ string CRPCTable::help(string strCommand) const
     vector<pair<string, const CRPCCommand*> > vCommands;
 
     for (map<string, const CRPCCommand*>::const_iterator mi = mapCommands.begin(); mi != mapCommands.end(); ++mi)
-        vCommands.push_back(make_pair(mi->vlcond->category + mi->first, mi->vlcond));
+        vCommands.push_back(make_pair(mi->second->category + mi->first, mi->second));
     sort(vCommands.begin(), vCommands.end());
 
     BOOST_FOREACH (const PAIRTYPE(string, const CRPCCommand*) & command, vCommands) {
-        const CRPCCommand* pcmd = command.vlcond;
+        const CRPCCommand* pcmd = command.second;
         string strMethod = pcmd->name;
         // We already filter duplicates, but these deprecated screw up the sort order
         if (strMethod.find("label") != string::npos)
@@ -190,7 +190,7 @@ string CRPCTable::help(string strCommand) const
         try {
             UniValue params;
             rpcfn_type pfn = pcmd->actor;
-            if (setDone.insert(pfn).vlcond)
+            if (setDone.insert(pfn).second)
                 (*pfn)(params, true);
         } catch (std::exception& e) {
             // Help text is returned in an exception
@@ -423,7 +423,7 @@ const CRPCCommand* CRPCTable::operator[](string name) const
     map<string, const CRPCCommand*>::const_iterator it = mapCommands.find(name);
     if (it == mapCommands.end())
         return NULL;
-    return (*it).vlcond;
+    return (*it).second;
 }
 
 
@@ -761,7 +761,7 @@ void StopRPCThreads()
     }
     rpc_acceptors.clear();
     BOOST_FOREACH (const PAIRTYPE(std::string, boost::shared_ptr<deadline_timer>) & timer, deadlineTimers) {
-        timer.vlcond->cancel(ec);
+        timer.second->cancel(ec);
         if (ec)
             LogPrintf("%s: Warning: %s when cancelling timer", __func__, ec.message());
     }

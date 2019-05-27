@@ -300,7 +300,7 @@ UniValue getaddednodeinfo(const UniValue& params, bool fHelp)
 
         UniValue addresses(UniValue::VARR);
         bool fConnected = false;
-        BOOST_FOREACH (CService& addrNode, it->vlcond) {
+        BOOST_FOREACH (CService& addrNode, it->second) {
             bool fFound = false;
             UniValue node(UniValue::VOBJ);
             node.push_back(Pair("address", addrNode.ToString()));
@@ -418,8 +418,8 @@ UniValue getnetworkinfo(const UniValue& params, bool fHelp)
         BOOST_FOREACH (const PAIRTYPE(CNetAddr, LocalServiceInfo) & item, mapLocalHost) {
             UniValue rec(UniValue::VOBJ);
             rec.push_back(Pair("address", item.first.ToString()));
-            rec.push_back(Pair("port", item.vlcond.nPort));
-            rec.push_back(Pair("score", item.vlcond.nScore));
+            rec.push_back(Pair("port", item.second.nPort));
+            rec.push_back(Pair("score", item.second.nScore));
             localAddresses.push_back(rec);
         }
     }
@@ -509,7 +509,7 @@ UniValue listbanned(const UniValue& params, bool fHelp)
     UniValue bannedAddresses(UniValue::VARR);
     for (banmap_t::iterator it = banMap.begin(); it != banMap.end(); it++)
     {
-        CBanEntry banEntry = (*it).vlcond;
+        CBanEntry banEntry = (*it).second;
         UniValue rec(UniValue::VOBJ);
         rec.push_back(Pair("address", (*it).first.ToString()));
         rec.push_back(Pair("banned_until", banEntry.nBanUntil));

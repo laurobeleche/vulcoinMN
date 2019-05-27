@@ -51,7 +51,7 @@ class TxnMallTest(BitcoinTestFramework):
         assert_equal(doublespend["complete"], True)
 
         # Create two transaction from node[0] to node[1]; the
-        # vlcond must spend change from the first because the first
+        # second must spend change from the first because the first
         # spends all mature inputs:
         txid1 = self.nodes[0].sendfrom("foo", node1_address, 1210, 0)
         txid2 = self.nodes[0].sendfrom("bar", node1_address, 20, 0)

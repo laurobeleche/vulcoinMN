@@ -13,7 +13,7 @@
 #   CXXCPP to enable support.  VERSION may be '11' (for the C++11 standard)
 #   or '14' (for the C++14 standard).
 #
-#   The vlcond argument, if specified, indicates whether you insist on an
+#   The second argument, if specified, indicates whether you insist on an
 #   extended mode (e.g. -std=gnu++11) or a strict conformance mode (e.g.
 #   -std=c++11).  If neither is specified, you get whatever works, with
 #   preference for an extended mode.
@@ -52,7 +52,7 @@ AC_DEFUN([AX_CXX_COMPILE_STDCXX], [dnl
   m4_if([$2], [], [],
         [$2], [ext], [],
         [$2], [noext], [],
-        [m4_fatal([invalid vlcond argument `$2' to AX_CXX_COMPILE_STDCXX])])dnl
+        [m4_fatal([invalid second argument `$2' to AX_CXX_COMPILE_STDCXX])])dnl
   m4_if([$3], [], [ax_cxx_compile_cxx$1_required=true],
         [$3], [mandatory], [ax_cxx_compile_cxx$1_required=true],
         [$3], [optional], [ax_cxx_compile_cxx$1_required=false],

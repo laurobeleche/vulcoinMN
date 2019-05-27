@@ -47,7 +47,7 @@ void AddTimeData(const CNetAddr& ip, int64_t nTime)
     LOCK(cs_nTimeOffset);
     // Ignore duplicates
     static set<CNetAddr> setKnown;
-    if (!setKnown.insert(ip).vlcond)
+    if (!setKnown.insert(ip).second)
         return;
 
     // Add data

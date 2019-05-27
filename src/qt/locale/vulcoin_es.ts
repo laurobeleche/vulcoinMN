@@ -1587,7 +1587,7 @@ Por favor compruebe la dirección e inténtelo de nuevo.</translation>
         <translation>Activar funciones de control de &amp;monedas</translation>
     </message>
     <message>
-        <source>Show additional tab listing all your masternodes in first sub-tab&lt;br/&gt;and all masternodes on the network in vlcond sub-tab.</source>
+        <source>Show additional tab listing all your masternodes in first sub-tab&lt;br/&gt;and all masternodes on the network in second sub-tab.</source>
         <translation>Mostrar pestaña adicional listando todos sus nodos maestros en la primera sub-pestaña&lt;br/&gt;y todos los nodos maestros de la red en la segunda sub-pestaña.</translation>
     </message>
     <message>

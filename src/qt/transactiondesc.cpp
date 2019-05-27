@@ -259,7 +259,7 @@ QString TransactionDesc::toHTML(CWallet* wallet, CWalletTx& wtx, TransactionReco
     // Message from normal vulcoin:URI (vulcoin:XyZ...?message=example)
     foreach (const PAIRTYPE(string, string) & r, wtx.vOrderForm)
         if (r.first == "Message")
-            strHTML += "<br><b>" + tr("Message") + ":</b><br>" + GUIUtil::HtmlEscape(r.vlcond, true) + "<br>";
+            strHTML += "<br><b>" + tr("Message") + ":</b><br>" + GUIUtil::HtmlEscape(r.second, true) + "<br>";
 
     //
     // PaymentRequest info:
@@ -267,7 +267,7 @@ QString TransactionDesc::toHTML(CWallet* wallet, CWalletTx& wtx, TransactionReco
     foreach (const PAIRTYPE(string, string) & r, wtx.vOrderForm) {
         if (r.first == "PaymentRequest") {
             PaymentRequestPlus req;
-            req.parse(QByteArray::fromRawData(r.vlcond.data(), r.vlcond.size()));
+            req.parse(QByteArray::fromRawData(r.second.data(), r.second.size()));
             QString merchant;
             if (req.getMerchant(PaymentServer::getCertStore(), merchant))
                 strHTML += "<b>" + tr("Merchant") + ":</b> " + GUIUtil::HtmlEscape(merchant) + "<br>";

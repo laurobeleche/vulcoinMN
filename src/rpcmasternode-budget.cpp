@@ -632,11 +632,11 @@ UniValue getbudgetvotes(const UniValue& params, bool fHelp)
     std::map<uint256, CBudgetVote>::iterator it = pbudgetProposal->mapVotes.begin();
     while (it != pbudgetProposal->mapVotes.end()) {
         UniValue bObj(UniValue::VOBJ);
-        bObj.push_back(Pair("mnId", (*it).vlcond.vin.prevout.hash.ToString()));
+        bObj.push_back(Pair("mnId", (*it).second.vin.prevout.hash.ToString()));
         bObj.push_back(Pair("nHash", (*it).first.ToString().c_str()));
-        bObj.push_back(Pair("Vote", (*it).vlcond.GetVoteString()));
-        bObj.push_back(Pair("nTime", (int64_t)(*it).vlcond.nTime));
-        bObj.push_back(Pair("fValid", (*it).vlcond.fValid));
+        bObj.push_back(Pair("Vote", (*it).second.GetVoteString()));
+        bObj.push_back(Pair("nTime", (int64_t)(*it).second.nTime));
+        bObj.push_back(Pair("fValid", (*it).second.fValid));
 
         ret.push_back(bObj);
 
@@ -1016,10 +1016,10 @@ UniValue mnfinalbudget(const UniValue& params, bool fHelp)
         while (it != pfinalBudget->mapVotes.end()) {
             UniValue bObj(UniValue::VOBJ);
             bObj.push_back(Pair("nHash", (*it).first.ToString().c_str()));
-            bObj.push_back(Pair("nTime", (int64_t)(*it).vlcond.nTime));
-            bObj.push_back(Pair("fValid", (*it).vlcond.fValid));
+            bObj.push_back(Pair("nTime", (int64_t)(*it).second.nTime));
+            bObj.push_back(Pair("fValid", (*it).second.fValid));
 
-            obj.push_back(Pair((*it).vlcond.vin.prevout.ToStringShort(), bObj));
+            obj.push_back(Pair((*it).second.vin.prevout.ToStringShort(), bObj));
 
             it++;
         }

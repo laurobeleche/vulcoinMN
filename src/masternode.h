@@ -73,17 +73,17 @@ public:
         return ss.GetHash();
     }
 
-    void swap(CMasternodePing& first, CMasternodePing& vlcond) // nothrow
+    void swap(CMasternodePing& first, CMasternodePing& second) // nothrow
     {
         // enable ADL (not necessary in our case, but good practice)
         using std::swap;
 
         // by swapping the members of two classes,
         // the two classes are effectively swapped
-        swap(first.vin, vlcond.vin);
-        swap(first.blockHash, vlcond.blockHash);
-        swap(first.sigTime, vlcond.sigTime);
-        swap(first.vchSig, vlcond.vchSig);
+        swap(first.vin, second.vin);
+        swap(first.blockHash, second.blockHash);
+        swap(first.sigTime, second.sigTime);
+        swap(first.vchSig, second.vchSig);
     }
 
     CMasternodePing& operator=(CMasternodePing from)
@@ -153,29 +153,29 @@ public:
     CMasternode(const CMasternodeBroadcast& mnb);
 
 
-    void swap(CMasternode& first, CMasternode& vlcond) // nothrow
+    void swap(CMasternode& first, CMasternode& second) // nothrow
     {
         // enable ADL (not necessary in our case, but good practice)
         using std::swap;
 
         // by swapping the members of two classes,
         // the two classes are effectively swapped
-        swap(first.vin, vlcond.vin);
-        swap(first.addr, vlcond.addr);
-        swap(first.pubKeyCollateralAddress, vlcond.pubKeyCollateralAddress);
-        swap(first.pubKeyMasternode, vlcond.pubKeyMasternode);
-        swap(first.sig, vlcond.sig);
-        swap(first.activeState, vlcond.activeState);
-        swap(first.sigTime, vlcond.sigTime);
-        swap(first.lastPing, vlcond.lastPing);
-        swap(first.cacheInputAge, vlcond.cacheInputAge);
-        swap(first.cacheInputAgeBlock, vlcond.cacheInputAgeBlock);
-        swap(first.unitTest, vlcond.unitTest);
-        swap(first.allowFreeTx, vlcond.allowFreeTx);
-        swap(first.protocolVersion, vlcond.protocolVersion);
-        swap(first.nLastDsq, vlcond.nLastDsq);
-        swap(first.nScanningErrorCount, vlcond.nScanningErrorCount);
-        swap(first.nLastScanningErrorBlockHeight, vlcond.nLastScanningErrorBlockHeight);
+        swap(first.vin, second.vin);
+        swap(first.addr, second.addr);
+        swap(first.pubKeyCollateralAddress, second.pubKeyCollateralAddress);
+        swap(first.pubKeyMasternode, second.pubKeyMasternode);
+        swap(first.sig, second.sig);
+        swap(first.activeState, second.activeState);
+        swap(first.sigTime, second.sigTime);
+        swap(first.lastPing, second.lastPing);
+        swap(first.cacheInputAge, second.cacheInputAge);
+        swap(first.cacheInputAgeBlock, second.cacheInputAgeBlock);
+        swap(first.unitTest, second.unitTest);
+        swap(first.allowFreeTx, second.allowFreeTx);
+        swap(first.protocolVersion, second.protocolVersion);
+        swap(first.nLastDsq, second.nLastDsq);
+        swap(first.nScanningErrorCount, second.nScanningErrorCount);
+        swap(first.nLastScanningErrorBlockHeight, second.nLastScanningErrorBlockHeight);
     }
 
     CMasternode& operator=(CMasternode from)

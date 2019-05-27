@@ -186,7 +186,7 @@ UniValue getrawmempool(const UniValue& params, bool fHelp)
         UniValue o(UniValue::VOBJ);
         BOOST_FOREACH (const PAIRTYPE(uint256, CTxMemPoolEntry) & entry, mempool.mapTx) {
             const uint256& hash = entry.first;
-            const CTxMemPoolEntry& e = entry.vlcond;
+            const CTxMemPoolEntry& e = entry.second;
             UniValue info(UniValue::VOBJ);
             info.push_back(Pair("size", (int)e.GetTxSize()));
             info.push_back(Pair("fee", ValueFromAmount(e.GetFee())));
@@ -449,7 +449,7 @@ UniValue gettxout(const UniValue& params, bool fHelp)
         return NullUniValue;
 
     BlockMap::iterator it = mapBlockIndex.find(pcoinsTip->GetBestBlock());
-    CBlockIndex* pindex = it->vlcond;
+    CBlockIndex* pindex = it->second;
     ret.push_back(Pair("bestblock", pindex->GetBlockHash().GetHex()));
     if ((unsigned int)coins.nHeight == MEMPOOL_HEIGHT)
         ret.push_back(Pair("confirmations", 0));
@@ -569,9 +569,9 @@ UniValue getchaintips(const UniValue& params, bool fHelp)
        of another block.  */
     std::set<const CBlockIndex*, CompareBlocksByHeight> setTips;
     BOOST_FOREACH (const PAIRTYPE(const uint256, CBlockIndex*) & item, mapBlockIndex)
-        setTips.insert(item.vlcond);
+        setTips.insert(item.second);
     BOOST_FOREACH (const PAIRTYPE(const uint256, CBlockIndex*) & item, mapBlockIndex) {
-        const CBlockIndex* pprev = item.vlcond->pprev;
+        const CBlockIndex* pprev = item.second->pprev;
         if (pprev)
             setTips.erase(pprev);
     }

@@ -612,8 +612,8 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     CTransaction tx2;
     GetTransaction(vin.prevout.hash, tx2, hashBlock, true);
     BlockMap::iterator mi = mapBlockIndex.find(hashBlock);
-    if (mi != mapBlockIndex.end() && (*mi).vlcond) {
-        CBlockIndex* pMNIndex = (*mi).vlcond;                                                        // block for 2500 PIVX tx -> 1 confirmation
+    if (mi != mapBlockIndex.end() && (*mi).second) {
+        CBlockIndex* pMNIndex = (*mi).second;                                                        // block for 2500 PIVX tx -> 1 confirmation
         CBlockIndex* pConfIndex = chainActive[pMNIndex->nHeight + MASTERNODE_MIN_CONFIRMATIONS - 1]; // block where tx got MASTERNODE_MIN_CONFIRMATIONS
         if (pConfIndex->GetBlockTime() > sigTime) {
             LogPrint("masternode","mnb - Bad sigTime %d for Masternode %s (%i conf block is at %d)\n",
@@ -742,8 +742,8 @@ bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled)
             }
 
             BlockMap::iterator mi = mapBlockIndex.find(blockHash);
-            if (mi != mapBlockIndex.end() && (*mi).vlcond) {
-                if ((*mi).vlcond->nHeight < chainActive.Height() - 24) {
+            if (mi != mapBlockIndex.end() && (*mi).second) {
+                if ((*mi).second->nHeight < chainActive.Height() - 24) {
                     LogPrint("masternode","CMasternodePing::CheckAndUpdate - Masternode %s block hash %s is too old\n", vin.prevout.hash.ToString(), blockHash.ToString());
                     // Do nothing here (no Masternode update, no mnping relay)
                     // Let this node to be visible but fail to accept mnping

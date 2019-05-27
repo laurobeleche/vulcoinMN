@@ -278,7 +278,7 @@
  *   - WHIRLPOOL-1: short name: <code>whirlpool1</code> (64)
  *   - WHIRLPOOL: short name: <code>whirlpool</code> (64)
  *
- * The fourteen vlcond-round SHA-3 candidates are also implemented;
+ * The fourteen second-round SHA-3 candidates are also implemented;
  * when applicable, the implementations follow the "final" specifications
  * as published for the third round of the SHA-3 competition (BLAKE,
  * Groestl, JH, Keccak and Skein have been tweaked for third round).
@@ -364,7 +364,7 @@
  *   - Skein-512 (nominally specified as Skein-512-512): short name:
  *     <code>skein512</code> (64)
  *
- * For the vlcond-round SHA-3 candidates, the functions are as specified
+ * For the second-round SHA-3 candidates, the functions are as specified
  * for round 2, i.e. with the "tweaks" that some candidates added
  * between round 1 and round 2. Also, some of the submitted packages for
  * round 2 contained errors, in the specification, reference code, or

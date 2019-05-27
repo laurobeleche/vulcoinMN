@@ -318,7 +318,7 @@ CNodeState* State(NodeId pnode)
     map<NodeId, CNodeState>::iterator it = mapNodeState.find(pnode);
     if (it == mapNodeState.end())
         return NULL;
-    return &it->vlcond;
+    return &it->second;
 }
 
 int GetHeight()
@@ -346,7 +346,7 @@ void UpdatePreferredDownload(CNode* node, CNodeState* state)
 void InitializeNode(NodeId nodeid, const CNode* pnode)
 {
     LOCK(cs_main);
-    CNodeState& state = mapNodeState.insert(std::make_pair(nodeid, CNodeState())).first->vlcond;
+    CNodeState& state = mapNodeState.insert(std::make_pair(nodeid, CNodeState())).first->second;
     state.name = pnode->addrName;
     state.address = pnode->addr;
 }
@@ -376,9 +376,9 @@ void MarkBlockAsReceived(const uint256& hash)
 {
     map<uint256, pair<NodeId, list<QueuedBlock>::iterator> >::iterator itInFlight = mapBlocksInFlight.find(hash);
     if (itInFlight != mapBlocksInFlight.end()) {
-        CNodeState* state = State(itInFlight->vlcond.first);
-        nQueuedValidatedHeaders -= itInFlight->vlcond.vlcond->fValidatedHeaders;
-        state->vBlocksInFlight.erase(itInFlight->vlcond.vlcond);
+        CNodeState* state = State(itInFlight->second.first);
+        nQueuedValidatedHeaders -= itInFlight->second.second->fValidatedHeaders;
+        state->vBlocksInFlight.erase(itInFlight->second.second);
         state->nBlocksInFlight--;
         state->nStallingSince = 0;
         mapBlocksInFlight.erase(itInFlight);
@@ -409,9 +409,9 @@ void ProcessBlockAvailability(NodeId nodeid)
 
     if (state->hashLastUnknownBlock != 0) {
         BlockMap::iterator itOld = mapBlockIndex.find(state->hashLastUnknownBlock);
-        if (itOld != mapBlockIndex.end() && itOld->vlcond->nChainWork > 0) {
-            if (state->pindexBestKnownBlock == NULL || itOld->vlcond->nChainWork >= state->pindexBestKnownBlock->nChainWork)
-                state->pindexBestKnownBlock = itOld->vlcond;
+        if (itOld != mapBlockIndex.end() && itOld->second->nChainWork > 0) {
+            if (state->pindexBestKnownBlock == NULL || itOld->second->nChainWork >= state->pindexBestKnownBlock->nChainWork)
+                state->pindexBestKnownBlock = itOld->second;
             state->hashLastUnknownBlock = uint256(0);
         }
     }
@@ -426,10 +426,10 @@ void UpdateBlockAvailability(NodeId nodeid, const uint256& hash)
     ProcessBlockAvailability(nodeid);
 
     BlockMap::iterator it = mapBlockIndex.find(hash);
-    if (it != mapBlockIndex.end() && it->vlcond->nChainWork > 0) {
+    if (it != mapBlockIndex.end() && it->second->nChainWork > 0) {
         // An actually better block was announced.
-        if (state->pindexBestKnownBlock == NULL || it->vlcond->nChainWork >= state->pindexBestKnownBlock->nChainWork)
-            state->pindexBestKnownBlock = it->vlcond;
+        if (state->pindexBestKnownBlock == NULL || it->second->nChainWork >= state->pindexBestKnownBlock->nChainWork)
+            state->pindexBestKnownBlock = it->second;
     } else {
         // An unknown block was announced; just assume that the latest one is the best one.
         state->hashLastUnknownBlock = hash;
@@ -582,7 +582,7 @@ CBlockIndex* FindForkInGlobalIndex(const CChain& chain, const CBlockLocator& loc
     BOOST_FOREACH (const uint256& hash, locator.vHave) {
         BlockMap::iterator mi = mapBlockIndex.find(hash);
         if (mi != mapBlockIndex.end()) {
-            CBlockIndex* pindex = (*mi).vlcond;
+            CBlockIndex* pindex = (*mi).second;
             if (chain.Contains(pindex))
                 return pindex;
         }
@@ -633,12 +633,12 @@ void static EraseOrphanTx(uint256 hash)
     map<uint256, COrphanTx>::iterator it = mapOrphanTransactions.find(hash);
     if (it == mapOrphanTransactions.end())
         return;
-    BOOST_FOREACH (const CTxIn& txin, it->vlcond.tx.vin) {
+    BOOST_FOREACH (const CTxIn& txin, it->second.tx.vin) {
         map<uint256, set<uint256> >::iterator itPrev = mapOrphanTransactionsByPrev.find(txin.prevout.hash);
         if (itPrev == mapOrphanTransactionsByPrev.end())
             continue;
-        itPrev->vlcond.erase(hash);
-        if (itPrev->vlcond.empty())
+        itPrev->second.erase(hash);
+        if (itPrev->second.empty())
             mapOrphanTransactionsByPrev.erase(itPrev);
     }
     mapOrphanTransactions.erase(it);
@@ -650,8 +650,8 @@ void EraseOrphansFor(NodeId peer)
     map<uint256, COrphanTx>::iterator iter = mapOrphanTransactions.begin();
     while (iter != mapOrphanTransactions.end()) {
         map<uint256, COrphanTx>::iterator maybeErase = iter++; // increment to avoid iterator becoming invalid
-        if (maybeErase->vlcond.fromPeer == peer) {
-            EraseOrphanTx(maybeErase->vlcond.tx.GetHash());
+        if (maybeErase->second.fromPeer == peer) {
+            EraseOrphanTx(maybeErase->second.tx.GetHash());
             ++nErased;
         }
     }
@@ -895,7 +895,7 @@ int GetInputAgeIX(uint256 nTXHash, CTxIn& vin)
     if (nResult < 6) {
         std::map<uint256, CTransactionLock>::iterator i = mapTxLocks.find(nTXHash);
         if (i != mapTxLocks.end()) {
-            sigs = (*i).vlcond.CountSignatures();
+            sigs = (*i).second.CountSignatures();
         }
         if (sigs >= SWIFTTX_SIGNATURES_REQUIRED) {
             return nSwiftTXDepth + nResult;
@@ -911,7 +911,7 @@ int GetIXConfirmations(uint256 nTXHash)
 
     std::map<uint256, CTransactionLock>::iterator i = mapTxLocks.find(nTXHash);
     if (i != mapTxLocks.end()) {
-        sigs = (*i).vlcond.CountSignatures();
+        sigs = (*i).second.CountSignatures();
     }
     if (sigs >= SWIFTTX_SIGNATURES_REQUIRED) {
         return nSwiftTXDepth;
@@ -944,7 +944,7 @@ bool GetCoinAge(const CTransaction& tx, const unsigned int nTxTime, uint64_t& nC
 
         BlockMap::iterator it = mapBlockIndex.find(hashBlockPrev);
         if (it != mapBlockIndex.end())
-            pindex = it->vlcond;
+            pindex = it->second;
         else {
             LogPrintf("GetCoinAge() failed to find block index \n");
             continue;
@@ -1774,11 +1774,11 @@ void static InvalidBlockFound(CBlockIndex* pindex, const CValidationState& state
     int nDoS = 0;
     if (state.IsInvalid(nDoS)) {
         std::map<uint256, NodeId>::iterator it = mapBlockSource.find(pindex->GetBlockHash());
-        if (it != mapBlockSource.end() && State(it->vlcond)) {
+        if (it != mapBlockSource.end() && State(it->second)) {
             CBlockReject reject = {state.GetRejectCode(), state.GetRejectReason().substr(0, MAX_REJECT_MESSAGE_LENGTH), pindex->GetBlockHash()};
-            State(it->vlcond)->rejects.push_back(reject);
+            State(it->second)->rejects.push_back(reject);
             if (nDoS > 0)
-                Misbehaving(it->vlcond, nDoS);
+                Misbehaving(it->second, nDoS);
         }
     }
     if (!state.CorruptionPossible()) {
@@ -1827,7 +1827,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
 
         // While checking, GetBestBlock() refers to the parent block.
         // This is also true for mempool checks.
-        CBlockIndex* pindexPrev = mapBlockIndex.find(inputs.GetBestBlock())->vlcond;
+        CBlockIndex* pindexPrev = mapBlockIndex.find(inputs.GetBestBlock())->second;
         int nSpendHeight = pindexPrev->nHeight + 1;
         CAmount nValueIn = 0;
         CAmount nFees = 0;
@@ -2783,8 +2783,8 @@ bool InvalidateBlock(CValidationState& state, CBlockIndex* pindex)
     // add them again.
     BlockMap::iterator it = mapBlockIndex.begin();
     while (it != mapBlockIndex.end()) {
-        if (it->vlcond->IsValid(BLOCK_VALID_TRANSACTIONS) && it->vlcond->nChainTx && !setBlockIndexCandidates.value_comp()(it->vlcond, chainActive.Tip())) {
-            setBlockIndexCandidates.insert(it->vlcond);
+        if (it->second->IsValid(BLOCK_VALID_TRANSACTIONS) && it->second->nChainTx && !setBlockIndexCandidates.value_comp()(it->second, chainActive.Tip())) {
+            setBlockIndexCandidates.insert(it->second);
         }
         it++;
     }
@@ -2802,13 +2802,13 @@ bool ReconsiderBlock(CValidationState& state, CBlockIndex* pindex)
     // Remove the invalidity flag from this block and all its descendants.
     BlockMap::iterator it = mapBlockIndex.begin();
     while (it != mapBlockIndex.end()) {
-        if (!it->vlcond->IsValid() && it->vlcond->GetAncestor(nHeight) == pindex) {
-            it->vlcond->nStatus &= ~BLOCK_FAILED_MASK;
-            setDirtyBlockIndex.insert(it->vlcond);
-            if (it->vlcond->IsValid(BLOCK_VALID_TRANSACTIONS) && it->vlcond->nChainTx && setBlockIndexCandidates.value_comp()(chainActive.Tip(), it->vlcond)) {
-                setBlockIndexCandidates.insert(it->vlcond);
+        if (!it->second->IsValid() && it->second->GetAncestor(nHeight) == pindex) {
+            it->second->nStatus &= ~BLOCK_FAILED_MASK;
+            setDirtyBlockIndex.insert(it->second);
+            if (it->second->IsValid(BLOCK_VALID_TRANSACTIONS) && it->second->nChainTx && setBlockIndexCandidates.value_comp()(chainActive.Tip(), it->second)) {
+                setBlockIndexCandidates.insert(it->second);
             }
-            if (it->vlcond == pindexBestInvalid) {
+            if (it->second == pindexBestInvalid) {
                 // Reset invalid block marker if it was pointing to one of those.
                 pindexBestInvalid = NULL;
             }
@@ -2833,7 +2833,7 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
     uint256 hash = block.GetHash();
     BlockMap::iterator it = mapBlockIndex.find(hash);
     if (it != mapBlockIndex.end())
-        return it->vlcond;
+        return it->second;
 
     // Construct new block index object
     CBlockIndex* pindexNew = new CBlockIndex(block);
@@ -2851,7 +2851,7 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
     pindexNew->phashBlock = &((*mi).first);
     BlockMap::iterator miPrev = mapBlockIndex.find(block.hashPrevBlock);
     if (miPrev != mapBlockIndex.end()) {
-        pindexNew->pprev = (*miPrev).vlcond;
+        pindexNew->pprev = (*miPrev).second;
         pindexNew->nHeight = pindexNew->pprev->nHeight + 1;
         pindexNew->BuildSkip();
 
@@ -2928,9 +2928,9 @@ bool ReceivedBlockTransactions(const CBlock& block, CValidationState& state, CBl
                 setBlockIndexCandidates.insert(pindex);
             }
             std::pair<std::multimap<CBlockIndex*, CBlockIndex*>::iterator, std::multimap<CBlockIndex*, CBlockIndex*>::iterator> range = mapBlocksUnlinked.equal_range(pindex);
-            while (range.first != range.vlcond) {
+            while (range.first != range.second) {
                 std::multimap<CBlockIndex*, CBlockIndex*>::iterator it = range.first;
-                queue.push_back(it->vlcond);
+                queue.push_back(it->second);
                 range.first++;
                 mapBlocksUnlinked.erase(it);
             }
@@ -3089,7 +3089,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
 
         // Vlcond transaction must be coinstake, the rest must not be
         if (block.vtx.empty() || !block.vtx[1].IsCoinStake())
-            return state.DoS(100, error("CheckBlock() : vlcond tx is not coinstake"));
+            return state.DoS(100, error("CheckBlock() : second tx is not coinstake"));
         for (unsigned int i = 2; i < block.vtx.size(); i++)
             if (block.vtx[i].IsCoinStake())
                 return state.DoS(100, error("CheckBlock() : more than one coinstake"));
@@ -3124,8 +3124,8 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
             nHeight = pindexPrev->nHeight + 1;
         } else { //out of order
             BlockMap::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
-            if (mi != mapBlockIndex.end() && (*mi).vlcond)
-                nHeight = (*mi).vlcond->nHeight + 1;
+            if (mi != mapBlockIndex.end() && (*mi).second)
+                nHeight = (*mi).second->nHeight + 1;
         }
 
         // VLC
@@ -3281,7 +3281,7 @@ bool AcceptBlockHeader(const CBlock& block, CValidationState& state, CBlockIndex
     // TODO : ENABLE BLOCK CACHE IN SPECIFIC CASES
     if (miSelf != mapBlockIndex.end()) {
         // Block header is already known.
-        pindex = miSelf->vlcond;
+        pindex = miSelf->second;
         if (ppindex)
             *ppindex = pindex;
         if (pindex->nStatus & BLOCK_FAILED_MASK)
@@ -3300,7 +3300,7 @@ bool AcceptBlockHeader(const CBlock& block, CValidationState& state, CBlockIndex
         BlockMap::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
         if (mi == mapBlockIndex.end())
             return state.DoS(0, error("%s : prev block %s not found", __func__, block.hashPrevBlock.ToString().c_str()), 0, "bad-prevblk");
-        pindexPrev = (*mi).vlcond;
+        pindexPrev = (*mi).second;
         if (pindexPrev->nStatus & BLOCK_FAILED_MASK) {
             //If this "invalid" block is an exact match from the checkpoints, then reconsider it
             if (pindex && Checkpoints::CheckBlock(pindex->nHeight - 1, block.hashPrevBlock, true)) {
@@ -3343,7 +3343,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
         BlockMap::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
         if (mi == mapBlockIndex.end())
             return state.DoS(0, error("%s : prev block %s not found", __func__, block.hashPrevBlock.ToString().c_str()), 0, "bad-prevblk");
-        pindexPrev = (*mi).vlcond;
+        pindexPrev = (*mi).second;
         if (pindexPrev->nStatus & BLOCK_FAILED_MASK) {
             //If this "invalid" block is an exact match from the checkpoints, then reconsider it
             if (Checkpoints::CheckBlock(pindexPrev->nHeight, block.hashPrevBlock, true)) {
@@ -3473,7 +3473,7 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, CBlock* pblock, CDis
     // Limited duplicity on stake: prevents block flood attack
     // Duplicate stake allowed only when there is orphan child block
     //if (pblock->IsProofOfStake() && setStakeSeen.count(pblock->GetProofOfStake())/* && !mapOrphanBlocksByPrev.count(hash)*/)
-    //    return error("ProcessNewBlock() : duplicate proof-of-stake (%s, %d) for block %s", pblock->GetProofOfStake().first.ToString().c_str(), pblock->GetProofOfStake().vlcond, pblock->GetHash().ToString().c_str());
+    //    return error("ProcessNewBlock() : duplicate proof-of-stake (%s, %d) for block %s", pblock->GetProofOfStake().first.ToString().c_str(), pblock->GetProofOfStake().second, pblock->GetHash().ToString().c_str());
 
     // NovaCoin: check proof-of-stake block signature
     if (!pblock->CheckBlockSignature())
@@ -3626,7 +3626,7 @@ CBlockIndex* InsertBlockIndex(uint256 hash)
     // Return existing
     BlockMap::iterator mi = mapBlockIndex.find(hash);
     if (mi != mapBlockIndex.end())
-        return (*mi).vlcond;
+        return (*mi).second;
 
     // Create new
     CBlockIndex* pindexNew = new CBlockIndex();
@@ -3654,12 +3654,12 @@ bool static LoadBlockIndexDB(string& strError)
     vector<pair<int, CBlockIndex*> > vSortedByHeight;
     vSortedByHeight.reserve(mapBlockIndex.size());
     for (const PAIRTYPE(uint256, CBlockIndex*) & item : mapBlockIndex) {
-        CBlockIndex* pindex = item.vlcond;
+        CBlockIndex* pindex = item.second;
         vSortedByHeight.push_back(make_pair(pindex->nHeight, pindex));
     }
     sort(vSortedByHeight.begin(), vSortedByHeight.end());
     BOOST_FOREACH (const PAIRTYPE(int, CBlockIndex*) & item, vSortedByHeight) {
-        CBlockIndex* pindex = item.vlcond;
+        CBlockIndex* pindex = item.second;
         pindex->nChainWork = (pindex->pprev ? pindex->pprev->nChainWork : 0) + GetBlockProof(*pindex);
         if (pindex->nStatus & BLOCK_HAVE_DATA) {
             if (pindex->pprev) {
@@ -3704,7 +3704,7 @@ bool static LoadBlockIndexDB(string& strError)
     LogPrintf("Checking all blk files are present...\n");
     set<int> setBlkDataFiles;
     for (const PAIRTYPE(uint256, CBlockIndex*) & item : mapBlockIndex) {
-        CBlockIndex* pindex = item.vlcond;
+        CBlockIndex* pindex = item.second;
         if (pindex->nStatus & BLOCK_HAVE_DATA) {
             setBlkDataFiles.insert(pindex->nFile);
         }
@@ -3724,7 +3724,7 @@ bool static LoadBlockIndexDB(string& strError)
     //Check for inconsistency with block file info and internal state
     if (!fLastShutdownWasPrepared && !GetBoolArg("-forcestart", false) && !GetBoolArg("-reindex", false)) {
         unsigned int nHeightLastBlockFile = vinfoBlockFile[nLastBlockFile].nHeightLast + 1;
-        if (vSortedByHeight.size() > nHeightLastBlockFile && pcoinsTip->GetBestBlock() != vSortedByHeight[nHeightLastBlockFile].vlcond->GetBlockHash()) {
+        if (vSortedByHeight.size() > nHeightLastBlockFile && pcoinsTip->GetBestBlock() != vSortedByHeight[nHeightLastBlockFile].second->GetBlockHash()) {
             //The database is in a state where a block has been accepted and written to disk, but the
             //transaction database (pcoinsTip) was not flushed to disk, and is therefore not in sync with
             //the block index database.
@@ -3737,13 +3737,13 @@ bool static LoadBlockIndexDB(string& strError)
                       mapBlockIndex[pcoinsTip->GetBestBlock()]->nHeight, vSortedByHeight.size());
 
             //get the index associated with the point in the chain that pcoinsTip is synced to
-            CBlockIndex *pindexLastMeta = vSortedByHeight[vinfoBlockFile[nLastBlockFile].nHeightLast + 1].vlcond;
-            CBlockIndex *pindex = vSortedByHeight[0].vlcond;
+            CBlockIndex *pindexLastMeta = vSortedByHeight[vinfoBlockFile[nLastBlockFile].nHeightLast + 1].second;
+            CBlockIndex *pindex = vSortedByHeight[0].second;
             unsigned int nSortedPos = 0;
             for (unsigned int i = 0; i < vSortedByHeight.size(); i++) {
                 nSortedPos = i;
                 if (vSortedByHeight[i].first == mapBlockIndex[pcoinsTip->GetBestBlock()]->nHeight + 1) {
-                    pindex = vSortedByHeight[i].vlcond;
+                    pindex = vSortedByHeight[i].second;
                     break;
                 }
             }
@@ -3773,7 +3773,7 @@ bool static LoadBlockIndexDB(string& strError)
                 if(pindex->nHeight >= pindexLastMeta->nHeight)
                     break;
 
-                pindex = vSortedByHeight[++nSortedPos].vlcond;
+                pindex = vSortedByHeight[++nSortedPos].second;
             }
 
             // Save the updates to disk
@@ -3803,7 +3803,7 @@ bool static LoadBlockIndexDB(string& strError)
     BlockMap::iterator it = mapBlockIndex.find(pcoinsTip->GetBestBlock());
     if (it == mapBlockIndex.end())
         return true;
-    chainActive.SetTip(it->vlcond);
+    chainActive.SetTip(it->second);
 
     PruneBlockIndexCandidates();
 
@@ -4032,13 +4032,13 @@ bool LoadExternalBlockFile(FILE* fileIn, CDiskBlockPos* dbp)
                     uint256 head = queue.front();
                     queue.pop_front();
                     std::pair<std::multimap<uint256, CDiskBlockPos>::iterator, std::multimap<uint256, CDiskBlockPos>::iterator> range = mapBlocksUnknownParent.equal_range(head);
-                    while (range.first != range.vlcond) {
+                    while (range.first != range.second) {
                         std::multimap<uint256, CDiskBlockPos>::iterator it = range.first;
-                        if (ReadBlockFromDisk(block, it->vlcond)) {
+                        if (ReadBlockFromDisk(block, it->second)) {
                             LogPrintf("%s: Processing out of order child %s of %s\n", __func__, block.GetHash().ToString(),
                                 head.ToString());
                             CValidationState dummy;
-                            if (ProcessNewBlock(dummy, NULL, &block, &it->vlcond)) {
+                            if (ProcessNewBlock(dummy, NULL, &block, &it->second)) {
                                 nLoaded++;
                                 queue.push_back(block.GetHash());
                             }
@@ -4078,15 +4078,15 @@ void static CheckBlockIndex()
     // Build forward-pointing map of the entire block tree.
     std::multimap<CBlockIndex*, CBlockIndex*> forward;
     for (BlockMap::iterator it = mapBlockIndex.begin(); it != mapBlockIndex.end(); it++) {
-        forward.insert(std::make_pair(it->vlcond->pprev, it->vlcond));
+        forward.insert(std::make_pair(it->second->pprev, it->second));
     }
 
     assert(forward.size() == mapBlockIndex.size());
 
     std::pair<std::multimap<CBlockIndex*, CBlockIndex*>::iterator, std::multimap<CBlockIndex*, CBlockIndex*>::iterator> rangeGenesis = forward.equal_range(NULL);
-    CBlockIndex* pindex = rangeGenesis.first->vlcond;
+    CBlockIndex* pindex = rangeGenesis.first->second;
     rangeGenesis.first++;
-    assert(rangeGenesis.first == rangeGenesis.vlcond); // There is only one index entry with parent NULL.
+    assert(rangeGenesis.first == rangeGenesis.second); // There is only one index entry with parent NULL.
 
     // Iterate over the entire block tree, using depth-first search.
     // Along the way, remember whether there are blocks on the path from genesis
@@ -4139,9 +4139,9 @@ void static CheckBlockIndex()
         // Check whether this block is in mapBlocksUnlinked.
         std::pair<std::multimap<CBlockIndex*, CBlockIndex*>::iterator, std::multimap<CBlockIndex*, CBlockIndex*>::iterator> rangeUnlinked = mapBlocksUnlinked.equal_range(pindex->pprev);
         bool foundInUnlinked = false;
-        while (rangeUnlinked.first != rangeUnlinked.vlcond) {
+        while (rangeUnlinked.first != rangeUnlinked.second) {
             assert(rangeUnlinked.first->first == pindex->pprev);
-            if (rangeUnlinked.first->vlcond == pindex) {
+            if (rangeUnlinked.first->second == pindex) {
                 foundInUnlinked = true;
                 break;
             }
@@ -4159,9 +4159,9 @@ void static CheckBlockIndex()
 
         // Try descending into the first subnode.
         std::pair<std::multimap<CBlockIndex*, CBlockIndex*>::iterator, std::multimap<CBlockIndex*, CBlockIndex*>::iterator> range = forward.equal_range(pindex);
-        if (range.first != range.vlcond) {
+        if (range.first != range.second) {
             // A subnode was found.
-            pindex = range.first->vlcond;
+            pindex = range.first->second;
             nHeight++;
             continue;
         }
@@ -4179,15 +4179,15 @@ void static CheckBlockIndex()
             CBlockIndex* pindexPar = pindex->pprev;
             // Find which child we just visited.
             std::pair<std::multimap<CBlockIndex*, CBlockIndex*>::iterator, std::multimap<CBlockIndex*, CBlockIndex*>::iterator> rangePar = forward.equal_range(pindexPar);
-            while (rangePar.first->vlcond != pindex) {
-                assert(rangePar.first != rangePar.vlcond); // Our parent must have at least the node we're coming from as child.
+            while (rangePar.first->second != pindex) {
+                assert(rangePar.first != rangePar.second); // Our parent must have at least the node we're coming from as child.
                 rangePar.first++;
             }
             // Proceed to the next one.
             rangePar.first++;
-            if (rangePar.first != rangePar.vlcond) {
+            if (rangePar.first != rangePar.second) {
                 // Move to the sibling.
-                pindex = rangePar.first->vlcond;
+                pindex = rangePar.first->second;
                 break;
             } else {
                 // Move up further.
@@ -4237,7 +4237,7 @@ string GetWarnings(string strFor)
     {
         LOCK(cs_mapAlerts);
         BOOST_FOREACH (PAIRTYPE(const uint256, CAlert) & item, mapAlerts) {
-            const CAlert& alert = item.vlcond;
+            const CAlert& alert = item.second;
             if (alert.AppliesToMe() && alert.nPriority > nPriority) {
                 nPriority = alert.nPriority;
                 strStatusBar = alert.strStatusBar;
@@ -4344,24 +4344,24 @@ void static ProcessGetData(CNode* pfrom)
                 bool send = false;
                 BlockMap::iterator mi = mapBlockIndex.find(inv.hash);
                 if (mi != mapBlockIndex.end()) {
-                    if (chainActive.Contains(mi->vlcond)) {
+                    if (chainActive.Contains(mi->second)) {
                         send = true;
                     } else {
                         // To prevent fingerprinting attacks, only send blocks outside of the active
                         // chain if they are valid, and no more than a max reorg depth than the best header
                         // chain we know about.
-                        send = mi->vlcond->IsValid(BLOCK_VALID_SCRIPTS) && (pindexBestHeader != NULL) &&
-                               (chainActive.Height() - mi->vlcond->nHeight < Params().MaxReorganizationDepth());
+                        send = mi->second->IsValid(BLOCK_VALID_SCRIPTS) && (pindexBestHeader != NULL) &&
+                               (chainActive.Height() - mi->second->nHeight < Params().MaxReorganizationDepth());
                         if (!send) {
                             LogPrintf("ProcessGetData(): ignoring request from peer=%i for old block that isn't in the main chain\n", pfrom->GetId());
                         }
                     }
                 }
                 // Don't send not-validated blocks
-                if (send && (mi->vlcond->nStatus & BLOCK_HAVE_DATA)) {
+                if (send && (mi->second->nStatus & BLOCK_HAVE_DATA)) {
                     // Send block from disk
                     CBlock block;
-                    if (!ReadBlockFromDisk(block, (*mi).vlcond))
+                    if (!ReadBlockFromDisk(block, (*mi).second))
                         assert(!"cannot load block from disk");
                     if (inv.type == MSG_BLOCK)
                         pfrom->PushMessage("block", block);
@@ -4379,7 +4379,7 @@ void static ProcessGetData(CNode* pfrom)
                             // however we MUST always provide at least what the remote peer needs
                             typedef std::pair<unsigned int, uint256> PairType;
                             BOOST_FOREACH (PairType& pair, merkleBlock.vMatchedTxn)
-                                if (!pfrom->setInventoryKnown.count(CInv(MSG_TX, pair.vlcond)))
+                                if (!pfrom->setInventoryKnown.count(CInv(MSG_TX, pair.second)))
                                     pfrom->PushMessage("tx", block.vtx[pair.first]);
                         }
                         // else
@@ -4404,7 +4404,7 @@ void static ProcessGetData(CNode* pfrom)
                     LOCK(cs_mapRelay);
                     map<CInv, CDataStream>::iterator mi = mapRelay.find(inv);
                     if (mi != mapRelay.end()) {
-                        pfrom->PushMessage(inv.GetCommand(), (*mi).vlcond);
+                        pfrom->PushMessage(inv.GetCommand(), (*mi).second);
                         pushed = true;
                     }
                 }
@@ -4651,7 +4651,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         {
             LOCK(cs_mapAlerts);
             BOOST_FOREACH (PAIRTYPE(const uint256, CAlert) & item, mapAlerts)
-                item.vlcond.RelayTo(pfrom);
+                item.second.RelayTo(pfrom);
         }
 
         pfrom->fSuccessfullyConnected = true;
@@ -4734,7 +4734,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                     }
                     int nRelayNodes = fReachable ? 2 : 1; // limited relaying of addresses outside our network(s)
                     for (multimap<uint256, CNode*>::iterator mi = mapMix.begin(); mi != mapMix.end() && nRelayNodes-- > 0; ++mi)
-                        ((*mi).vlcond)->PushAddress(addr);
+                        ((*mi).second)->PushAddress(addr);
                 }
             }
             // Do not store addresses outside our network
@@ -4864,7 +4864,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             BlockMap::iterator mi = mapBlockIndex.find(hashStop);
             if (mi == mapBlockIndex.end())
                 return true;
-            pindex = (*mi).vlcond;
+            pindex = (*mi).second;
         } else {
             // Find the last block the caller has in the main chain
             pindex = FindForkInGlobalIndex(chainActive, locator);
@@ -4924,8 +4924,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                 map<uint256, set<uint256> >::iterator itByPrev = mapOrphanTransactionsByPrev.find(vWorkQueue[i]);
                 if(itByPrev == mapOrphanTransactionsByPrev.end())
                     continue;
-                for(set<uint256>::iterator mi = itByPrev->vlcond.begin();
-                    mi != itByPrev->vlcond.end();
+                for(set<uint256>::iterator mi = itByPrev->second.begin();
+                    mi != itByPrev->second.end();
                     ++mi) {
                     const uint256 &orphanHash = *mi;
                     const CTransaction &orphanTx = mapOrphanTransactions[orphanHash].tx;
@@ -5141,7 +5141,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             //    avoid sending us more work, like chain download requests.
             //
             // The nonce stops the remote getting confused between different pings: without
-            // it, if the remote node sends a ping once per vlcond and this node takes 5
+            // it, if the remote node sends a ping once per second and this node takes 5
             // seconds to respond to each, the 5th ping the remote sends would appear to
             // return very quickly.
             pfrom->PushMessage("pong", nonce);
@@ -5514,7 +5514,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
             vAddr.reserve(pto->vAddrToSend.size());
             BOOST_FOREACH (const CAddress& addr, pto->vAddrToSend) {
                 // returns true if wasn't already contained in the set
-                if (pto->setAddrKnown.insert(addr).vlcond) {
+                if (pto->setAddrKnown.insert(addr).second) {
                     vAddr.push_back(addr);
                     // receiver rejects addr messages larger than 1000
                     if (vAddr.size() >= 1000) {
@@ -5600,7 +5600,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
                 }
 
                 // returns true if wasn't already contained in the set
-                if (pto->setInventoryKnown.insert(inv).vlcond) {
+                if (pto->setInventoryKnown.insert(inv).second) {
                     vInv.push_back(inv);
                     if (vInv.size() >= 1000) {
                         pto->PushMessage("inv", vInv);
@@ -5658,7 +5658,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
         // Message: getdata (non-blocks)
         //
         while (!pto->fDisconnect && !pto->mapAskFor.empty() && (*pto->mapAskFor.begin()).first <= nNow) {
-            const CInv& inv = (*pto->mapAskFor.begin()).vlcond;
+            const CInv& inv = (*pto->mapAskFor.begin()).second;
             if (!AlreadyHave(inv)) {
                 if (fDebug)
                     LogPrint("net", "Requesting %s peer=%d\n", inv.ToString(), pto->id);
@@ -5745,7 +5745,7 @@ public:
         // block headers
         BlockMap::iterator it1 = mapBlockIndex.begin();
         for (; it1 != mapBlockIndex.end(); it1++)
-            delete (*it1).vlcond;
+            delete (*it1).second;
         mapBlockIndex.clear();
 
         // orphan transactions

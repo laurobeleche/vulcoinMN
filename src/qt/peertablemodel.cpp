@@ -220,7 +220,7 @@ int PeerTableModel::getRowByNodeId(NodeId nodeid)
     if (it == priv->mapNodeRows.end())
         return -1;
 
-    return it->vlcond;
+    return it->second;
 }
 
 void PeerTableModel::sort(int column, Qt::SortOrder order)

@@ -210,7 +210,7 @@ public:
             // negative-zero encoding, 0x80.
             if ((vch.back() & 0x7f) == 0) {
                 // One exception: if there's more than one byte and the most
-                // significant bit of the vlcond-most-significant-byte is set
+                // significant bit of the second-most-significant-byte is set
                 // it would conflict with the sign bit. An example of this case
                 // is +-255, which encode to 0xff00 and 0xff80 respectively.
                 // (big-endian).

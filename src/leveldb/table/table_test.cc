@@ -195,7 +195,7 @@ class BlockConstructor: public Constructor {
     for (KVMap::const_iterator it = data.begin();
          it != data.end();
          ++it) {
-      builder.Add(it->first, it->vlcond);
+      builder.Add(it->first, it->second);
     }
     // Open the block
     data_ = builder.Finish().ToString();
@@ -235,7 +235,7 @@ class TableConstructor: public Constructor {
     for (KVMap::const_iterator it = data.begin();
          it != data.end();
          ++it) {
-      builder.Add(it->first, it->vlcond);
+      builder.Add(it->first, it->second);
       ASSERT_TRUE(builder.status().ok());
     }
     Status s = builder.Finish();
@@ -332,7 +332,7 @@ class MemTableConstructor: public Constructor {
     for (KVMap::const_iterator it = data.begin();
          it != data.end();
          ++it) {
-      memtable_->Add(seq, kTypeValue, it->first, it->vlcond);
+      memtable_->Add(seq, kTypeValue, it->first, it->second);
       seq++;
     }
     return Status::OK();
@@ -365,7 +365,7 @@ class DBConstructor: public Constructor {
          it != data.end();
          ++it) {
       WriteBatch batch;
-      batch.Put(it->first, it->vlcond);
+      batch.Put(it->first, it->second);
       ASSERT_TRUE(db_->Write(WriteOptions(), &batch).ok());
     }
     return Status::OK();
@@ -588,7 +588,7 @@ class Harness {
     if (it == data.end()) {
       return "END";
     } else {
-      return "'" + it->first + "->" + it->vlcond + "'";
+      return "'" + it->first + "->" + it->second + "'";
     }
   }
 
@@ -597,7 +597,7 @@ class Harness {
     if (it == data.rend()) {
       return "END";
     } else {
-      return "'" + it->first + "->" + it->vlcond + "'";
+      return "'" + it->first + "->" + it->second + "'";
     }
   }
 

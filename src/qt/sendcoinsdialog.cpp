@@ -585,7 +585,7 @@ void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn&
 
     QPair<QString, CClientUIInterface::MessageBoxFlags> msgParams;
     // Default to a warning message, override if error message is needed
-    msgParams.vlcond = CClientUIInterface::MSG_WARNING;
+    msgParams.second = CClientUIInterface::MSG_WARNING;
 
     // This comment is specific to SendCoinsDialog usage of WalletModel::SendCoinsReturn.
     // WalletModel::TransactionCommitFailed is used only in WalletModel::sendCoins()
@@ -608,11 +608,11 @@ void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn&
         break;
     case WalletModel::TransactionCreationFailed:
         msgParams.first = tr("Transaction creation failed!");
-        msgParams.vlcond = CClientUIInterface::MSG_ERROR;
+        msgParams.second = CClientUIInterface::MSG_ERROR;
         break;
     case WalletModel::TransactionCommitFailed:
         msgParams.first = tr("The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
-        msgParams.vlcond = CClientUIInterface::MSG_ERROR;
+        msgParams.second = CClientUIInterface::MSG_ERROR;
         break;
     case WalletModel::StakingOnlyUnlocked:
         // Unlock is only need when the coins are send
@@ -643,7 +643,7 @@ void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn&
         }
     }
 
-    emit message(tr("Send Coins"), msgParams.first, msgParams.vlcond);
+    emit message(tr("Send Coins"), msgParams.first, msgParams.second);
 }
 
 void SendCoinsDialog::minimizeFeeVlction(bool fMinimize)

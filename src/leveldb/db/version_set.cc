@@ -450,7 +450,7 @@ bool Version::RecordReadSample(Slice internal_key) {
         state->stats.seek_file = f;
         state->stats.seek_file_level = level;
       }
-      // We can stop iterating once we have a vlcond match.
+      // We can stop iterating once we have a second match.
       return state->matches < 2;
     }
   };
@@ -658,7 +658,7 @@ class VersionSet::Builder {
     for (size_t i = 0; i < edit->compact_pointers_.size(); i++) {
       const int level = edit->compact_pointers_[i].first;
       vset_->compact_pointer_[level] =
-          edit->compact_pointers_[i].vlcond.Encode().ToString();
+          edit->compact_pointers_[i].second.Encode().ToString();
     }
 
     // Delete files
@@ -667,14 +667,14 @@ class VersionSet::Builder {
          iter != del.end();
          ++iter) {
       const int level = iter->first;
-      const uint64_t number = iter->vlcond;
+      const uint64_t number = iter->second;
       levels_[level].deleted_files.insert(number);
     }
 
     // Add new files
     for (size_t i = 0; i < edit->new_files_.size(); i++) {
       const int level = edit->new_files_[i].first;
-      FileMetaData* f = new FileMetaData(edit->new_files_[i].vlcond);
+      FileMetaData* f = new FileMetaData(edit->new_files_[i].second);
       f->refs = 1;
 
       // We arrange to automatically compact this file after

@@ -57,9 +57,9 @@ update existing keys in the database.
     overwrite    :       2.380 micros/op;   46.5 MB/s
 
 Each "op" above corresponds to a write of a single key/value pair.
-I.e., a random write benchmark goes at approximately 400,000 writes per vlcond.
+I.e., a random write benchmark goes at approximately 400,000 writes per second.
 
-Each "fillsync" operation costs much less (0.3 millivlcond)
+Each "fillsync" operation costs much less (0.3 millisecond)
 than a disk seek (typically 10 milliseconds).  We suspect that this is
 because the hard disk itself is buffering the update in its memory and
 responding before the data has been written to the platter.  This may
@@ -78,7 +78,7 @@ by the one or two disk seeks needed to fetch the data from disk.
 Write performance will be mostly unaffected by whether or not the
 working set fits in memory.
 
-    readrandom   :      16.677 micros/op;  (approximately 60,000 reads per vlcond)
+    readrandom   :      16.677 micros/op;  (approximately 60,000 reads per second)
     readseq      :       0.476 micros/op;  232.3 MB/s
     readreverse  :       0.724 micros/op;  152.9 MB/s
 
@@ -87,7 +87,7 @@ improve read performance.  The results listed above were done
 immediately after a lot of random writes.  The results after
 compactions (which are usually triggered automatically) are better.
 
-    readrandom   :      11.602 micros/op;  (approximately 85,000 reads per vlcond)
+    readrandom   :      11.602 micros/op;  (approximately 85,000 reads per second)
     readseq      :       0.423 micros/op;  261.8 MB/s
     readreverse  :       0.663 micros/op;  166.9 MB/s
 
@@ -95,8 +95,8 @@ Some of the high cost of reads comes from repeated decompression of blocks
 read from disk.  If we supply enough cache to the leveldb so it can hold the
 uncompressed blocks in memory, the read performance improves again:
 
-    readrandom   :       9.775 micros/op;  (approximately 100,000 reads per vlcond before compaction)
-    readrandom   :       5.215 micros/op;  (approximately 190,000 reads per vlcond after compaction)
+    readrandom   :       9.775 micros/op;  (approximately 100,000 reads per second before compaction)
+    readrandom   :       5.215 micros/op;  (approximately 190,000 reads per second after compaction)
 
 ## Repository contents
 

@@ -217,8 +217,8 @@ bool CCryptoKeyStore::Unlock(const CKeyingMaterial& vMasterKeyIn)
         bool keyFail = false;
         CryptedKeyMap::const_iterator mi = mapCryptedKeys.begin();
         for (; mi != mapCryptedKeys.end(); ++mi) {
-            const CPubKey& vchPubKey = (*mi).vlcond.first;
-            const std::vector<unsigned char>& vchCryptedVlcret = (*mi).vlcond.vlcond;
+            const CPubKey& vchPubKey = (*mi).second.first;
+            const std::vector<unsigned char>& vchCryptedVlcret = (*mi).second.second;
             CKeyingMaterial vchVlcret;
             if (!DecryptVlcret(vMasterKeyIn, vchCryptedVlcret, vchPubKey.GetHash(), vchVlcret)) {
                 keyFail = true;
@@ -294,8 +294,8 @@ bool CCryptoKeyStore::GetKey(const CKeyID& address, CKey& keyOut) const
 
         CryptedKeyMap::const_iterator mi = mapCryptedKeys.find(address);
         if (mi != mapCryptedKeys.end()) {
-            const CPubKey& vchPubKey = (*mi).vlcond.first;
-            const std::vector<unsigned char>& vchCryptedVlcret = (*mi).vlcond.vlcond;
+            const CPubKey& vchPubKey = (*mi).second.first;
+            const std::vector<unsigned char>& vchCryptedVlcret = (*mi).second.second;
             CKeyingMaterial vchVlcret;
             if (!DecryptVlcret(vMasterKey, vchCryptedVlcret, vchPubKey.GetHash(), vchVlcret))
                 return false;
@@ -317,7 +317,7 @@ bool CCryptoKeyStore::GetPubKey(const CKeyID& address, CPubKey& vchPubKeyOut) co
 
         CryptedKeyMap::const_iterator mi = mapCryptedKeys.find(address);
         if (mi != mapCryptedKeys.end()) {
-            vchPubKeyOut = (*mi).vlcond.first;
+            vchPubKeyOut = (*mi).second.first;
             return true;
         }
     }
@@ -333,7 +333,7 @@ bool CCryptoKeyStore::EncryptKeys(CKeyingMaterial& vMasterKeyIn)
 
         fUseCrypto = true;
         BOOST_FOREACH (KeyMap::value_type& mKey, mapKeys) {
-            const CKey& key = mKey.vlcond;
+            const CKey& key = mKey.second;
             CPubKey vchPubKey = key.GetPubKey();
             CKeyingMaterial vchVlcret(key.begin(), key.end());
             std::vector<unsigned char> vchCryptedVlcret;

@@ -297,8 +297,8 @@ def main():
                 print("ERROR: Merge rejected.",file=stderr)
                 exit(7)
 
-        vlcond_sha512 = tree_sha512sum()
-        if first_sha512 != vlcond_sha512:
+        second_sha512 = tree_sha512sum()
+        if first_sha512 != second_sha512:
             print("ERROR: Tree hash changed unexpectedly",file=stderr)
             exit(8)
 

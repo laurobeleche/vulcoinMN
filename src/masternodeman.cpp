@@ -217,7 +217,7 @@ void CMasternodeMan::AskForMN(CNode* pnode, CTxIn& vin)
 {
     std::map<COutPoint, int64_t>::iterator i = mWeAskedForMasternodeListEntry.find(vin.prevout);
     if (i != mWeAskedForMasternodeListEntry.end()) {
-        int64_t t = (*i).vlcond;
+        int64_t t = (*i).second;
         if (GetTime() < t) return; // we've asked recently
     }
 
@@ -258,7 +258,7 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
             //    sending a brand new mnb
             map<uint256, CMasternodeBroadcast>::iterator it3 = mapSeenMasternodeBroadcast.begin();
             while (it3 != mapSeenMasternodeBroadcast.end()) {
-                if ((*it3).vlcond.vin == (*it).vin) {
+                if ((*it3).second.vin == (*it).vin) {
                     masternodeSync.mapSeenSyncMNB.erase((*it3).first);
                     mapSeenMasternodeBroadcast.erase(it3++);
                 } else {
@@ -285,7 +285,7 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
     // check who's asked for the Masternode list
     map<CNetAddr, int64_t>::iterator it1 = mAskedUsForMasternodeList.begin();
     while (it1 != mAskedUsForMasternodeList.end()) {
-        if ((*it1).vlcond < GetTime()) {
+        if ((*it1).second < GetTime()) {
             mAskedUsForMasternodeList.erase(it1++);
         } else {
             ++it1;
@@ -295,7 +295,7 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
     // check who we asked for the Masternode list
     it1 = mWeAskedForMasternodeList.begin();
     while (it1 != mWeAskedForMasternodeList.end()) {
-        if ((*it1).vlcond < GetTime()) {
+        if ((*it1).second < GetTime()) {
             mWeAskedForMasternodeList.erase(it1++);
         } else {
             ++it1;
@@ -305,7 +305,7 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
     // check which Masternodes we've asked for
     map<COutPoint, int64_t>::iterator it2 = mWeAskedForMasternodeListEntry.begin();
     while (it2 != mWeAskedForMasternodeListEntry.end()) {
-        if ((*it2).vlcond < GetTime()) {
+        if ((*it2).second < GetTime()) {
             mWeAskedForMasternodeListEntry.erase(it2++);
         } else {
             ++it2;
@@ -315,9 +315,9 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
     // remove expired mapSeenMasternodeBroadcast
     map<uint256, CMasternodeBroadcast>::iterator it3 = mapSeenMasternodeBroadcast.begin();
     while (it3 != mapSeenMasternodeBroadcast.end()) {
-        if ((*it3).vlcond.lastPing.sigTime < GetTime() - (MASTERNODE_REMOVAL_SECONDS * 2)) {
+        if ((*it3).second.lastPing.sigTime < GetTime() - (MASTERNODE_REMOVAL_SECONDS * 2)) {
             mapSeenMasternodeBroadcast.erase(it3++);
-            masternodeSync.mapSeenSyncMNB.erase((*it3).vlcond.GetHash());
+            masternodeSync.mapSeenSyncMNB.erase((*it3).second.GetHash());
         } else {
             ++it3;
         }
@@ -326,7 +326,7 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
     // remove expired mapSeenMasternodePing
     map<uint256, CMasternodePing>::iterator it4 = mapSeenMasternodePing.begin();
     while (it4 != mapSeenMasternodePing.end()) {
-        if ((*it4).vlcond.sigTime < GetTime() - (MASTERNODE_REMOVAL_SECONDS * 2)) {
+        if ((*it4).second.sigTime < GetTime() - (MASTERNODE_REMOVAL_SECONDS * 2)) {
             mapSeenMasternodePing.erase(it4++);
         } else {
             ++it4;
@@ -419,7 +419,7 @@ void CMasternodeMan::DsegUpdate(CNode* pnode)
         if (!(pnode->addr.IsRFC1918() || pnode->addr.IsLocal())) {
             std::map<CNetAddr, int64_t>::iterator it = mWeAskedForMasternodeList.find(pnode->addr);
             if (it != mWeAskedForMasternodeList.end()) {
-                if (GetTime() < (*it).vlcond) {
+                if (GetTime() < (*it).second) {
                     LogPrint("masternode", "dseg - we already asked peer %i for the list; skipping...\n", pnode->GetId());
                     return;
                 }
@@ -518,7 +518,7 @@ CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment(int nBlockHeight
     int nCountTenth = 0;
     uint256 nHigh = 0;
     BOOST_FOREACH (PAIRTYPE(int64_t, CTxIn) & s, vecMasternodeLastPaid) {
-        CMasternode* pmn = Find(s.vlcond);
+        CMasternode* pmn = Find(s.second);
         if (!pmn) break;
 
         uint256 n = pmn->CalculateScore(1, nBlockHeight - 100);
@@ -627,7 +627,7 @@ int CMasternodeMan::GetMasternodeRank(const CTxIn& vin, int64_t nBlockHeight, in
     int rank = 0;
     BOOST_FOREACH (PAIRTYPE(int64_t, CTxIn) & s, vecMasternodeScores) {
         rank++;
-        if (s.vlcond.prevout == vin.prevout) {
+        if (s.second.prevout == vin.prevout) {
             return rank;
         }
     }
@@ -666,7 +666,7 @@ std::vector<pair<int, CMasternode> > CMasternodeMan::GetMasternodeRanks(int64_t 
     int rank = 0;
     BOOST_FOREACH (PAIRTYPE(int64_t, CMasternode) & s, vecMasternodeScores) {
         rank++;
-        vecMasternodeRanks.push_back(make_pair(rank, s.vlcond));
+        vecMasternodeRanks.push_back(make_pair(rank, s.second));
     }
 
     return vecMasternodeRanks;
@@ -696,7 +696,7 @@ CMasternode* CMasternodeMan::GetMasternodeByRank(int nRank, int64_t nBlockHeight
     BOOST_FOREACH (PAIRTYPE(int64_t, CTxIn) & s, vecMasternodeScores) {
         rank++;
         if (rank == nRank) {
-            return Find(s.vlcond);
+            return Find(s.second);
         }
     }
 
@@ -803,7 +803,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             if (!isLocal && Params().NetworkID() == CBaseChainParams::MAIN) {
                 std::map<CNetAddr, int64_t>::iterator i = mAskedUsForMasternodeList.find(pfrom->addr);
                 if (i != mAskedUsForMasternodeList.end()) {
-                    int64_t t = (*i).vlcond;
+                    int64_t t = (*i).second;
                     if (GetTime() < t) {
                         Misbehaving(pfrom->GetId(), 34);
                         LogPrint("masternode","dseg - peer already asked me for the list\n");

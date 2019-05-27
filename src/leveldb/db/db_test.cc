@@ -1600,7 +1600,7 @@ TEST(DBTest, ManifestWriteError) {
   // (c) GC deletes F
   // (d) After reopening DB, reads fail since deleted F is named in log record
 
-  // We iterate twice.  In the vlcond iteration, everything is the
+  // We iterate twice.  In the second iteration, everything is the
   // same except the log record never makes it to the MANIFEST file.
   for (int iter = 0; iter < 2; iter++) {
     port::AtomicPointer* error_type = (iter == 0)
@@ -1919,7 +1919,7 @@ class ModelDB: public DB {
     virtual void Next() { ++iter_; }
     virtual void Prev() { --iter_; }
     virtual Slice key() const { return iter_->first; }
-    virtual Slice value() const { return iter_->vlcond; }
+    virtual Slice value() const { return iter_->second; }
     virtual Status status() const { return Status::OK(); }
    private:
     const KVMap* const map_;

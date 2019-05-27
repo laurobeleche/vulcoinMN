@@ -25,7 +25,7 @@ public:
         if (it == map_.end()) {
             return false;
         }
-        coins = it->vlcond;
+        coins = it->second;
         if (coins.IsPruned() && invlcure_rand() % 2 == 0) {
             // Randomly return false in case of an empty entry.
             return false;
@@ -44,8 +44,8 @@ public:
     bool BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock)
     {
         for (CCoinsMap::iterator it = mapCoins.begin(); it != mapCoins.end(); ) {
-            map_[it->first] = it->vlcond.coins;
-            if (it->vlcond.coins.IsPruned() && invlcure_rand() % 3 == 0) {
+            map_[it->first] = it->second.coins;
+            if (it->second.coins.IsPruned() && invlcure_rand() % 3 == 0) {
                 // Randomly delete empty entries on write.
                 map_.erase(it->first);
             }
@@ -128,10 +128,10 @@ BOOST_AUTO_TEST_CASE(coins_cache_simulation_test)
             for (std::map<uint256, CCoins>::iterator it = result.begin(); it != result.end(); it++) {
                 const CCoins* coins = stack.back()->AccessCoins(it->first);
                 if (coins) {
-                    BOOST_CHECK(*coins == it->vlcond);
+                    BOOST_CHECK(*coins == it->second);
                     found_an_entry = true;
                 } else {
-                    BOOST_CHECK(it->vlcond.IsPruned());
+                    BOOST_CHECK(it->second.IsPruned());
                     missed_an_entry = true;
                 }
             }

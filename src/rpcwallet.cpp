@@ -65,7 +65,7 @@ void WalletTxToJSON(const CWalletTx& wtx, UniValue& entry)
     entry.push_back(Pair("time", wtx.GetTxTime()));
     entry.push_back(Pair("timereceived", (int64_t)wtx.nTimeReceived));
     BOOST_FOREACH (const PAIRTYPE(string, string) & item, wtx.mapValue)
-        entry.push_back(Pair(item.first, item.vlcond));
+        entry.push_back(Pair(item.first, item.second));
 }
 
 string AccountFromValue(const UniValue& value)
@@ -126,7 +126,7 @@ CBitcoinAddress GetAccountAddress(string strAccount, bool bForceNew = false)
         for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin();
              it != pwalletMain->mapWallet.end() && account.vchPubKey.IsValid();
              ++it) {
-            const CWalletTx& wtx = (*it).vlcond;
+            const CWalletTx& wtx = (*it).second;
             BOOST_FOREACH (const CTxOut& txout, wtx.vout)
                 if (txout.scriptPubKey == scriptPubKey)
                     bKeyUsed = true;
@@ -253,8 +253,8 @@ UniValue getaccount(const UniValue& params, bool fHelp)
 
     string strAccount;
     map<CTxDestination, CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
-    if (mi != pwalletMain->mapAddressBook.end() && !(*mi).vlcond.name.empty())
-        strAccount = (*mi).vlcond.name;
+    if (mi != pwalletMain->mapAddressBook.end() && !(*mi).second.name.empty())
+        strAccount = (*mi).second.name;
     return strAccount;
 }
 
@@ -281,7 +281,7 @@ UniValue getaddressesbyaccount(const UniValue& params, bool fHelp)
     UniValue ret(UniValue::VARR);
     BOOST_FOREACH (const PAIRTYPE(CBitcoinAddress, CAddressBookData) & item, pwalletMain->mapAddressBook) {
         const CBitcoinAddress& address = item.first;
-        const string& strName = item.vlcond.name;
+        const string& strName = item.second.name;
         if (strName == strAccount)
             ret.push_back(address.ToString());
     }
@@ -436,7 +436,7 @@ UniValue listaddressgroupings(const UniValue& params, bool fHelp)
             {
                 LOCK(pwalletMain->cs_wallet);
                 if (pwalletMain->mapAddressBook.find(CBitcoinAddress(address).Get()) != pwalletMain->mapAddressBook.end())
-                    addressInfo.push_back(pwalletMain->mapAddressBook.find(CBitcoinAddress(address).Get())->vlcond.name);
+                    addressInfo.push_back(pwalletMain->mapAddressBook.find(CBitcoinAddress(address).Get())->second.name);
             }
             jsonGrouping.push_back(addressInfo);
         }
@@ -526,7 +526,7 @@ UniValue getreceivedbyaddress(const UniValue& params, bool fHelp)
     // Tally
     CAmount nAmount = 0;
     for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it) {
-        const CWalletTx& wtx = (*it).vlcond;
+        const CWalletTx& wtx = (*it).second;
         if (wtx.IsCoinBase() || !IsFinalTx(wtx))
             continue;
 
@@ -570,7 +570,7 @@ UniValue getreceivedbyaccount(const UniValue& params, bool fHelp)
     // Tally
     CAmount nAmount = 0;
     for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it) {
-        const CWalletTx& wtx = (*it).vlcond;
+        const CWalletTx& wtx = (*it).second;
         if (wtx.IsCoinBase() || !IsFinalTx(wtx))
             continue;
 
@@ -592,7 +592,7 @@ CAmount GetAccountBalance(CWalletDB& walletdb, const string& strAccount, int nMi
 
     // Tally wallet transactions
     for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it) {
-        const CWalletTx& wtx = (*it).vlcond;
+        const CWalletTx& wtx = (*it).second;
         if (!IsFinalTx(wtx) || wtx.GetBlocksToMaturity() > 0 || wtx.GetDepthInMainChain() < 0)
             continue;
 
@@ -657,7 +657,7 @@ UniValue getbalance(const UniValue& params, bool fHelp)
         // getbalance and "getbalance * 1 true" should return the same number
         CAmount nBalance = 0;
         for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it) {
-            const CWalletTx& wtx = (*it).vlcond;
+            const CWalletTx& wtx = (*it).second;
             if (!IsFinalTx(wtx) || wtx.GetBlocksToMaturity() > 0 || wtx.GetDepthInMainChain() < 0)
                 continue;
 
@@ -967,7 +967,7 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
     // Tally
     map<CBitcoinAddress, tallyitem> mapTally;
     for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it) {
-        const CWalletTx& wtx = (*it).vlcond;
+        const CWalletTx& wtx = (*it).second;
 
         if (wtx.IsCoinBase() || !IsFinalTx(wtx))
             continue;
@@ -1001,7 +1001,7 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
     map<string, tallyitem> mapAccountTally;
     BOOST_FOREACH (const PAIRTYPE(CBitcoinAddress, CAddressBookData) & item, pwalletMain->mapAddressBook) {
         const CBitcoinAddress& address = item.first;
-        const string& strAccount = item.vlcond.name;
+        const string& strAccount = item.second.name;
         map<CBitcoinAddress, tallyitem>::iterator it = mapTally.find(address);
         if (it == mapTally.end() && !fIncludeEmpty)
             continue;
@@ -1011,10 +1011,10 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
         int nBCConf = std::numeric_limits<int>::max();
         bool fIsWatchonly = false;
         if (it != mapTally.end()) {
-            nAmount = (*it).vlcond.nAmount;
-            nConf = (*it).vlcond.nConf;
-            nBCConf = (*it).vlcond.nBCConf;
-            fIsWatchonly = (*it).vlcond.fIsWatchonly;
+            nAmount = (*it).second.nAmount;
+            nConf = (*it).second.nConf;
+            nBCConf = (*it).second.nBCConf;
+            fIsWatchonly = (*it).second.fIsWatchonly;
         }
 
         if (fByAccounts) {
@@ -1034,7 +1034,7 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
             obj.push_back(Pair("bcconfirmations", (nBCConf == std::numeric_limits<int>::max() ? 0 : nBCConf)));
             UniValue transactions(UniValue::VARR);
             if (it != mapTally.end()) {
-                BOOST_FOREACH (const uint256& item, (*it).vlcond.txids) {
+                BOOST_FOREACH (const uint256& item, (*it).second.txids) {
                     transactions.push_back(item.GetHex());
                 }
             }
@@ -1045,11 +1045,11 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
 
     if (fByAccounts) {
         for (map<string, tallyitem>::iterator it = mapAccountTally.begin(); it != mapAccountTally.end(); ++it) {
-            CAmount nAmount = (*it).vlcond.nAmount;
-            int nConf = (*it).vlcond.nConf;
-            int nBCConf = (*it).vlcond.nBCConf;
+            CAmount nAmount = (*it).second.nAmount;
+            int nConf = (*it).second.nConf;
+            int nBCConf = (*it).second.nBCConf;
             UniValue obj(UniValue::VOBJ);
-            if ((*it).vlcond.fIsWatchonly)
+            if ((*it).second.fIsWatchonly)
                 obj.push_back(Pair("involvesWatchonly", true));
             obj.push_back(Pair("account", (*it).first));
             obj.push_back(Pair("amount", ValueFromAmount(nAmount)));
@@ -1149,7 +1149,7 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
             entry.push_back(Pair("account", strSentAccount));
             MaybePushAddress(entry, s.destination);
             std::map<std::string, std::string>::const_iterator it = wtx.mapValue.find("DS");
-            entry.push_back(Pair("category", (it != wtx.mapValue.end() && it->vlcond == "1") ? "darksent" : "send"));
+            entry.push_back(Pair("category", (it != wtx.mapValue.end() && it->second == "1") ? "darksent" : "send"));
             entry.push_back(Pair("amount", ValueFromAmount(-s.amount)));
             entry.push_back(Pair("vout", s.vout));
             entry.push_back(Pair("fee", ValueFromAmount(-nFee)));
@@ -1288,10 +1288,10 @@ UniValue listtransactions(const UniValue& params, bool fHelp)
 
     // iterate backwards until we have nCount items to return:
     for (CWallet::TxItems::reverse_iterator it = txOrdered.rbegin(); it != txOrdered.rend(); ++it) {
-        CWalletTx* const pwtx = (*it).vlcond.first;
+        CWalletTx* const pwtx = (*it).second.first;
         if (pwtx != 0)
             ListTransactions(*pwtx, strAccount, 0, true, ret, filter);
-        CAccountingEntry* const pacentry = (*it).vlcond.vlcond;
+        CAccountingEntry* const pacentry = (*it).second.second;
         if (pacentry != 0)
             AcentryToJSON(*pacentry, strAccount, ret);
 
@@ -1355,11 +1355,11 @@ UniValue listaccounts(const UniValue& params, bool fHelp)
     map<string, CAmount> mapAccountBalances;
     BOOST_FOREACH (const PAIRTYPE(CTxDestination, CAddressBookData) & entry, pwalletMain->mapAddressBook) {
         if (IsMine(*pwalletMain, entry.first) & includeWatchonly) // This address belongs to me
-            mapAccountBalances[entry.vlcond.name] = 0;
+            mapAccountBalances[entry.second.name] = 0;
     }
 
     for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it) {
-        const CWalletTx& wtx = (*it).vlcond;
+        const CWalletTx& wtx = (*it).second;
         CAmount nFee;
         string strSentAccount;
         list<COutputEntry> listReceived;
@@ -1387,7 +1387,7 @@ UniValue listaccounts(const UniValue& params, bool fHelp)
 
     UniValue ret(UniValue::VOBJ);
     BOOST_FOREACH (const PAIRTYPE(string, CAmount) & accountBalance, mapAccountBalances) {
-        ret.push_back(Pair(accountBalance.first, ValueFromAmount(accountBalance.vlcond)));
+        ret.push_back(Pair(accountBalance.first, ValueFromAmount(accountBalance.second)));
     }
     return ret;
 }
@@ -1438,7 +1438,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
         blockId.SetHex(params[0].get_str());
         BlockMap::iterator it = mapBlockIndex.find(blockId);
         if (it != mapBlockIndex.end())
-            pindex = it->vlcond;
+            pindex = it->second;
     }
 
     if (params.size() > 1) {
@@ -1457,7 +1457,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
     UniValue transactions(UniValue::VARR);
 
     for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); it++) {
-        CWalletTx tx = (*it).vlcond;
+        CWalletTx tx = (*it).second;
 
         if (depth == -1 || tx.GetDepthInMainChain(false) < depth)
             ListTransactions(tx, "*", 0, true, transactions, filter);
@@ -2087,7 +2087,7 @@ UniValue printMultiSend()
     UniValue vMS(UniValue::VOBJ);
     for (unsigned int i = 0; i < pwalletMain->vMultiSend.size(); i++) {
         vMS.push_back(Pair("Address " + boost::lexical_cast<std::string>(i), pwalletMain->vMultiSend[i].first));
-        vMS.push_back(Pair("Percent", pwalletMain->vMultiSend[i].vlcond));
+        vMS.push_back(Pair("Percent", pwalletMain->vMultiSend[i].second));
     }
 
     ret.push_back(vMS);
@@ -2114,7 +2114,7 @@ UniValue printAddresses()
     for (map<std::string, double>::const_iterator it = mapAddresses.begin(); it != mapAddresses.end(); ++it) {
         UniValue obj(UniValue::VOBJ);
         const std::string* strAdd = &(*it).first;
-        const double* nBalance = &(*it).vlcond;
+        const double* nBalance = &(*it).second;
         obj.push_back(Pair("Address ", *strAdd));
         obj.push_back(Pair("Balance ", *nBalance));
         ret.push_back(obj);
@@ -2127,7 +2127,7 @@ unsigned int sumMultiSend()
 {
     unsigned int sum = 0;
     for (unsigned int i = 0; i < pwalletMain->vMultiSend.size(); i++)
-        sum += pwalletMain->vMultiSend[i].vlcond;
+        sum += pwalletMain->vMultiSend[i].second;
     return sum;
 }
 
@@ -2298,7 +2298,7 @@ UniValue multisend(const UniValue& params, bool fHelp)
 
         std::pair<std::string, int> newMultiSend;
         newMultiSend.first = strAddress;
-        newMultiSend.vlcond = nPercent;
+        newMultiSend.second = nPercent;
         pwalletMain->vMultiSend.push_back(newMultiSend);
         if (fFileBacked) {
             if (!walletdb.WriteMultiSend(pwalletMain->vMultiSend))

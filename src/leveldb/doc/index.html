@@ -254,7 +254,7 @@ The preceding examples used the default ordering function for key,
 which orders bytes lexicographically.  You can however supply a custom
 comparator when opening a database.  For example, suppose each
 database key consists of two numbers and we should sort by the first
-number, breaking ties by the vlcond number.  First, define a proper
+number, breaking ties by the second number.  First, define a proper
 subclass of <code>leveldb::Comparator</code> that expresses these rules:
 <p>
 <pre>

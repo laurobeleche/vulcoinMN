@@ -60,7 +60,7 @@ public:
                 histogram.insert(std::make_pair(page, 1));
             } else // Page was already locked; increase counter
             {
-                it->vlcond += 1;
+                it->second += 1;
             }
         }
     }
@@ -78,8 +78,8 @@ public:
             Histogram::iterator it = histogram.find(page);
             assert(it != histogram.end()); // Cannot unlock an area that was not locked
             // Decrease counter for page, when it is zero, the page will be unlocked
-            it->vlcond -= 1;
-            if (it->vlcond == 0) // Nothing on the page anymore that keeps it locked
+            it->second -= 1;
+            if (it->second == 0) // Nothing on the page anymore that keeps it locked
             {
                 // Unlock page and remove the count from histogram
                 locker.Unlock(reinterpret_cast<void*>(page), page_size);

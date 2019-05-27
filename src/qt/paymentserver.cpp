@@ -534,15 +534,15 @@ bool PaymentServer::processPaymentRequest(PaymentRequestPlus& request, SendCoins
         }
 
         // Extract and check amounts
-        CTxOut txOut(sendingTo.vlcond, sendingTo.first);
+        CTxOut txOut(sendingTo.second, sendingTo.first);
         if (txOut.IsDust(::minRelayTxFee)) {
-            emit message(tr("Payment request error"), tr("Requested payment amount of %1 is too small (considered dust).").arg(BitcoinUnits::formatWithUnit(optionsModel->getDisplayUnit(), sendingTo.vlcond)),
+            emit message(tr("Payment request error"), tr("Requested payment amount of %1 is too small (considered dust).").arg(BitcoinUnits::formatWithUnit(optionsModel->getDisplayUnit(), sendingTo.second)),
                 CClientUIInterface::MSG_ERROR);
 
             return false;
         }
 
-        recipient.amount += sendingTo.vlcond;
+        recipient.amount += sendingTo.second;
     }
     // Store addresses and format them to fit nicely into the GUI
     recipient.address = addresses.join("<br />");

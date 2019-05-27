@@ -77,8 +77,8 @@ public:
         {
             LOCK2(cs_main, wallet->cs_wallet);
             for (std::map<uint256, CWalletTx>::iterator it = wallet->mapWallet.begin(); it != wallet->mapWallet.end(); ++it) {
-                if (TransactionRecord::showTransaction(it->vlcond))
-                    cachedWallet.append(TransactionRecord::decomposeTransaction(wallet, it->vlcond));
+                if (TransactionRecord::showTransaction(it->second))
+                    cachedWallet.append(TransactionRecord::decomposeTransaction(wallet, it->second));
             }
         }
     }
@@ -128,7 +128,7 @@ public:
                 }
                 // Added -- insert at the right position
                 QList<TransactionRecord> toInsert =
-                    TransactionRecord::decomposeTransaction(wallet, mi->vlcond);
+                    TransactionRecord::decomposeTransaction(wallet, mi->second);
                 if (!toInsert.isEmpty()) /* only if something to insert */
                 {
                     parent->beginInsertRows(QModelIndex(), lowerIndex, lowerIndex + toInsert.size() - 1);
@@ -182,7 +182,7 @@ public:
                     std::map<uint256, CWalletTx>::iterator mi = wallet->mapWallet.find(rec->hash);
 
                     if (mi != wallet->mapWallet.end()) {
-                        rec->updateStatus(mi->vlcond);
+                        rec->updateStatus(mi->second);
                     }
                 }
             }
@@ -197,7 +197,7 @@ public:
             LOCK2(cs_main, wallet->cs_wallet);
             std::map<uint256, CWalletTx>::iterator mi = wallet->mapWallet.find(rec->hash);
             if (mi != wallet->mapWallet.end()) {
-                return TransactionDesc::toHTML(wallet, mi->vlcond, rec, unit);
+                return TransactionDesc::toHTML(wallet, mi->second, rec, unit);
             }
         }
         return QString();
@@ -656,7 +656,7 @@ static void NotifyTransactionChanged(TransactionTableModel* ttm, CWallet* wallet
     std::map<uint256, CWalletTx>::iterator mi = wallet->mapWallet.find(hash);
     // Determine whether to show transaction or not (determine this here so that no relocking is needed in GUI thread)
     bool inWallet = mi != wallet->mapWallet.end();
-    bool showTransaction = (inWallet && TransactionRecord::showTransaction(mi->vlcond));
+    bool showTransaction = (inWallet && TransactionRecord::showTransaction(mi->second));
 
     TransactionNotification notification(hash, status, showTransaction);
 

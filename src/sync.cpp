@@ -67,17 +67,17 @@ static void potential_deadlock_detected(const std::pair<void*, void*>& mismatch,
     BOOST_FOREACH (const PAIRTYPE(void*, CLockLocation) & i, s2) {
         if (i.first == mismatch.first)
             LogPrintf(" (1)");
-        if (i.first == mismatch.vlcond)
+        if (i.first == mismatch.second)
             LogPrintf(" (2)");
-        LogPrintf(" %s\n", i.vlcond.ToString());
+        LogPrintf(" %s\n", i.second.ToString());
     }
     LogPrintf("Current lock order is:\n");
     BOOST_FOREACH (const PAIRTYPE(void*, CLockLocation) & i, s1) {
         if (i.first == mismatch.first)
             LogPrintf(" (1)");
-        if (i.first == mismatch.vlcond)
+        if (i.first == mismatch.second)
             LogPrintf(" (2)");
-        LogPrintf(" %s\n", i.vlcond.ToString());
+        LogPrintf(" %s\n", i.second.ToString());
     }
 }
 
@@ -114,7 +114,7 @@ static void push_lock(void* c, const CLockLocation& locklocation, bool fTry)
 static void pop_lock()
 {
     if (fDebug) {
-        const CLockLocation& locklocation = (*lockstack).rbegin()->vlcond;
+        const CLockLocation& locklocation = (*lockstack).rbegin()->second;
         LogPrint("lock", "Unlocked: %s\n", locklocation.ToString());
     }
     dd_mutex.lock();
@@ -136,7 +136,7 @@ std::string LocksHeld()
 {
     std::string result;
     BOOST_FOREACH (const PAIRTYPE(void*, CLockLocation) & i, *lockstack)
-        result += i.vlcond.ToString() + std::string("\n");
+        result += i.second.ToString() + std::string("\n");
     return result;
 }
 

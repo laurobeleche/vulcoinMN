@@ -401,8 +401,8 @@ private:
     CCoinsModifier(CCoinsViewCache& cache_, CCoinsMap::iterator it_);
 
 public:
-    CCoins* operator->() { return &it->vlcond.coins; }
-    CCoins& operator*() { return it->vlcond.coins; }
+    CCoins* operator->() { return &it->second.coins; }
+    CCoins& operator*() { return it->second.coins; }
     ~CCoinsModifier();
     friend class CCoinsViewCache;
 };

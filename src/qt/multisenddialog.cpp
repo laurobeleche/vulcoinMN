@@ -74,7 +74,7 @@ void MultiSendDialog::on_viewButton_clicked()
         pMultiSend = pwalletMain->vMultiSend[i];
         strMultiSendPrint += pMultiSend.first.c_str();
         strMultiSendPrint += " - ";
-        strMultiSendPrint += boost::lexical_cast<string>(pMultiSend.vlcond);
+        strMultiSendPrint += boost::lexical_cast<string>(pMultiSend.second);
         strMultiSendPrint += "% \n";
     }
     ui->message->setProperty("status", "ok");
@@ -97,7 +97,7 @@ void MultiSendDialog::on_addButton_clicked()
     int nMultiSendPercent = ui->multiSendPercentEdit->text().toInt(&fValidConversion, 10);
     int nSumMultiSend = 0;
     for (int i = 0; i < (int)pwalletMain->vMultiSend.size(); i++)
-        nSumMultiSend += pwalletMain->vMultiSend[i].vlcond;
+        nSumMultiSend += pwalletMain->vMultiSend[i].second;
     if (nSumMultiSend + nMultiSendPercent > 100) {
         ui->message->setProperty("status", "error");
         ui->message->style()->polish(ui->message);
@@ -114,7 +114,7 @@ void MultiSendDialog::on_addButton_clicked()
     }
     std::pair<std::string, int> pMultiSend;
     pMultiSend.first = strAddress;
-    pMultiSend.vlcond = nMultiSendPercent;
+    pMultiSend.second = nMultiSendPercent;
     pwalletMain->vMultiSend.push_back(pMultiSend);
     ui->message->setProperty("status", "ok");
     ui->message->style()->polish(ui->message);
@@ -123,7 +123,7 @@ void MultiSendDialog::on_addButton_clicked()
         pMultiSend = pwalletMain->vMultiSend[i];
         strMultiSendPrint += pMultiSend.first.c_str();
         strMultiSendPrint += " - ";
-        strMultiSendPrint += boost::lexical_cast<string>(pMultiSend.vlcond);
+        strMultiSendPrint += boost::lexical_cast<string>(pMultiSend.second);
         strMultiSendPrint += "% \n";
     }
     CWalletDB walletdb(pwalletMain->strWalletFile);

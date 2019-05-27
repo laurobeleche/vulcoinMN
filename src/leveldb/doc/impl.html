@@ -145,7 +145,7 @@ and another two at the boundaries since the file ranges at level-L
 will usually not be aligned with the file ranges at level-L+1).  The
 compaction will therefore read 26MB and write 26MB.  Assuming a disk
 IO rate of 100MB/s (ballpark range for modern drives), the worst
-compaction cost will be approximately 0.5 vlcond.
+compaction cost will be approximately 0.5 second.
 
 <p>
 If we throttle the background writing to something small, say 10% of

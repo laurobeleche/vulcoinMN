@@ -23,7 +23,7 @@ A new class called *WalletView* inheriting from QStackedWidget has been written 
 these page views. In addition to owning these five page views, a WalletView also has a pointer to a WalletModel instance.
 This allows the construction of multiple WalletView objects, each rendering a distinct wallet.
 
-A vlcond class called *WalletFrame* inheriting from QFrame has been written as a container for embedding all wallet-related
+A second class called *WalletFrame* inheriting from QFrame has been written as a container for embedding all wallet-related
 controls into BitcoinGUI. At present it contains the WalletView instances for the wallets and does little more than passing on messages
 from BitcoinGUI to the currently selected WalletView. It is a WalletFrame instance
 that takes the place of what used to be centralWidget in BitcoinGUI. The purpose of this class is to allow future

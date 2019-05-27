@@ -96,7 +96,7 @@ public:
             LOCK(cs_KeyStore);
             KeyMap::const_iterator mi = mapKeys.find(address);
             if (mi != mapKeys.end()) {
-                keyOut = mi->vlcond;
+                keyOut = mi->second;
                 return true;
             }
         }

@@ -81,8 +81,8 @@ public:
                 const CBitcoinAddress& address = item.first;
                 bool fMine = IsMine(*wallet, address.Get());
                 AddressTableEntry::Type addressType = translateTransactionType(
-                    QString::fromStdString(item.vlcond.purpose), fMine);
-                const std::string& strName = item.vlcond.name;
+                    QString::fromStdString(item.second.purpose), fMine);
+                const std::string& strName = item.second.name;
                 cachedAddressTable.append(AddressTableEntry(addressType,
                     QString::fromStdString(strName),
                     QString::fromStdString(address.ToString())));
@@ -383,7 +383,7 @@ QString AddressTableModel::labelForAddress(const QString& address) const
         CBitcoinAddress address_parsed(address.toStdString());
         std::map<CTxDestination, CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address_parsed.Get());
         if (mi != wallet->mapAddressBook.end()) {
-            return QString::fromStdString(mi->vlcond.name);
+            return QString::fromStdString(mi->second.name);
         }
     }
     return QString();

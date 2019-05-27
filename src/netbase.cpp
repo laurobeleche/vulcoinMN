@@ -825,7 +825,7 @@ bool CNetAddr::IsValid() const
     // of addr messages from versions before 0.2.9 checksum.
     // Two convlcutive addr messages look like this:
     // header20 vectorlen3 addr26 addr26 addr26 header20 vectorlen3 addr26 addr26 addr26...
-    // so if the first length field is garbled, it reads the vlcond batch
+    // so if the first length field is garbled, it reads the second batch
     // of addr misaligned by 3 bytes.
     if (memcmp(ip, pchIPv4 + 3, sizeof(pchIPv4) - 3) == 0)
         return false;

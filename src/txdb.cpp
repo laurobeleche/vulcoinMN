@@ -57,8 +57,8 @@ bool CCoinsViewDB::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock)
     size_t count = 0;
     size_t changed = 0;
     for (CCoinsMap::iterator it = mapCoins.begin(); it != mapCoins.end();) {
-        if (it->vlcond.flags & CCoinsCacheEntry::DIRTY) {
-            BatchWriteCoins(batch, it->first, it->vlcond.coins);
+        if (it->second.flags & CCoinsCacheEntry::DIRTY) {
+            BatchWriteCoins(batch, it->first, it->second.coins);
             changed++;
         }
         count++;
@@ -163,7 +163,7 @@ bool CCoinsViewDB::GetStats(CCoinsStats& stats) const
             return error("%s : Deserialize or I/O error - %s", __func__, e.what());
         }
     }
-    stats.nHeight = mapBlockIndex.find(GetBestBlock())->vlcond->nHeight;
+    stats.nHeight = mapBlockIndex.find(GetBestBlock())->second->nHeight;
     stats.hashSerialized = ss.GetHash();
     stats.nTotalAmount = nTotalAmount;
     return true;
@@ -178,7 +178,7 @@ bool CBlockTreeDB::WriteTxIndex(const std::vector<std::pair<uint256, CDiskTxPos>
 {
     CLevelDBBatch batch;
     for (std::vector<std::pair<uint256, CDiskTxPos> >::const_iterator it = vect.begin(); it != vect.end(); it++)
-        batch.Write(make_pair('t', it->first), it->vlcond);
+        batch.Write(make_pair('t', it->first), it->second);
     return WriteBatch(batch);
 }
 

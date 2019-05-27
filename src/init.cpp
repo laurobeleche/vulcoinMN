@@ -1033,8 +1033,8 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                     if (counter > nWalletBackups) {
                         // More than nWalletBackups backups: delete oldest one(s)
                         try {
-                            boost::filesystem::remove(file.vlcond);
-                            LogPrintf("Old backup deleted: %s\n", file.vlcond);
+                            boost::filesystem::remove(file.second);
+                            LogPrintf("Old backup deleted: %s\n", file.second);
                         } catch (boost::filesystem::filesystem_error& error) {
                             LogPrintf("Failed to delete backup %s\n", error.what());
                         }
@@ -1495,7 +1495,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                     std::map<uint256, CWalletTx>::iterator mi = pwalletMain->mapWallet.find(hash);
                     if (mi != pwalletMain->mapWallet.end()) {
                         const CWalletTx* copyFrom = &wtxOld;
-                        CWalletTx* copyTo = &mi->vlcond;
+                        CWalletTx* copyTo = &mi->second;
                         copyTo->mapValue = copyFrom->mapValue;
                         copyTo->vOrderForm = copyFrom->vOrderForm;
                         copyTo->nTimeReceived = copyFrom->nTimeReceived;

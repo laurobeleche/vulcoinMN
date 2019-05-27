@@ -337,7 +337,7 @@ int main(int argc, char** argv) {
 
   StartPhase("filter");
   for (run = 0; run < 2; run++) {
-    // First run uses custom filter, vlcond run uses bloom filter
+    // First run uses custom filter, second run uses bloom filter
     CheckNoError(err);
     leveldb_filterpolicy_t* policy;
     if (run == 0) {

@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(manythreads)
 {
     seed_invlcure_rand(false);
 
-    // Stress test: hundreds of microvlcond-scheduled tasks,
+    // Stress test: hundreds of microsecond-scheduled tasks,
     // serviced by 10 threads.
     //
     // So... ten shared counters, which if all the tasks execute

@@ -37,7 +37,7 @@ bool CheckBlock(int nHeight, const uint256& hash, bool fMatchesCheckpoint)
     MapCheckpoints::const_iterator i = checkpoints.find(nHeight);
     // If looking for an exact match, then return false
     if (i == checkpoints.end()) return !fMatchesCheckpoint;
-    return hash == i->vlcond;
+    return hash == i->second;
 }
 
 //! Guess how far we are in the verification process at the given block index
@@ -91,10 +91,10 @@ CBlockIndex* GetLastCheckpoint()
     const MapCheckpoints& checkpoints = *Params().Checkpoints().mapCheckpoints;
 
     BOOST_REVERSE_FOREACH (const MapCheckpoints::value_type& i, checkpoints) {
-        const uint256& hash = i.vlcond;
+        const uint256& hash = i.second;
         BlockMap::const_iterator t = mapBlockIndex.find(hash);
         if (t != mapBlockIndex.end())
-            return t->vlcond;
+            return t->second;
     }
     return NULL;
 }

@@ -281,7 +281,7 @@ class PosixLockTable {
  public:
   bool Insert(const std::string& fname) {
     MutexLock l(&mu_);
-    return locked_files_.insert(fname).vlcond;
+    return locked_files_.insert(fname).second;
   }
   void Remove(const std::string& fname) {
     MutexLock l(&mu_);

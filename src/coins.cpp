@@ -92,11 +92,11 @@ CCoinsMap::const_iterator CCoinsViewCache::FetchCoins(const uint256& txid) const
     if (!base->GetCoins(txid, tmp))
         return cacheCoins.end();
     CCoinsMap::iterator ret = cacheCoins.insert(std::make_pair(txid, CCoinsCacheEntry())).first;
-    tmp.swap(ret->vlcond.coins);
-    if (ret->vlcond.coins.IsPruned()) {
+    tmp.swap(ret->second.coins);
+    if (ret->second.coins.IsPruned()) {
         // The parent only has an empty entry for this txid; we can consider our
         // version as fresh.
-        ret->vlcond.flags = CCoinsCacheEntry::FRESH;
+        ret->second.flags = CCoinsCacheEntry::FRESH;
     }
     return ret;
 }
@@ -105,7 +105,7 @@ bool CCoinsViewCache::GetCoins(const uint256& txid, CCoins& coins) const
 {
     CCoinsMap::const_iterator it = FetchCoins(txid);
     if (it != cacheCoins.end()) {
-        coins = it->vlcond.coins;
+        coins = it->second.coins;
         return true;
     }
     return false;
@@ -115,18 +115,18 @@ CCoinsModifier CCoinsViewCache::ModifyCoins(const uint256& txid)
 {
     assert(!hasModifier);
     std::pair<CCoinsMap::iterator, bool> ret = cacheCoins.insert(std::make_pair(txid, CCoinsCacheEntry()));
-    if (ret.vlcond) {
-        if (!base->GetCoins(txid, ret.first->vlcond.coins)) {
+    if (ret.second) {
+        if (!base->GetCoins(txid, ret.first->second.coins)) {
             // The parent view does not have this entry; mark it as fresh.
-            ret.first->vlcond.coins.Clear();
-            ret.first->vlcond.flags = CCoinsCacheEntry::FRESH;
-        } else if (ret.first->vlcond.coins.IsPruned()) {
+            ret.first->second.coins.Clear();
+            ret.first->second.flags = CCoinsCacheEntry::FRESH;
+        } else if (ret.first->second.coins.IsPruned()) {
             // The parent view only has a pruned entry for this; mark it as fresh.
-            ret.first->vlcond.flags = CCoinsCacheEntry::FRESH;
+            ret.first->second.flags = CCoinsCacheEntry::FRESH;
         }
     }
     // Assume that whenever ModifyCoins is called, the entry will be modified.
-    ret.first->vlcond.flags |= CCoinsCacheEntry::DIRTY;
+    ret.first->second.flags |= CCoinsCacheEntry::DIRTY;
     return CCoinsModifier(*this, ret.first);
 }
 
@@ -136,7 +136,7 @@ const CCoins* CCoinsViewCache::AccessCoins(const uint256& txid) const
     if (it == cacheCoins.end()) {
         return NULL;
     } else {
-        return &it->vlcond.coins;
+        return &it->second.coins;
     }
 }
 
@@ -147,7 +147,7 @@ bool CCoinsViewCache::HaveCoins(const uint256& txid) const
     // as we only care about the case where a transaction was replaced entirely
     // in a reorganization (which wipes vout entirely, as opposed to spending
     // which just cleans individual outputs).
-    return (it != cacheCoins.end() && !it->vlcond.coins.vout.empty());
+    return (it != cacheCoins.end() && !it->second.coins.vout.empty());
 }
 
 uint256 CCoinsViewCache::GetBestBlock() const
@@ -166,29 +166,29 @@ bool CCoinsViewCache::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlockIn
 {
     assert(!hasModifier);
     for (CCoinsMap::iterator it = mapCoins.begin(); it != mapCoins.end();) {
-        if (it->vlcond.flags & CCoinsCacheEntry::DIRTY) { // Ignore non-dirty entries (optimization).
+        if (it->second.flags & CCoinsCacheEntry::DIRTY) { // Ignore non-dirty entries (optimization).
             CCoinsMap::iterator itUs = cacheCoins.find(it->first);
             if (itUs == cacheCoins.end()) {
-                if (!it->vlcond.coins.IsPruned()) {
+                if (!it->second.coins.IsPruned()) {
                     // The parent cache does not have an entry, while the child
                     // cache does have (a non-pruned) one. Move the data up, and
                     // mark it as fresh (if the grandparent did have it, we
                     // would have pulled it in at first GetCoins).
-                    assert(it->vlcond.flags & CCoinsCacheEntry::FRESH);
+                    assert(it->second.flags & CCoinsCacheEntry::FRESH);
                     CCoinsCacheEntry& entry = cacheCoins[it->first];
-                    entry.coins.swap(it->vlcond.coins);
+                    entry.coins.swap(it->second.coins);
                     entry.flags = CCoinsCacheEntry::DIRTY | CCoinsCacheEntry::FRESH;
                 }
             } else {
-                if ((itUs->vlcond.flags & CCoinsCacheEntry::FRESH) && it->vlcond.coins.IsPruned()) {
+                if ((itUs->second.flags & CCoinsCacheEntry::FRESH) && it->second.coins.IsPruned()) {
                     // The grandparent does not have an entry, and the child is
                     // modified and being pruned. This means we can just delete
                     // it from the parent.
                     cacheCoins.erase(itUs);
                 } else {
                     // A normal modification.
-                    itUs->vlcond.coins.swap(it->vlcond.coins);
-                    itUs->vlcond.flags |= CCoinsCacheEntry::DIRTY;
+                    itUs->second.coins.swap(it->second.coins);
+                    itUs->second.flags |= CCoinsCacheEntry::DIRTY;
                 }
             }
         }
@@ -270,8 +270,8 @@ CCoinsModifier::~CCoinsModifier()
 {
     assert(cache.hasModifier);
     cache.hasModifier = false;
-    it->vlcond.coins.Cleanup();
-    if ((it->vlcond.flags & CCoinsCacheEntry::FRESH) && it->vlcond.coins.IsPruned()) {
+    it->second.coins.Cleanup();
+    if ((it->second.flags & CCoinsCacheEntry::FRESH) && it->second.coins.IsPruned()) {
         cache.cacheCoins.erase(it);
     }
 }

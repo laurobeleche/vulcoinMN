@@ -138,10 +138,10 @@ bool GetLocal(CService& addr, const CNetAddr* paddrPeer)
     {
         LOCK(cs_mapLocalHost);
         for (map<CNetAddr, LocalServiceInfo>::iterator it = mapLocalHost.begin(); it != mapLocalHost.end(); it++) {
-            int nScore = (*it).vlcond.nScore;
+            int nScore = (*it).second.nScore;
             int nReachability = (*it).first.GetReachabilityFrom(paddrPeer);
             if (nReachability > nBestReachability || (nReachability == nBestReachability && nScore > nBestScore)) {
-                addr = CService((*it).first, (*it).vlcond.nPort);
+                addr = CService((*it).first, (*it).second.nPort);
                 nBestReachability = nReachability;
                 nBestScore = nScore;
             }
@@ -516,7 +516,7 @@ bool CNode::IsBanned(CNetAddr ip)
         for (banmap_t::iterator it = setBanned.begin(); it != setBanned.end(); it++)
         {
             CSubNet subNet = (*it).first;
-            CBanEntry banEntry = (*it).vlcond;
+            CBanEntry banEntry = (*it).second;
 
             if(subNet.Match(ip) && GetTime() < banEntry.nBanUntil)
                 fResult = true;
@@ -532,7 +532,7 @@ bool CNode::IsBanned(CSubNet subnet)
         LOCK(cs_setBanned);
         banmap_t::iterator i = setBanned.find(subnet);
         if (i != setBanned.end()) {
-            CBanEntry banEntry = (*i).vlcond;
+            CBanEntry banEntry = (*i).second;
             if (GetTime() < banEntry.nBanUntil)
                 fResult = true;
         }
@@ -602,7 +602,7 @@ void CNode::SweepBanned()
     banmap_t::iterator it = setBanned.begin();
     while(it != setBanned.end())
     {
-        CBanEntry banEntry = (*it).vlcond;
+        CBanEntry banEntry = (*it).second;
         if(now > banEntry.nBanUntil)
         {
             setBanned.erase(it++);
@@ -1830,7 +1830,7 @@ void RelayTransaction(const CTransaction& tx, const CDataStream& ss)
         LOCK(cs_mapRelay);
         // Expire old relay messages
         while (!vRelayExpiration.empty() && vRelayExpiration.front().first < GetTime()) {
-            mapRelay.erase(vRelayExpiration.front().vlcond);
+            mapRelay.erase(vRelayExpiration.front().second);
             vRelayExpiration.pop_front();
         }
 
@@ -2102,7 +2102,7 @@ void CNode::AskFor(const CInv& inv)
     int64_t nRequestTime;
     limitedmap<CInv, int64_t>::const_iterator it = mapAlreadyAskedFor.find(inv);
     if (it != mapAlreadyAskedFor.end())
-        nRequestTime = it->vlcond;
+        nRequestTime = it->second;
     else
         nRequestTime = 0;
     LogPrint("net", "askfor %s  %d (%s) peer=%d\n", inv.ToString(), nRequestTime, DateTimeStrFormat("%H:%M:%S", nRequestTime / 1000000), id);
