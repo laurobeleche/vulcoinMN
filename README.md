@@ -13,12 +13,12 @@ Vulcoin (VLC) is a sustainable cryptocurrency modeled after Satoshi Nakamoto’s
 
 |                             |                 |
 |-----------------------------|-----------------|
-| Block Time                  | 90 Seconds      |
-| Premine                     | 105,000 VLC     |
-| MAX Supply                  | 7,000,000 VLC   |
+| Block Time                  | 180 Seconds      |
+| Premine                     | 21,000,000 VLC     |
+| MAX Supply                  | 77,000,000 VLC   |
 
 ### Reward Distribution
 
-| **Block Height**  | **Reward** | **Masternodes**  | **PoS**          |
-|-------------------|------------|------------------|------------------|
-| 2-....            | 1 VLC      | 90% (0.9 VLC)    | 10% (0.1 VLC)    |
+| **Block Height**  | **Reward** | **Masternodes**  |
+|-------------------|------------|------------------|
+| 2-....            | 25 VLC     | 100% (25 VLC)    |
