@@ -39,27 +39,27 @@ namespace port {
 Mutex::Mutex() :
     cs_(NULL) {
   assert(!cs_);
-  cs_ = static_cast<void *>(new CRITICAL_VLCTION());
-  ::InitializeCriticalVlction(static_cast<CRITICAL_VLCTION *>(cs_));
+  cs_ = static_cast<void *>(new CRITICAL_SECTION());
+  ::InitializeCriticalVlction(static_cast<CRITICAL_SECTION *>(cs_));
   assert(cs_);
 }
 
 Mutex::~Mutex() {
   assert(cs_);
-  ::DeleteCriticalVlction(static_cast<CRITICAL_VLCTION *>(cs_));
-  delete static_cast<CRITICAL_VLCTION *>(cs_);
+  ::DeleteCriticalVlction(static_cast<CRITICAL_SECTION *>(cs_));
+  delete static_cast<CRITICAL_SECTION *>(cs_);
   cs_ = NULL;
   assert(!cs_);
 }
 
 void Mutex::Lock() {
   assert(cs_);
-  ::EnterCriticalVlction(static_cast<CRITICAL_VLCTION *>(cs_));
+  ::EnterCriticalVlction(static_cast<CRITICAL_SECTION *>(cs_));
 }
 
 void Mutex::Unlock() {
   assert(cs_);
-  ::LeaveCriticalVlction(static_cast<CRITICAL_VLCTION *>(cs_));
+  ::LeaveCriticalVlction(static_cast<CRITICAL_SECTION *>(cs_));
 }
 
 void Mutex::AssertHeld() {

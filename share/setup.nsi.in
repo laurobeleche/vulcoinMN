@@ -110,15 +110,15 @@ Vlction -post VLC0001
 VlctionEnd
 
 # Macro for selecting uninstaller vlctions
-!macro SELECT_UNVLCTION VLCTION_NAME UNVLCTION_ID
+!macro SELECT_UNSECTION SECTION_NAME UNSECTION_ID
     Push $R0
-    ReadRegStr $R0 HKCU "${REGKEY}\Components" "${VLCTION_NAME}"
-    StrCmp $R0 1 0 next${UNVLCTION_ID}
-    !insertmacro SelectVlction "${UNVLCTION_ID}"
-    GoTo done${UNVLCTION_ID}
-next${UNVLCTION_ID}:
-    !insertmacro UnselectVlction "${UNVLCTION_ID}"
-done${UNVLCTION_ID}:
+    ReadRegStr $R0 HKCU "${REGKEY}\Components" "${SECTION_NAME}"
+    StrCmp $R0 1 0 next${UNSECTION_ID}
+    !insertmacro SelectVlction "${UNSECTION_ID}"
+    GoTo done${UNSECTION_ID}
+next${UNSECTION_ID}:
+    !insertmacro UnselectVlction "${UNSECTION_ID}"
+done${UNSECTION_ID}:
     Pop $R0
 !macroend
 
@@ -173,5 +173,5 @@ FunctionEnd
 Function un.onInit
     ReadRegStr $INSTDIR HKCU "${REGKEY}" Path
     !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuGroup
-    !insertmacro SELECT_UNVLCTION Main ${UNVLC0000}
+    !insertmacro SELECT_UNSECTION Main ${UNVLC0000}
 FunctionEnd

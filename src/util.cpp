@@ -136,9 +136,9 @@ static CCriticalVlction** ppmutexOpenSSL;
 void locking_callback(int mode, int i, const char* file, int line)
 {
     if (mode & CRYPTO_LOCK) {
-        ENTER_CRITICAL_VLCTION(*ppmutexOpenSSL[i]);
+        ENTER_CRITICAL_SECTION(*ppmutexOpenSSL[i]);
     } else {
-        LEAVE_CRITICAL_VLCTION(*ppmutexOpenSSL[i]);
+        LEAVE_CRITICAL_SECTION(*ppmutexOpenSSL[i]);
     }
 }
 
