@@ -56,7 +56,7 @@ class PosixLogger : public Logger {
                     t.tm_mday,
                     t.tm_hour,
                     t.tm_min,
-                    t.tm_vlc,
+                    t.tm_sec,
                     static_cast<int>(now_tv.tv_usec),
                     static_cast<long long unsigned int>(thread_id));
 
