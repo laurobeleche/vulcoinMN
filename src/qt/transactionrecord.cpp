@@ -123,7 +123,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
 
         if (fAllFromMe && fAllToMe) {
             // Payment to self
-            // TODO: this vlction still not accurate but covers most cases,
+            // TODO: this section still not accurate but covers most cases,
             // might need some additional work however
 
             TransactionRecord sub(hash, nTime);

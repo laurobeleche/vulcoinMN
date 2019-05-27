@@ -497,7 +497,7 @@ QHeaderView { /* Table Header */
 	outline:0;
 }
 
-QHeaderView::vlction { /* Table Header Sections */
+QHeaderView::section { /* Table Header Sections */
 	qproperty-alignment:center;
 	background-color: #07a1ee;
 	color:#333;
@@ -520,7 +520,7 @@ QHeaderView::up-arrow {
     image: url(':/images/upArrow_small_white');
 }
 
-QHeaderView::vlction:last {
+QHeaderView::section:last {
 	border-right:0;
 }
 
@@ -814,7 +814,7 @@ QWidget#AddressBookPage QTableView { /* Address Listing */
 	font-size:12px;
 }
 
-QWidget#AddressBookPage QHeaderView::vlction { /* Min width for Windows fix */
+QWidget#AddressBookPage QHeaderView::section { /* Min width for Windows fix */
 	min-width:260px;
 }
 
@@ -1415,7 +1415,7 @@ QDialog#CoinControlDialog .QFrame#frame .QRadioButton#radioListMode { /* Coin Co
 	background-color:transparent;
 }
 
-QDialog#CoinControlDialog QHeaderView::vlction:first { /* Bug Fix: the number "1" displays in this table for some reason... */
+QDialog#CoinControlDialog QHeaderView::section:first { /* Bug Fix: the number "1" displays in this table for some reason... */
 	color:transparent;
 }
 

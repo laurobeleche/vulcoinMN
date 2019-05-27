@@ -443,14 +443,14 @@ bool ToolTipToRichTextFilter::eventFilter(QObject* obj, QEvent* evt)
 
 void TableViewLastColumnResizingFixer::connectViewHeadersSignals()
 {
-    connect(tableView->horizontalHeader(), SIGNAL(vlctionResized(int, int, int)), this, SLOT(on_vlctionResized(int, int, int)));
+    connect(tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(on_sectionResized(int, int, int)));
     connect(tableView->horizontalHeader(), SIGNAL(geometriesChanged()), this, SLOT(on_geometriesChanged()));
 }
 
 // We need to disconnect these while handling the resize events, otherwise we can enter infinite loops.
 void TableViewLastColumnResizingFixer::disconnectViewHeadersSignals()
 {
-    disconnect(tableView->horizontalHeader(), SIGNAL(vlctionResized(int, int, int)), this, SLOT(on_vlctionResized(int, int, int)));
+    disconnect(tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(on_sectionResized(int, int, int)));
     disconnect(tableView->horizontalHeader(), SIGNAL(geometriesChanged()), this, SLOT(on_geometriesChanged()));
 }
 
@@ -475,7 +475,7 @@ int TableViewLastColumnResizingFixer::getColumnsWidth()
 {
     int nColumnsWidthSum = 0;
     for (int i = 0; i < columnCount; i++) {
-        nColumnsWidthSum += tableView->horizontalHeader()->vlctionSize(i);
+        nColumnsWidthSum += tableView->horizontalHeader()->sectionSize(i);
     }
     return nColumnsWidthSum;
 }
@@ -486,7 +486,7 @@ int TableViewLastColumnResizingFixer::getAvailableWidthForColumn(int column)
     int nTableWidth = tableView->horizontalHeader()->width();
 
     if (nTableWidth > 0) {
-        int nOtherColsWidth = getColumnsWidth() - tableView->horizontalHeader()->vlctionSize(column);
+        int nOtherColsWidth = getColumnsWidth() - tableView->horizontalHeader()->sectionSize(column);
         nResult = std::max(nResult, nTableWidth - nOtherColsWidth);
     }
 
@@ -515,8 +515,8 @@ void TableViewLastColumnResizingFixer::stretchColumnWidth(int column)
     connectViewHeadersSignals();
 }
 
-// When a vlction is resized this is a slot-proxy for ajustAmountColumnWidth().
-void TableViewLastColumnResizingFixer::on_vlctionResized(int logicalIndex, int oldSize, int newSize)
+// When a section is resized this is a slot-proxy for ajustAmountColumnWidth().
+void TableViewLastColumnResizingFixer::on_sectionResized(int logicalIndex, int oldSize, int newSize)
 {
     adjustTableColumnsWidth();
     int remainingWidth = getAvailableWidthForColumn(logicalIndex);

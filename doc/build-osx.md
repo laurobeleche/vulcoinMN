@@ -31,7 +31,7 @@ You will also need to install [Homebrew](http://brew.sh) in order to install lib
 dependencies.
 
 The installation of the actual dependencies is covered in the Instructions
-vlctions below.
+sections below.
 
 Instructions: Homebrew
 ----------------------
@@ -79,7 +79,7 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 
 Creating a release build
 ------------------------
-You can ignore this vlction if you are building `vulcoind` for your own use.
+You can ignore this section if you are building `vulcoind` for your own use.
 
 vulcoind/vulcoin-cli binaries are not included in the Vulcoin-Qt.app bundle.
 

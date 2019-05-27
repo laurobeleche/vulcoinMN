@@ -55,7 +55,7 @@ if __name__ == "__main__":
                         # Count the number of commas after the format specifier string.  Check to see if it matches the number of format specifiers.
                         # Assumes quotes are not escaped in the specifier string and there are no percent signs when specifying the debug level.
 
-                        # First, determine the position of the comma after the format specifier vlction, named commaAfterEndSpecifierStringIndex
+                        # First, determine the position of the comma after the format specifier section, named commaAfterEndSpecifierStringIndex
                         firstSpecifierIndex = tempLine.find('%')
                         startSpecifierStringIndex = tempLine.rfind('"',firstSpecifierIndex)
                         endSpecifierStringIndex = tempLine.find('"',firstSpecifierIndex)

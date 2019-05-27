@@ -31,7 +31,7 @@
 //      readreverse   -- read N times in reverse order
 //      readrandom    -- read N times in random order
 //      readmissing   -- read N missing keys in random order
-//      readhot       -- read N times in random order from 1% vlction of DB
+//      readhot       -- read N times in random order from 1% section of DB
 //      seekrandom    -- N random seeks
 //      crc32c        -- repeated crc32c of 4K of data
 //      acquireload   -- load N*1000 times

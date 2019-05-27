@@ -24,7 +24,7 @@ outgoing connections be anonymized, but more is possible.
                 to explicitly disable access to hidden service.
 
 -listen         When using -proxy, listening is disabled by default. If you want
-                to run a hidden service (see next vlction), you'll need to enable
+                to run a hidden service (see next section), you'll need to enable
                 it explicitly.
 
 -connect=X      When behind a Tor proxy, you can specify .onion addresses instead

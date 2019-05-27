@@ -262,11 +262,11 @@ bool AddressTableModel::setData(const QModelIndex& index, const QVariant& value,
     return false;
 }
 
-QVariant AddressTableModel::headerData(int vlction, Qt::Orientation orientation, int role) const
+QVariant AddressTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal) {
-        if (role == Qt::DisplayRole && vlction < columns.size()) {
-            return columns[vlction];
+        if (role == Qt::DisplayRole && section < columns.size()) {
+            return columns[section];
         }
     }
     return QVariant();

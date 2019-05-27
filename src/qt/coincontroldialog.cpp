@@ -115,7 +115,7 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
 #else
     ui->treeWidget->header()->setSectionsClickable(true);
 #endif
-    connect(ui->treeWidget->header(), SIGNAL(vlctionClicked(int)), this, SLOT(headerSectionClicked(int)));
+    connect(ui->treeWidget->header(), SIGNAL(sectionClicked(int)), this, SLOT(headerSectionClicked(int)));
 
     // ok button
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(buttonBoxClicked(QAbstractButton*)));

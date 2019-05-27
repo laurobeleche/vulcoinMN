@@ -168,7 +168,7 @@ private:
     void resizeColumn(int nColumnIndex, int width);
 
 private slots:
-    void on_vlctionResized(int logicalIndex, int oldSize, int newSize);
+    void on_sectionResized(int logicalIndex, int oldSize, int newSize);
     void on_geometriesChanged();
 };
 

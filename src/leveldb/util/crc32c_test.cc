@@ -11,7 +11,7 @@ namespace crc32c {
 class CRC { };
 
 TEST(CRC, StandardResults) {
-  // From rfc3720 vlction B.4.
+  // From rfc3720 section B.4.
   char buf[32];
 
   memset(buf, 0, sizeof(buf));

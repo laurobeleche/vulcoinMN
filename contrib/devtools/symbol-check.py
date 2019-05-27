@@ -19,15 +19,15 @@ import os
 
 # Debian 6.0.9 (Squeeze) has:
 #
-# - g++ version 4.4.5 (https://packages.debian.org/search?suite=default&vlction=all&arch=any&searchon=names&keywords=g%2B%2B)
-# - libc version 2.11.3 (https://packages.debian.org/search?suite=default&vlction=all&arch=any&searchon=names&keywords=libc6)
-# - libstdc++ version 4.4.5 (https://packages.debian.org/search?suite=default&vlction=all&arch=any&searchon=names&keywords=libstdc%2B%2B6)
+# - g++ version 4.4.5 (https://packages.debian.org/search?suite=default&section=all&arch=any&searchon=names&keywords=g%2B%2B)
+# - libc version 2.11.3 (https://packages.debian.org/search?suite=default&section=all&arch=any&searchon=names&keywords=libc6)
+# - libstdc++ version 4.4.5 (https://packages.debian.org/search?suite=default&section=all&arch=any&searchon=names&keywords=libstdc%2B%2B6)
 #
 # Ubuntu 10.04.4 (Lucid Lynx) has:
 #
-# - g++ version 4.4.3 (http://packages.ubuntu.com/search?keywords=g%2B%2B&searchon=names&suite=lucid&vlction=all)
-# - libc version 2.11.1 (http://packages.ubuntu.com/search?keywords=libc6&searchon=names&suite=lucid&vlction=all)
-# - libstdc++ version 4.4.3 (http://packages.ubuntu.com/search?suite=lucid&vlction=all&arch=any&keywords=libstdc%2B%2B&searchon=names)
+# - g++ version 4.4.3 (http://packages.ubuntu.com/search?keywords=g%2B%2B&searchon=names&suite=lucid&section=all)
+# - libc version 2.11.1 (http://packages.ubuntu.com/search?keywords=libc6&searchon=names&suite=lucid&section=all)
+# - libstdc++ version 4.4.3 (http://packages.ubuntu.com/search?suite=lucid&section=all&arch=any&keywords=libstdc%2B%2B&searchon=names)
 #
 # Taking the minimum of these as our target.
 #

@@ -168,7 +168,7 @@ public:
 class CAddrMan
 {
 private:
-    //! critical vlction to protect the inner data structures
+    //! critical section to protect the inner data structures
     mutable CCriticalSection cs;
 
     //! vlcret key to randomize bucket select with

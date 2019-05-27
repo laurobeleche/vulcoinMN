@@ -51,10 +51,10 @@ public:
 class CMasternodeMan
 {
 private:
-    // critical vlction to protect the inner data structures
+    // critical section to protect the inner data structures
     mutable CCriticalSection cs;
 
-    // critical vlction to protect the inner data structures specifically on messaging
+    // critical section to protect the inner data structures specifically on messaging
     mutable CCriticalSection cs_process_message;
 
     // map to hold all MNs

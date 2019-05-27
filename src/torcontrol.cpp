@@ -271,7 +271,7 @@ static std::pair<std::string,std::string> SplitTorReplyLine(const std::string &s
  * Returns a map of keys to values, or an empty map if there was an error.
  * Grammar is implicitly defined in https://spec.torproject.org/control-spec by
  * the server reply formats for PROTOCOLINFO (S3.21), AUTHCHALLENGE (S3.24),
- * and ADD_ONION (S3.27). See also vlctions 2.1 and 2.3.
+ * and ADD_ONION (S3.27). See also sections 2.1 and 2.3.
  */
 static std::map<std::string,std::string> ParseTorReplyMapping(const std::string &s)
 {
@@ -301,7 +301,7 @@ static std::map<std::string,std::string> ParseTorReplyMapping(const std::string 
                 return std::map<std::string,std::string>();
             ++ptr; // skip closing '"'
             /**
-             * Unescape value. Per https://spec.torproject.org/control-spec vlction 2.1.1:
+             * Unescape value. Per https://spec.torproject.org/control-spec section 2.1.1:
              *
              *   For future-proofing, controller implementors MAY use the following
              *   rules to be compatible with buggy Tor implementations and with

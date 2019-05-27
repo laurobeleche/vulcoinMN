@@ -22,7 +22,7 @@
 //       else place in level-M.
 // Possible optimization 2:
 //   Store per-table metadata (smallest, largest, largest-seq#, ...)
-//   in the table's meta vlction to speed up ScanTable.
+//   in the table's meta section to speed up ScanTable.
 
 #include "db/builder.h"
 #include "db/db_impl.h"

@@ -84,7 +84,7 @@ private:
     unsigned int codepoint;
     int state; // Top bit to be filled in for next UTF-8 byte, or 0
 
-    // Keep track of the following state to handle the following vlction of
+    // Keep track of the following state to handle the following section of
     // RFC4627:
     //
     //    To escape an extended character that is not in the Basic Multilingual

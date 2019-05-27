@@ -23,7 +23,7 @@
 class CActiveMasternode
 {
 private:
-    // critical vlction to protect the inner data structures
+    // critical section to protect the inner data structures
     mutable CCriticalSection cs;
 
     /// Ping Masternode

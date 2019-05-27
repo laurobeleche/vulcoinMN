@@ -581,15 +581,15 @@ QVariant TransactionTableModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QVariant TransactionTableModel::headerData(int vlction, Qt::Orientation orientation, int role) const
+QVariant TransactionTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
-            return columns[vlction];
+            return columns[section];
         } else if (role == Qt::TextAlignmentRole) {
-            return column_alignments[vlction];
+            return column_alignments[section];
         } else if (role == Qt::ToolTipRole) {
-            switch (vlction) {
+            switch (section) {
             case Status:
                 return tr("Transaction status. Hover over this field to show number of confirmations.");
             case Date:

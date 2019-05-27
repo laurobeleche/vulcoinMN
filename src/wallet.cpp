@@ -2693,7 +2693,7 @@ void CWallet::AutoCombineDust()
 
     map<CBitcoinAddress, vector<COutput> > mapCoinsByAddress = AvailableCoinsByAddress(true, 0);
 
-    //coins are vlctioned by address. This combination code only wants to combine inputs that belong to the same address
+    //coins are sectioned by address. This combination code only wants to combine inputs that belong to the same address
     for (map<CBitcoinAddress, vector<COutput> >::iterator it = mapCoinsByAddress.begin(); it != mapCoinsByAddress.end(); it++) {
         vector<COutput> vCoins, vRewardCoins;
         vCoins = it->second;

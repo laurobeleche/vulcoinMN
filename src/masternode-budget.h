@@ -178,7 +178,7 @@ private:
     map<uint256, uint256> mapCollateralTxids;
 
 public:
-    // critical vlction to protect the inner data structures
+    // critical section to protect the inner data structures
     mutable CCriticalSection cs;
 
     // keep track of the scanning errors I've seen
@@ -307,7 +307,7 @@ public:
 class CFinalizedBudget
 {
 private:
-    // critical vlction to protect the inner data structures
+    // critical section to protect the inner data structures
     mutable CCriticalSection cs;
     bool fAutoChecked; //If it matches what we see, we'll auto vote for it (masternode only)
 
@@ -452,7 +452,7 @@ public:
 class CBudgetProposal
 {
 private:
-    // critical vlction to protect the inner data structures
+    // critical section to protect the inner data structures
     mutable CCriticalSection cs;
     CAmount nAlloted;
 

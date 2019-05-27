@@ -154,7 +154,7 @@ cd $VLC_ROOT
 ./configure (other args...) LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/"
 ```
 
-**Note**: You only need Berkeley DB if the wallet is enabled (see the vlction *Disable-Wallet mode* below).
+**Note**: You only need Berkeley DB if the wallet is enabled (see the section *Disable-Wallet mode* below).
 
 Boost
 -----
@@ -183,7 +183,7 @@ Hardening enables the following features:
     Build position independent code to take advantage of Address Space Layout Randomization
     offered by some kernels. An attacker who is able to cause execution of code at an arbitrary
     memory location is thwarted if he doesn't know where anything useful is located.
-    The stack and heap are randomly located by default but this allows the code vlction to be
+    The stack and heap are randomly located by default but this allows the code section to be
     randomly located as well.
 
     On an Amd64 processor where a library was not compiled with -fPIC, this will cause an error

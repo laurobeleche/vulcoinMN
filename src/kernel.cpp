@@ -53,7 +53,7 @@ static bool GetLastStakeModifier(const CBlockIndex* pindex, uint64_t& nStakeModi
     return true;
 }
 
-// Get selection interval vlction (in seconds)
+// Get selection interval section (in seconds)
 static int64_t GetStakeModifierSelectionIntervalSection(int nSection)
 {
     assert(nSection >= 0 && nSection < 64);
@@ -195,7 +195,7 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
     int64_t nSelectionIntervalStop = nSelectionIntervalStart;
     map<uint256, const CBlockIndex*> mapSelectedBlocks;
     for (int nRound = 0; nRound < min(64, (int)vSortedByTimestamp.size()); nRound++) {
-        // add an interval vlction to the current selection round
+        // add an interval section to the current selection round
         nSelectionIntervalStop += GetStakeModifierSelectionIntervalSection(nRound);
 
         // select a block from the candidates of current round

@@ -10,7 +10,7 @@ To run the vulcoind tests manually, launch src/test/test_vulcoin .
 
 To add more vulcoind tests, add `BOOST_AUTO_TEST_CASE` functions to the existing
 .cpp files in the test/ directory or add new .cpp files that
-implement new BOOST_AUTO_TEST_SUITE vlctions.
+implement new BOOST_AUTO_TEST_SUITE sections.
 
 To run the vulcoin-qt tests manually, launch src/qt/test/vulcoin-qt_test
 

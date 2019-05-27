@@ -62,7 +62,7 @@ class Mutex {
 
  private:
   friend class CondVar;
-  // critical vlctions are more efficient than mutexes
+  // critical sections are more efficient than mutexes
   // but they are not recursive and can only be used to synchronize threads within the same process
   // we use opaque void * to avoid including windows.h in port_win.h
   void * cs_;

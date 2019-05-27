@@ -91,11 +91,11 @@ bool RecentRequestsTableModel::setData(const QModelIndex& index, const QVariant&
     return true;
 }
 
-QVariant RecentRequestsTableModel::headerData(int vlction, Qt::Orientation orientation, int role) const
+QVariant RecentRequestsTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal) {
-        if (role == Qt::DisplayRole && vlction < columns.size()) {
-            return columns[vlction];
+        if (role == Qt::DisplayRole && section < columns.size()) {
+            return columns[section];
         }
     }
     return QVariant();

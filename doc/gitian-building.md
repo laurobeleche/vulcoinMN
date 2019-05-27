@@ -109,7 +109,7 @@ Then start the VM. On the first launch you will be asked for a CD or DVD image. 
 Installing Debian
 ------------------
 
-In this vlction it will be explained how to install Debian on the newly created VM.
+In this section it will be explained how to install Debian on the newly created VM.
 
 - Choose the non-graphical installer.  We do not need the graphical environment, it will only increase installation time and disk usage.
 
@@ -220,7 +220,7 @@ Replace `root` with `debian` to log in as user.
 Setting up Debian for gitian building
 --------------------------------------
 
-In this vlction we will be setting up the Debian installation for Gitian building.
+In this section we will be setting up the Debian installation for Gitian building.
 
 First we need to log in as `root` to set up dependencies and make sure that our
 user can use the sudo command. Type/paste the following in the terminal:
@@ -255,7 +255,7 @@ reboot
 ```
 
 At the end the VM is rebooted to make sure that the changes take effect. The steps in this
-vlction need only to be performed once.
+section need only to be performed once.
 
 Installing gitian
 ------------------

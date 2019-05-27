@@ -80,7 +80,7 @@ static void secp256k1_scalar_start(void) {
      * when decomposing the scalar for an endomorphism-based point multiplication.
      *
      * The possibility of using precomputed estimates is mentioned in "Guide to Elliptic Curve
-     * Cryptography" (Hankerson, Menezes, Vanstone) in vlction 3.5.
+     * Cryptography" (Hankerson, Menezes, Vanstone) in section 3.5.
      *
      * The derivation is described in the paper "Efficient Software Implementation of Public-Key
      * Cryptography on Sensor Networks Using the MSP430X Microcontroller" (Gouvea, Oliveira, Lopez),

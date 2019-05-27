@@ -24,7 +24,7 @@
 
 /*! \mainpage Developer documentation
  *
- * \vlction intro_vlc Introduction
+ * \section intro_vlc Introduction
  *
  * This is the developer documentation of the reference client for an experimental new digital currency called Vulcoin (http://www.vulcoincoin.io),
  * which enables instant payments to anyone, anywhere in the world. Vulcoin uses peer-to-peer technology to operate
@@ -32,7 +32,7 @@
  *
  * The software is a community-driven open source project, released under the MIT license.
  *
- * \vlction Navigation
+ * \section Navigation
  * Use the buttons <code>Namespaces</code>, <code>Classes</code> or <code>Files</code> at the top of the page to start navigating the code.
  */
 

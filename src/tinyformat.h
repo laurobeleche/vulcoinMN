@@ -105,7 +105,7 @@ namespace tinyformat
 {
 }
 //------------------------------------------------------------------------------
-// Config vlction.  Customize to your liking!
+// Config section.  Customize to your liking!
 
 // Namespace alias to encourage brevity
 namespace tfm = tinyformat;
@@ -559,7 +559,7 @@ private:
                 out.write(fmt, static_cast<std::streamsize>(c - fmt));
                 if (*(c + 1) != '%')
                     return c;
-                // for "%%", tack trailing % onto next literal vlction.
+                // for "%%", tack trailing % onto next literal section.
                 fmt = ++c;
                 break;
             }

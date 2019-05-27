@@ -171,11 +171,11 @@ QVariant PeerTableModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QVariant PeerTableModel::headerData(int vlction, Qt::Orientation orientation, int role) const
+QVariant PeerTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal) {
-        if (role == Qt::DisplayRole && vlction < columns.size()) {
-            return columns[vlction];
+        if (role == Qt::DisplayRole && section < columns.size()) {
+            return columns[section];
         }
     }
     return QVariant();

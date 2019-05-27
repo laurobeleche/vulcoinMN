@@ -23,7 +23,7 @@ class Class
 {
     bool Function(char* psz, int n)
     {
-        // Comment summarising what this vlction of code does
+        // Comment summarising what this section of code does
         for (int i = 0; i < n; i++) {
             // When something fails, return early
             if (!Something())
@@ -413,7 +413,7 @@ Git and github tips
   moved body of code which should show up as neither `+` or `-` lines. In case it was not a pure move, this may
   even work when combined with the `-w` or `--word-diff` options described above.
 
-- When looking at other's pull requests, it may make sense to add the following vlction to your `.git/config`
+- When looking at other's pull requests, it may make sense to add the following section to your `.git/config`
   file:
 
         [remote "upstream-pull"]

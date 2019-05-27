@@ -63,7 +63,7 @@
 
 /** @mainpage sphlib C code documentation
  *
- * @vlction overview Overview
+ * @section overview Overview
  *
  * <code>sphlib</code> is a library which contains implementations of
  * various cryptographic hash functions. These pages have been generated
@@ -71,14 +71,14 @@
  * document the API for the C implementations.
  *
  * The API is described in appropriate header files, which are available
- * in the "Files" vlction. Each hash function family has its own header,
+ * in the "Files" section. Each hash function family has its own header,
  * whose name begins with <code>"sph_"</code> and contains the family
  * name. For instance, the API for the RIPEMD hash functions is available
  * in the header file <code>sph_ripemd.h</code>.
  *
- * @vlction principles API structure and conventions
+ * @section principles API structure and conventions
  *
- * @subvlction io Input/output conventions
+ * @subsection io Input/output conventions
  *
  * In all generality, hash functions operate over strings of bits.
  * Individual bits are rarely encountered in C programming or actual
@@ -118,13 +118,13 @@
  * <code>sphlib</code> has been tested against published "reference"
  * implementations in order to use the same conventions.
  *
- * @subvlction shortname Function short name
+ * @subsection shortname Function short name
  *
  * Each implemented hash function has a "short name" which is used
  * internally to derive the identifiers for the functions and context
  * structures which the function uses. For instance, MD5 has the short
- * name <code>"md5"</code>. Short names are listed in the next vlction,
- * for the implemented hash functions. In subsequent vlctions, the
+ * name <code>"md5"</code>. Short names are listed in the next section,
+ * for the implemented hash functions. In subsequent sections, the
  * short name will be assumed to be <code>"XXX"</code>: replace with the
  * actual hash function name to get the C identifier.
  *
@@ -133,7 +133,7 @@
  * some of the defined types or functions may actually be macros which
  * transparently evaluate to another type or function name.
  *
- * @subvlction context Context structure
+ * @subsection context Context structure
  *
  * Each implemented hash fonction has its own context structure, available
  * under the type name <code>"sph_XXX_context"</code> for the hash function
@@ -167,7 +167,7 @@
  * context structures contain no pointer, in particular no pointer to
  * themselves.
  *
- * @subvlction dataio Data input
+ * @subsection dataio Data input
  *
  * Hashed data is input with the <code>sph_XXX()</code> fonction, which
  * takes as parameters a pointer to the context, a pointer to the data
@@ -208,7 +208,7 @@
  * <code>sph_XXX_init()</code> can still be called to "reset" a context,
  * i.e. forget previously input data, and get back to the initial state.
  *
- * @subvlction alignment Data alignment
+ * @subsection alignment Data alignment
  *
  * "Alignment" is a property of data, which is said to be "properly
  * aligned" when its emplacement in memory is such that the data can
@@ -222,7 +222,7 @@
  * addresses, such as the base address returned by a call to
  * <code>malloc()</code>.
  *
- * @vlction functions Implemented functions
+ * @section functions Implemented functions
  *
  * We give here the list of implemented functions. They are grouped by
  * family; to each family corresponds a specific header file. Each
