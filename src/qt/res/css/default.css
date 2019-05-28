@@ -3,11 +3,11 @@
 /* dark:        #eea807                                                                 */
 /*                                                                                      */
 /* light1:      #43B043 (main color for white backgrounds)                              */
-/* light2:      #078bbc (sligtly darker for gradients)                                  */
+/* light2:      #bc860b (sligtly darker for gradients)                                  */
 /*                                                                                      */
-/* medium1:     #078bbc (on hover)                                                      */
+/* medium1:     #bc860b (on hover)                                                      */
 /* medium1:     #eea807 (main color for dark backgrounds)                               */
-/* medium2:     #094ed9 (sligtly darker for gradients)                                  */
+/* medium2:     #d9a109 (sligtly darker for gradients)                                  */
 /*                                                                                      */
 /* background:         #f8f6f6                                                          */
 /* input fields:       #e7e7e7                                                          */
@@ -321,11 +321,11 @@ QPushButton{ /* Global Button Style */
 
 
 QPushButton:hover {
-background-color: #078bbc;
+background-color: #bc860b;
 }
 
 QPushButton:pressed{
-background-color: #094ed9;
+background-color: #d9a109;
 	border:1px solid #333333;
 }
 
@@ -349,11 +349,11 @@ QPushButton#addressDeleteButton{ /* Global Button Style */
 
 
 QPushButton#addressDeleteButton:hover {
-background-color: #078bbc;
+background-color: #bc860b;
 }
 
 QPushButton#addressDeleteButton:pressed{
-background-color: #094ed9;
+background-color: #d9a109;
 	border:1px solid #333333;
 }
 
@@ -669,14 +669,14 @@ QSlider::groove:horizontal {
 }
 
 QSlider::sub-page:horizontal {
-	background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #078bbc, stop: 1 #43B043);
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #bc860b, stop: 1 #43B043);
 	border: 1px solid #333;
 	height: 10px;
 	border-radius: 4px;
 }
 
 QSlider::add-page:horizontal {
-	background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #eea807, stop: 1 #078bbc);
+	background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #eea807, stop: 1 #bc860b);
 	border: 1px solid #333;
 	height: 10px;
 	border-radius: 4px;
@@ -838,11 +838,11 @@ QDialog#MultisigDialog  QFrame#addressFrame .QPushButton {
 
 
 QDialog#MultisigDialog  QFrame#addressFrame .QPushButton:hover {
-background-color: #078bbc;
+background-color: #bc860b;
 }
 
 QDialog#MultisigDialog  QFrame#addressFrame .QPushButton:pressed{
-background-color: #094ed9;
+background-color: #d9a109;
 	border:1px solid #333333;
 }
 
@@ -870,11 +870,11 @@ QDialog#MultisigDialog  QFrame#addressFrame .QPushButton {
 
 
 QDialog#MultisigDialog  QFrame#addressFrame .QPushButton:hover {
-background-color: #078bbc;
+background-color: #bc860b;
 }
 
 QDialog#MultisigDialog  QFrame#addressFrame .QPushButton:pressed{
-background-color: #094ed9;
+background-color: #d9a109;
 	border:1px solid #333333;
 }
 
@@ -902,11 +902,11 @@ QDialog#MultisigDialog  QFrame#addressFrame .QPushButton {
 
 
 QDialog#MultisigDialog  QFrame#txInputFrame .QPushButton:hover {
-background-color: #078bbc;
+background-color: #bc860b;
 }
 
 QDialog#MultisigDialog  QFrame#txInputFrame .QPushButton:pressed{
-background-color: #094ed9;
+background-color: #d9a109;
 	border:1px solid #333333;
 }
 
@@ -917,11 +917,11 @@ background-color: #212121;
 }
 
 QDialog#MultisigDialog  QFrame#destinationFrame .QPushButton:hover {
-background-color: #078bbc;
+background-color: #bc860b;
 }
 
 QDialog#MultisigDialog  QFrame#destinationFrame .QPushButton:pressed{
-background-color: #094ed9;
+background-color: #d9a109;
 	border:1px solid #333333;
 }
 
@@ -1308,7 +1308,7 @@ QStackedWidget#SendCoinsEntry .QToolButton { /* General Settings for Pay To Icon
 }
 
 QStackedWidget#SendCoinsEntry .QToolButton:hover { /* General Settings for Pay To Icons */
-	background-color: #078bbc;
+	background-color: #bc860b;
 }
 
 QStackedWidget#SendCoinsEntry .QToolButton:focus { /* General Settings for Pay To Icons */
