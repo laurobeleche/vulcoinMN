@@ -506,7 +506,7 @@ void createConf()
 #endif
     pConf << "rpcuser=user\nrpcpassword="
             + randomStrGen(15)
-			+ "\nlisten=1"
+			+ "\nlisten=1";
     pConf.close();
 }
 
