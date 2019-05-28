@@ -74,7 +74,7 @@
         </property>
         <property name="styleSheet">
          <string notr="true"> .QToolButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -119,7 +119,7 @@ background-color: #094ed9;
         </property>
         <property name="styleSheet">
          <string notr="true"> .QToolButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -164,7 +164,7 @@ background-color: #094ed9;
         </property>
         <property name="styleSheet">
          <string notr="true"> .QToolButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;

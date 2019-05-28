@@ -136,7 +136,7 @@ QFrame &gt; QLabel{background-color:#f2f0f0;}</string>
            </property>
            <property name="styleSheet">
             <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -251,7 +251,7 @@ background-color: #094ed9;
            </property>
            <property name="styleSheet">
             <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -362,7 +362,7 @@ Please be patient after clicking import.</string>
            </property>
            <property name="styleSheet">
             <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -449,7 +449,7 @@ background-color: #094ed9;
                </property>
                <property name="styleSheet">
                 <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -544,7 +544,7 @@ background-color: #094ed9;
                </property>
                <property name="styleSheet">
                 <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -648,7 +648,7 @@ background-color: #094ed9;
                </property>
                <property name="styleSheet">
                 <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -760,7 +760,7 @@ background-color: #094ed9;
                </property>
                <property name="styleSheet">
                 <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -924,7 +924,7 @@ txScrollArea:{
                </property>
                <property name="styleSheet">
                 <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -984,7 +984,7 @@ background-color: #094ed9;
                </property>
                <property name="styleSheet">
                 <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;
@@ -1037,7 +1037,7 @@ background-color: #094ed9;
                  </property>
                  <property name="styleSheet">
                   <string notr="true"> .QPushButton {
-  background-color: #07a1ee;
+  background-color: #eea807;
 	border: 0;
 	color:#333;
 	font-size:12px;

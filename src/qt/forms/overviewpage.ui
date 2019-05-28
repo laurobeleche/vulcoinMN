@@ -273,7 +273,7 @@
                          <string>Your current total balance</string>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">color:#01aae8; font-size:25px</string>
+                         <string notr="true">color:#ffe900; font-size:25px</string>
                         </property>
                         <property name="text">
                          <string notr="true">0.000 000 00</string>
@@ -344,7 +344,7 @@
                          <string>Total of transactions that have yet to be confirmed, and do not yet count toward the spendable balance</string>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">color:#01aae8; font-size:18px</string>
+                         <string notr="true">color:#ffe900; font-size:18px</string>
                         </property>
                         <property name="text">
                          <string notr="true">0.000 000 00 VLC</string>
@@ -371,7 +371,7 @@
                          <string>Staked or masternode rewards that has not yet matured</string>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">color:#01aae8; font-size:18px</string>
+                         <string notr="true">color:#ffe900; font-size:18px</string>
                         </property>
                         <property name="text">
                          <string notr="true">0.000 000 00 VLC</string>
@@ -927,7 +927,7 @@
                    </size>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">alternate-background-color: #2b2c32;</string>
+                   <string notr="true">alternate-background-color: transparent;</string>
                   </property>
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>

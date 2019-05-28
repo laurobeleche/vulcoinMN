@@ -217,7 +217,7 @@ QLabel { /* Base Text Size & Color */
 
 .QCheckBox::indicator:hover {
 
-    background: #004f72;
+    background: #ffd260;
 
 }
 
@@ -229,7 +229,7 @@ QLabel { /* Base Text Size & Color */
 
 .QCheckBox::indicator:checked:hover {
 
-    background: #004f72;
+    background: #ffd260;
 
 }
 
@@ -535,7 +535,7 @@ QHeaderView::section:last {
 }
 
 QTableView::item { /* Table Item */
-	background-color:#2b2c32;
+	background-color:#322e2b;
 	font-size:14px;
 	color:#fff;
         border-style: none;
@@ -721,7 +721,7 @@ QDialog .QTabWidget::pane {
 }
 
 QDialog .QTabWidget QTabBar::tab {
-	background-color:#004f72;
+	background-color:#ffd260;
 	color:#333;
 	padding-left:10px;
 	padding-right:10px;
