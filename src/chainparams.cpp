@@ -168,10 +168,10 @@ public:
         assert(genesis.hashMerkleRoot == uint256("0x7bbcd6458f795847babf3ce2a1b133dac37bdb32c355fbcbc8e8611316207040"));
 
         // DNS Seeding
-        //vSeeds.push_back(CDNSSeedData("207.148.7.125", "207.148.7.125"));
-		//vSeeds.push_back(CDNSSeedData("45.32.192.128", "45.32.192.128"));
-		//vSeeds.push_back(CDNSSeedData("45.76.234.227", "45.76.234.227"));
-		//vSeeds.push_back(CDNSSeedData("107.191.44.109", "107.191.44.109"));
+        vSeeds.push_back(CDNSSeedData("202.182.114.6", "202.182.114.6"));
+		vSeeds.push_back(CDNSSeedData("45.77.31.201", "45.77.31.201"));
+		vSeeds.push_back(CDNSSeedData("202.182.115.47", "202.182.115.47"));
+		vSeeds.push_back(CDNSSeedData("45.32.8.155", "45.32.8.155"));
 		
         // Vulcoin addresses start with 'V'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 70);
