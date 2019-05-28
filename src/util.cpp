@@ -494,6 +494,16 @@ boost::filesystem::path GetMasternodeConfigFile()
     return pathConfigFile;
 }
 
+string randomStrGen(int length) {
+    static string charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    string result;
+    result.resize(length);
+    for (int32_t i = 0; i < length; i++)
+        result[i] = charset[rand() % charset.length()];
+
+    return result;
+}
+
 void createConf()
 {
     srand(static_cast<unsigned int>(time(NULL)));
