@@ -772,9 +772,8 @@ bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled, bool fChec
         // update only if there is no known ping for this masternode or
         // last ping was more then MASTERNODE_MIN_MNP_SECONDS-60 ago comparing to this one
         if (!pmn->IsPingedWithin(MASTERNODE_MIN_MNP_SECONDS - 60, sigTime)) {
-            if (!VerifySignature(pmn->pubKeyMasternode, nDos))
+        	if (!VerifySignature(pmn->pubKeyMasternode, nDos))
                 return false;
-            }
 
             BlockMap::iterator mi = mapBlockIndex.find(blockHash);
             if (mi != mapBlockIndex.end() && (*mi).second) {
